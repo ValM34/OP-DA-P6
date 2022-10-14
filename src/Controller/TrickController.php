@@ -45,8 +45,8 @@ class TrickController extends AbstractController
       'controller_name' => 'TrickController', 'allTricks' => $trick
     ]);
   }
-/*
-  #[Route('/trick/{id}', name: 'trick_show')]
+
+  #[Route('/trick/showone{id}', name: 'trick_show')]
   public function show(ManagerRegistry $doctrine, int $id): Response
   {
     $trick = $doctrine->getRepository(Trick::class)->find($id,);
@@ -56,9 +56,9 @@ class TrickController extends AbstractController
       );
     }
 
-    return new Response('Check out this great product: ' . $trick->getName() . $trick->getId());
+    return $this->render('trick/showone.html.twig', [ 'trick' => $trick ]);
   }
-*/
+
   #[Route('/trick/creationpage', name: 'create_trick_page')]
   public function createProductPage(): Response
   {
