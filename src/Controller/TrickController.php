@@ -6,6 +6,7 @@ use DateTimeImmutable;
 use App\Entity\Trick;
 use App\Entity\User;
 use App\Entity\Category;
+use App\Service\TrickService;
 use App\Entity\Trait\CreatedAtTrait;
 use App\Service\TrickServiceInterface;
 use Doctrine\Persistence\ManagerRegistry;
@@ -36,25 +37,15 @@ class TrickController extends AbstractController
   }
 
   #[Route('/trick/all', name: 'trick_show_all')]
-  public function showAll(ManagerRegistry $doctrine): Response
+  public function showAll(): Response
   {
-    $trick = $doctrine->getRepository(Trick::class)->findAll();
-    if (!$trick) {
-      throw $this->createNotFoundException(
-        'No product found'
-      );
-    }
-    // dd($trick);
+    $trick = $this->trickService->readAll();
 
-    // return new Response('Check out this great product: ' . $trick);
     return $this->render('trick/index.html.twig', [
       'controller_name' => 'TrickController', 'allTricks' => $trick
     ]);
-    // or render a template
-    // in the template, print things with {{ product.name }}
-    // return $this->render('product/show.html.twig', ['product' => $product]);
   }
-
+/*
   #[Route('/trick/{id}', name: 'trick_show')]
   public function show(ManagerRegistry $doctrine, int $id): Response
   {
@@ -66,10 +57,14 @@ class TrickController extends AbstractController
     }
 
     return new Response('Check out this great product: ' . $trick->getName() . $trick->getId());
-
-    // or render a template
-    // in the template, print things with {{ product.name }}
-    // return $this->render('product/show.html.twig', ['product' => $product]);
+  }
+*/
+  #[Route('/trick/creationpage', name: 'create_trick_page')]
+  public function createProductPage(): Response
+  {
+    return $this->render('trick/creationPage.html.twig', [
+      'controller_name' => 'TrickController',
+    ]);
   }
 
   #[Route('/trick/create', name: 'create_trick')]
