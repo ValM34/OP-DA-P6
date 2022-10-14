@@ -20,11 +20,11 @@ class TrickService implements TrickServiceInterface
   public function create()
   {
     $this->created_at = new DateTimeImmutable();
-
+    
     $trick = new Trick();
     $trick
-      ->setName('Keyboard')
-      ->setDescription('Description')
+      ->setName($_POST['name'])
+      ->setDescription($_POST['description'])
       ->setUpdatedAt($this->created_at)
       ->setCreatedAt($this->created_at)
     ;
@@ -41,14 +41,16 @@ class TrickService implements TrickServiceInterface
 
     return $trick;
   }
-  /*
+  
   public function readAll()
   {
-    $this->created_at = new DateTimeImmutable();
+    $trick = $this->entityManager->getRepository(Trick::class)->findAll();
+    if (!$trick) {
+      $trick = null;
 
-    $trick = new Trick();
-    $trick
-      ->
+      return $trick;
+    }
+    return $trick;
   }
-  */
+  
 }
