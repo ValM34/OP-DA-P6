@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace App\Service;
 
@@ -20,14 +20,13 @@ class TrickService implements TrickServiceInterface
   public function create()
   {
     $this->created_at = new DateTimeImmutable();
-    
+
     $trick = new Trick();
     $trick
       ->setName($_POST['name'])
       ->setDescription($_POST['description'])
       ->setUpdatedAt($this->created_at)
-      ->setCreatedAt($this->created_at)
-    ;
+      ->setCreatedAt($this->created_at);
     $user = $this->entityManager->getRepository(User::class)->findOneById(1);
     $category = $this->entityManager->getRepository(Category::class)->findOneById(1);
     $trick->setIdUser($user);
@@ -41,7 +40,7 @@ class TrickService implements TrickServiceInterface
 
     return $trick;
   }
-  
+
   public function readAll()
   {
     $trick = $this->entityManager->getRepository(Trick::class)->findAll();
@@ -52,5 +51,26 @@ class TrickService implements TrickServiceInterface
     }
     return $trick;
   }
-  
+
+  public function update(int $id)
+  {
+    $trick = $this->entityManager->getRepository(Trick::class)->find($id);
+
+    if (!$trick) {
+      $trick = null;
+
+      return $trick;
+    }
+    if ($_POST) {
+      if ($_POST['name']) {
+        $trick->setName($_POST['name']);
+      };
+      if ($_POST['description']) {
+        $trick->setDescription($_POST['description']);
+      };
+    };
+    $this->entityManager->flush();
+
+    return $trick;
+  }
 }

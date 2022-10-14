@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter un trick
+{% endblock %}
+
+{% block body %}
+
+	{% if app.user %}
+		<form action="http://127.0.0.1:8000/trick/update{{trick.id}}" method="POST" enctype="multipart/form-data">
+			<label for="name">Nom :
+				<textarea name="name" id="name" type="text" placeholder="Votre nom..." required="true">{{trick.name}}</textarea></label>
+			<label for="description">Description :
+				<textarea name="description" id="description" type="text" placeholder="Description..." required="true">{{trick.description}}</textarea></label>
+			<!-- <label for="group">Groupe :
+				<input name="group" id="group" type="text" placeholder="Groupe..." required="true">Ajouter quand j'aurai géré les groupes</textarea></label> -->
+			<label for="img">Image(s) :
+				<textarea name="img" id="img" type="file">Ajouter quand j'aurai géré les images</textarea></label>
+			<label for="video">Vidéo(s) :
+				<textarea name="video" id="video" type="file">Ajouter quand j'aurai géré les vidéos</textarea></label>
+			<button type="submit">Valider</button>
+		</form>
+	{% else %}
+		Veuillez vous connecter pour pouvoir ajouter un nouveau trick :
+		<a href="{{ path('app_login') }}">Connexion</a>
+	{% endif %}
+
+{% endblock %}
