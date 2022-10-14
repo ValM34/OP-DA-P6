@@ -74,4 +74,22 @@ class TrickController extends AbstractController
 
     return new Response('Saved new product with id ' . $trick->getId());
   }
+
+  #[Route('/trick/updatepage{id}', name: 'update_trick_page')]
+  public function updateTrickPage(ManagerRegistry $doctrine, int $id): Response
+  {
+    $trick = $doctrine->getRepository(Trick::class)->find($id,);
+
+    return $this->render('trick/updatePage.html.twig', [
+      'trick' => $trick,
+    ]);
+  }
+
+  #[Route('/trick/update{id}', name: 'update_trick')]
+  public function updateTrick(int $id): Response
+  {
+    $trick = $this->trickService->update($id);
+
+    return new Response('Saved new product with id ' . $trick->getId());
+  }
 }
