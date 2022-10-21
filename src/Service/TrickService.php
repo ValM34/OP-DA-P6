@@ -8,6 +8,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Trick;
 use App\Entity\User;
 use App\Entity\Category;
+use Symfony\Component\HttpFoundation\Request;
 
 class TrickService implements TrickServiceInterface
 {
@@ -15,6 +16,14 @@ class TrickService implements TrickServiceInterface
   public function __construct(EntityManagerInterface $entityManager)
   {
     $this->entityManager = $entityManager;
+    $this->request = new Request(
+      $_GET,
+      $_POST,
+      [],
+      $_COOKIE,
+      $_FILES,
+      $_SERVER
+    );
   }
 
   public function create()
@@ -23,8 +32,8 @@ class TrickService implements TrickServiceInterface
 
     $trick = new Trick();
     $trick
-      ->setName($_POST['name'])
-      ->setDescription($_POST['description'])
+      ->setName($this->request->request->get('name'))
+      ->setDescription($this->request->request->get('description'))
       ->setUpdatedAt($this->created_at)
       ->setCreatedAt($this->created_at);
     $user = $this->entityManager->getRepository(User::class)->findOneById(1);
@@ -41,7 +50,7 @@ class TrickService implements TrickServiceInterface
     return $trick;
   }
 
-  public function readAll()
+  public function getAll()
   {
     $trick = $this->entityManager->getRepository(Trick::class)->findAll();
     if (!$trick) {
@@ -49,6 +58,32 @@ class TrickService implements TrickServiceInterface
 
       return $trick;
     }
+
+    return $trick;
+  }
+
+  public function getOne(int $id)
+  {
+    $trick = $this->entityManager->getRepository(Trick::class)->find($id);
+    if (!$trick) {
+      $trick = null;
+
+      return $trick;
+    }
+
+    return $trick;
+  }
+
+  public function updatePage(int $id)
+  {
+    $trick = $this->entityManager->getRepository(Trick::class)->find($id);
+
+    if (!$trick) {
+      $trick = null;
+
+      return $trick;
+    }
+
     return $trick;
   }
 
@@ -61,14 +96,28 @@ class TrickService implements TrickServiceInterface
 
       return $trick;
     }
-    if ($_POST) {
-      if ($_POST['name']) {
-        $trick->setName($_POST['name']);
-      };
-      if ($_POST['description']) {
-        $trick->setDescription($_POST['description']);
-      };
+    if ($this->request->request->get('name')) {
+      $trick->setName($this->request->request->get('name'));
     };
+    if ($this->request->request->get('description')) {
+      $trick->setDescription($this->request->request->get('description'));
+    };
+    $this->entityManager->flush();
+
+    return $trick;
+  }
+
+  public function delete(int $id)
+  {
+    $trick = $this->entityManager->getRepository(Trick::class)->find($id);
+
+    if (!$trick) {
+      $trick = null;
+
+      return 'No trick found for id ' . $id;
+    }
+
+    $this->entityManager->remove($trick);
     $this->entityManager->flush();
 
     return $trick;
