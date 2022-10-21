@@ -6,7 +6,7 @@ use DateTimeImmutable;
 use App\Entity\Trick;
 use App\Entity\User;
 use App\Entity\Category;
-use App\Service\TrickService;
+// use App\Service\TrickService;
 use App\Entity\Trait\CreatedAtTrait;
 use App\Service\TrickServiceInterface;
 use Doctrine\Persistence\ManagerRegistry;
@@ -27,34 +27,21 @@ class TrickController extends AbstractController
     $this->trickService = $trickService;
   }
 
-  #[Route('/trick', name: 'app_trick')]
-  public function index(): Response
-  {
-    var_dump($this->trick->getId());
-    return $this->render('trick/index.html.twig', [
-      'controller_name' => 'TrickController',
-    ]);
-  }
-
   #[Route('/trick/all', name: 'trick_show_all')]
   public function showAll(): Response
   {
-    $trick = $this->trickService->readAll();
+    $tricks = $this->trickService->getAll();
 
     return $this->render('trick/index.html.twig', [
-      'controller_name' => 'TrickController', 'allTricks' => $trick
+      'controller_name' => 'TrickController',
+      'tricks' => $tricks
     ]);
   }
 
   #[Route('/trick/showone{id}', name: 'trick_show')]
   public function show(ManagerRegistry $doctrine, int $id): Response
   {
-    $trick = $doctrine->getRepository(Trick::class)->find($id,);
-    if (!$trick) {
-      throw $this->createNotFoundException(
-        'No product found for id ' . $id
-      );
-    }
+    $trick = $this->trickService->getOne($id);
 
     return $this->render('trick/showone.html.twig', [ 'trick' => $trick ]);
   }
@@ -75,21 +62,29 @@ class TrickController extends AbstractController
     return new Response('Saved new product with id ' . $trick->getId());
   }
 
-  #[Route('/trick/updatepage{id}', name: 'update_trick_page')]
+  #[Route('/trick/updatepage/{id}', name: 'update_trick_page')]
   public function updateTrickPage(ManagerRegistry $doctrine, int $id): Response
   {
-    $trick = $doctrine->getRepository(Trick::class)->find($id,);
+    $trick = $this->trickService->updatePage($id);
 
     return $this->render('trick/updatePage.html.twig', [
       'trick' => $trick,
     ]);
   }
 
-  #[Route('/trick/update{id}', name: 'update_trick')]
+  #[Route('/trick/update/{id}', name: 'update_trick')]
   public function updateTrick(int $id): Response
   {
     $trick = $this->trickService->update($id);
 
     return new Response('Saved new product with id ' . $trick->getId());
+  }
+
+  #[Route('/trick/delete/{id}', name: 'delete_trick')]
+  public function deleteTrick(int $id): Response
+  {
+    $trick = $this->trickService->delete($id);
+
+    return new Response('Trick supprimé ! ');
   }
 }

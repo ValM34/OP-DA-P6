@@ -8,9 +8,9 @@
 	<div class="example-wrapper">
 		<h1>Liste des figures</h1>
 		<ul>
-			{% for trick in allTricks %}
+			{% for trick in tricks %}
 				<li>
-					<a href="showone{{trick.id}}">{{trick.name}}</a>
+					<a href="showone{{trick.id}}">{{trick.name}}</a><a href="updatepage/{{trick.id}}">Modifier</a><a href="delete/{{trick.id}}">Supprimer</a>
 				</li>
 			{% endfor %}
 		</ul>

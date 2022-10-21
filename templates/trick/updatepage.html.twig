@@ -6,7 +6,7 @@
 {% block body %}
 
 	{% if app.user %}
-		<form action="http://127.0.0.1:8000/trick/update{{trick.id}}" method="POST" enctype="multipart/form-data">
+		<form action="http://127.0.0.1:8000/trick/update/{{trick.id}}" method="POST" enctype="multipart/form-data">
 			<label for="name">Nom :
 				<textarea name="name" id="name" type="text" placeholder="Votre nom..." required="true">{{trick.name}}</textarea></label>
 			<label for="description">Description :
