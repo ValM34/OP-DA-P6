@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier la catégorie
+{% endblock %}
+
+{% block body %}
+
+	{% if app.user %}
+		<form class="flex flex-col" action="http://127.0.0.1:8000/category/update/{{category.id}}" method="POST" enctype="multipart/form-data">
+			<label for="name">Nom :
+				<input class="w-full rounded bg-neutral-200" name="name" id="name" type="text" placeholder="Nouveau nom de la catégorie" required="true" />{{category.name}}</label>
+			<button class="bg-blue-500 hover:bg-blue-400 px-2 py-1 rounded text-white font-semibold w-fit" type="submit">Valider</button>
+		</form>
+	{% else %}
+		Veuillez vous connecter pour pouvoir ajouter une nouvelle catégorie :
+		<a href="{{ path('app_login') }}">Connexion</a>
+	{% endif %}
+
+{% endblock %}
