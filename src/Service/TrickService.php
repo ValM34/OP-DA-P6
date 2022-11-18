@@ -110,6 +110,32 @@ class TrickService implements TrickServiceInterface
     return $trick;
   }
 
+  public function createMessage($id_trick)
+  {
+    $this->created_at = new DateTimeImmutable();
+
+    $message = new Message();
+    $message
+      ->setUpdatedAt($this->created_at)
+      ->setCreatedAt($this->created_at)
+    ;
+    $user = $this->entityManager->getRepository(User::class)->findOneById(1);
+    $trick = $this->entityManager->getRepository(Trick::class)->findOneById($id_trick);
+    $message->setUser($user);
+    $message->setTrick($trick);
+    if ($this->request->request->get('content')) {
+      $message->setContent($this->request->request->get('content'));
+    };
+
+    // tell Doctrine you want to (eventually) save the Product (no queries yet)
+    $this->entityManager->persist($message);
+
+    // actually executes the queries (i.e. the INSERT query)
+    $this->entityManager->flush();
+
+    return $message;
+  }
+
   public function getMessages(int $id)
   {
     return $this->entityManager->getRepository(Message::class)->findByTrick($id);

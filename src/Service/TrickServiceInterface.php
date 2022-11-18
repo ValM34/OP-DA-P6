@@ -12,4 +12,5 @@ interface TrickServiceInterface
   public function delete(int $id);
   public function getMessages(int $id);
   public function findAllCategories();
+  public function createMessage($id);
 }
