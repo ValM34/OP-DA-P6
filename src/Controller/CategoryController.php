@@ -65,22 +65,22 @@ class CategoryController extends AbstractController
     return new Response('Saved new product with id ' . $trick->getId());
   }
 
-  #[Route('/trick/updatepage/{id}', name: 'update_trick_page')]
-  public function updateTrickPage(ManagerRegistry $doctrine, int $id): Response
+  #[Route('/category/updatepage/{id}', name: 'update_category_page')]
+  public function updateCategoryPage(ManagerRegistry $doctrine, int $id): Response
   {
-    $trick = $this->categoryService->updatePage($id);
+    $category = $this->categoryService->updatePage($id);
 
-    return $this->render('trick/updatePage.html.twig', [
-      'trick' => $trick,
+    return $this->render('category/updatePage.html.twig', [
+      'category' => $category,
     ]);
   }
 
-  #[Route('/trick/update/{id}', name: 'update_trick')]
-  public function updateTrick(int $id): Response
+  #[Route('/category/update/{id}', name: 'update_category')]
+  public function updateCategory(int $id): Response
   {
-    $trick = $this->categoryService->update($id);
+    $category = $this->categoryService->update($id);
 
-    return new Response('Saved new product with id ' . $trick->getId());
+    return new Response('Saved new category with id ' . $category->getId());
   }
 
   #[Route('/trick/delete/{id}', name: 'delete_trick')]

@@ -66,13 +66,13 @@ class CategoryService implements CategoryServiceInterface
 
   public function updatePage(int $id)
   {
-    $trick = $this->entityManager->getRepository(Trick::class)->find($id);
+    $category = $this->entityManager->getRepository(Category::class)->find($id);
 
-    if (!$trick) {
-      $trick = null;
+    if (!$category) {
+      $category = null;
     }
 
-    return $trick;
+    return $category;
   }
 
   public function update(int $id)

@@ -31,6 +31,9 @@ class Category
   #[ORM\JoinColumn(nullable: false, onDelete: 'SET NULL', name: 'id_user')]
   private ?User $user = null;
 
+  #[ORM\Column(length: 1000)]
+  private ?string $description = null;
+
   public function __construct()
   {
     $this->tricks = new ArrayCollection();
@@ -104,6 +107,18 @@ class Category
   public function setUser(?User $user): self
   {
       $this->user = $user;
+
+      return $this;
+  }
+
+  public function getDescription(): ?string
+  {
+      return $this->description;
+  }
+
+  public function setDescription(string $description): self
+  {
+      $this->description = $description;
 
       return $this;
   }
