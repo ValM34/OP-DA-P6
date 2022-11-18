@@ -111,4 +111,29 @@ class TrickController extends AbstractController
       'id' => $message->getTrick()->getId()
     ]);
   }
+
+  #[Route('/message/updatepage/{id}', name: 'update_message_page')]
+  public function updateMessagePage(ManagerRegistry $doctrine, int $id): Response
+  {
+    $entity = $this->trickService->updateMessagePage($id);
+
+    return $this->render('message/updatePage.html.twig', [
+      'trick' => $entity['trick'],
+      'message' => $entity['message']
+    ]);
+  }
+
+  #[Route('/message/update/{id}', name: 'update_message_update')]
+  public function updateMessage(ManagerRegistry $doctrine, int $id): Response
+  {
+    $message = $this->trickService->updateMessage($id);
+    $trick = $message->getTrick();
+    $messages = $this->trickService->getMessages($trick->getId());
+
+    return $this->redirectToRoute('trick_show', [
+      'trick' => $trick,
+      'messages' => $messages,
+      'id' => $message->getTrick()->getId()
+    ]);
+  }
 }

@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier le message
+{% endblock %}
+
+{% block body %}
+
+	{% if app.user %}
+		<form class="flex flex-col" action="http://127.0.0.1:8000/message/update/{{message.id}}" method="POST" enctype="multipart/form-data">
+			<label for="content">Nom :
+			</label>
+			<textarea class="w-full rounded bg-neutral-200" name="content" id="content" type="text" required="true">{{message.content}}</textarea>
+			<button class="bg-blue-500 hover:bg-blue-400 px-2 py-1 rounded text-white font-semibold w-fit" type="submit">Valider</button>
+		</form>
+	{% else %}
+		Veuillez vous connecter pour pouvoir ajouter un nouveau trick :
+		<a href="{{ path('app_login') }}">Connexion</a>
+	{% endif %}
+
+{% endblock %}
