@@ -97,4 +97,18 @@ class TrickController extends AbstractController
 
     return new Response('Trick supprimé ! ');
   }
+
+  #[Route('/message/create/{id}', name: 'create_message')]
+  public function createMessage(int $id): Response
+  {
+    $message = $this->trickService->createMessage($id);
+    $messages = $this->trickService->getMessages($message->getTrick()->getId());
+    $trick = $message->getTrick();
+
+    return $this->redirectToRoute('trick_show', [
+      'trick' => $trick,
+      'messages' => $messages,
+      'id' => $message->getTrick()->getId()
+    ]);
+  }
 }
