@@ -160,22 +160,33 @@ class TrickService implements TrickServiceInterface
 
   public function updateMessage(int $id)
   {
-    // $entity['message'] = new Message();
-    $entity['message'] = $this->entityManager->getRepository(Message::class)->find($id);
-    $entity['message']
+    $entity = $this->entityManager->getRepository(Message::class)->find($id);
+    $entity
       ->setUpdatedAt(new \DateTimeImmutable())
       ->setCreatedAt(new \DateTimeImmutable())
     ;
-
     if ($this->request->request->get('content')) {
-      $entity['message']->setContent($this->request->request->get('content'));
+      $entity->setContent($this->request->request->get('content'));
     };
-
-    $this->entityManager->persist($entity['message']);
-
+    $this->entityManager->persist($entity);
     $this->entityManager->flush();
 
-    return $entity['message'];
+    return $entity;
+  }
 
+  public function deleteMessage(int $id)
+  {
+    $entity = $this->entityManager->getRepository(Message::class)->find($id);
+    $entity
+      ->setUpdatedAt(new \DateTimeImmutable())
+      ->setCreatedAt(new \DateTimeImmutable())
+    ;
+    if ($this->request->request->get('content')) {
+      $entity->setContent($this->request->request->get('content'));
+    };
+    $this->entityManager->remove($entity);
+    $this->entityManager->flush();
+
+    return $entity;
   }
 }
