@@ -95,15 +95,15 @@ class CategoryService implements CategoryServiceInterface
 
   public function delete(int $id)
   {
-    $trick = $this->entityManager->getRepository(Trick::class)->find($id);
+    $category = $this->entityManager->getRepository(Category::class)->find($id);
 
-    if (!$trick) {
-      $trick = null;
+    if (!$category) {
+      $category = null;
     }
 
-    $this->entityManager->remove($trick);
+    $this->entityManager->remove($category);
     $this->entityManager->flush();
 
-    return $trick;
+    return $category;
   }
 }

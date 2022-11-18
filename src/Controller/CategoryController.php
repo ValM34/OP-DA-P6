@@ -83,11 +83,11 @@ class CategoryController extends AbstractController
     return new Response('Saved new category with id ' . $category->getId());
   }
 
-  #[Route('/trick/delete/{id}', name: 'delete_trick')]
-  public function deleteTrick(int $id): Response
+  #[Route('/category/delete/{id}', name: 'delete_category')]
+  public function deleteCategory(int $id): Response
   {
     $this->categoryService->delete($id);
 
-    return new Response('Trick supprimé ! ');
+    return new Response('Catégorie supprimée ! ');
   }
 }
