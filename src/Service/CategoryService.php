@@ -29,24 +29,22 @@ class CategoryService implements CategoryServiceInterface
   {
     $this->created_at = new DateTimeImmutable();
 
-    $trick = new Trick();
-    $trick
+    $category = new Category();
+    $category
       ->setName($this->request->request->get('name'))
       ->setDescription($this->request->request->get('description'))
       ->setUpdatedAt($this->created_at)
       ->setCreatedAt($this->created_at);
     $user = $this->entityManager->getRepository(User::class)->findOneById(1);
-    $category = $this->entityManager->getRepository(Category::class)->findOneById(1);
-    $trick->setUser($user);
-    $trick->setCategory($category);
+    $category->setUser($user);
 
     // tell Doctrine you want to (eventually) save the Product (no queries yet)
-    $this->entityManager->persist($trick);
+    $this->entityManager->persist($category);
 
     // actually executes the queries (i.e. the INSERT query)
     $this->entityManager->flush();
 
-    return $trick;
+    return $category;
   }
 
   public function findAll()
@@ -56,12 +54,12 @@ class CategoryService implements CategoryServiceInterface
 
   public function getOne(int $id)
   {
-    $trick = $this->entityManager->getRepository(Trick::class)->find($id);
-    if (!$trick) {
-      $trick = null;
+    $category = $this->entityManager->getRepository(Category::class)->find($id);
+    if (!$category) {
+      $category = null;
     }
 
-    return $trick;
+    return $category;
   }
 
   public function updatePage(int $id)

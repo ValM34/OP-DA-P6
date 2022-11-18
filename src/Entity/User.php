@@ -46,7 +46,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
   #[ORM\Column(options: ['default' => 'CURRENT_TIMESTAMP'])]
   private ?\DateTimeImmutable $updated_at = null;
 
-  #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Trick::class)]
+  #[ORM\OneToMany(mappedBy: 'user', targetEntity: Trick::class)]
   private Collection $tricks;
 
   #[ORM\OneToMany(mappedBy: 'user', targetEntity: Message::class)]

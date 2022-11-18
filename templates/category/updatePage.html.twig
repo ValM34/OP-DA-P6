@@ -7,8 +7,10 @@
 
 	{% if app.user %}
 		<form class="flex flex-col" action="http://127.0.0.1:8000/category/update/{{category.id}}" method="POST" enctype="multipart/form-data">
-			<label for="name">Nom :
-				<input class="w-full rounded bg-neutral-200" name="name" id="name" type="text" placeholder="Nouveau nom de la catégorie" required="true" />{{category.name}}</label>
+			<label for="name">Nom :</label>
+			<input class="w-full rounded bg-neutral-200" name="name" id="name" type="text" placeholder={{category.name}} required="true" />
+      <label for="description">Description :</label>
+			<textarea class="w-full rounded bg-neutral-200" name="description" id="description" type="text" placeholder="Description..." required="true">{{category.description}}</textarea>
 			<button class="bg-blue-500 hover:bg-blue-400 px-2 py-1 rounded text-white font-semibold w-fit" type="submit">Valider</button>
 		</form>
 	{% else %}
