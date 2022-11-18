@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	{{category.name}}
+{% endblock %}
+
+{% block body %}
+
+	<h1 class="text-4xl">{{category.name}}</h1>
+	<p>{{category.description}}</p>
+
+{% endblock %}

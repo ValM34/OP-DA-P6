@@ -39,30 +39,30 @@ class CategoryController extends AbstractController
     ]);
   }
 
-  #[Route('/trick/showone/{id}', name: 'trick_show')]
+  #[Route('/category/showone/{id}', name: 'category_show')]
   public function show(ManagerRegistry $doctrine, int $id): Response
   {
-    $trick = $this->categoryService->getOne($id);
+    $category = $this->categoryService->getOne($id);
     
-    return $this->render('trick/showone.html.twig', [
-      'trick' => $trick
+    return $this->render('category/showone.html.twig', [
+      'category' => $category
     ]);
   }
 
-  #[Route('/trick/creationpage', name: 'create_trick_page')]
-  public function createProductPage(): Response
+  #[Route('/category/creationpage', name: 'create_category_page')]
+  public function createCategoryPage(): Response
   {
-    return $this->render('trick/creationPage.html.twig', [
-      'controller_name' => 'TrickController',
+    return $this->render('category/creationPage.html.twig', [
+      'controller_name' => 'CategoryController',
     ]);
   }
 
-  #[Route('/trick/create', name: 'create_trick')]
+  #[Route('/category/create', name: 'create_category')]
   public function createProduct(): Response
   {
-    $trick = $this->categoryService->create();
+    $category = $this->categoryService->create();
 
-    return new Response('Saved new product with id ' . $trick->getId());
+    return new Response('Saved new category with id ' . $category->getId());
   }
 
   #[Route('/category/updatepage/{id}', name: 'update_category_page')]

@@ -16,7 +16,7 @@ class Category
   #[ORM\Id]
   #[ORM\GeneratedValue]
   #[ORM\Column]
-  private ?int $id = null;
+  private ?int $id;
 
   #[ORM\Column(length: 150)]
   private ?string $name = null;
@@ -28,7 +28,7 @@ class Category
   private Collection $tricks;
 
   #[ORM\ManyToOne(inversedBy: 'categories')]
-  #[ORM\JoinColumn(nullable: false, onDelete: 'SET NULL', name: 'id_user')]
+  #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL', name: 'id_user')]
   private ?User $user = null;
 
   #[ORM\Column(length: 1000)]
