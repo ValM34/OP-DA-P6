@@ -77,20 +77,20 @@ class CategoryService implements CategoryServiceInterface
 
   public function update(int $id)
   {
-    $trick = $this->entityManager->getRepository(Trick::class)->find($id);
+    $category = $this->entityManager->getRepository(Category::class)->find($id);
 
-    if (!$trick) {
-      $trick = null;
+    if (!$category) {
+      $category = null;
     }
     if ($this->request->request->get('name')) {
-      $trick->setName($this->request->request->get('name'));
+      $category->setName($this->request->request->get('name'));
     };
     if ($this->request->request->get('description')) {
-      $trick->setDescription($this->request->request->get('description'));
+      $category->setDescription($this->request->request->get('description'));
     };
     $this->entityManager->flush();
 
-    return $trick;
+    return $category;
   }
 
   public function delete(int $id)
