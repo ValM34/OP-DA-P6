@@ -46,11 +46,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
   #[ORM\Column(options: ['default' => 'CURRENT_TIMESTAMP'])]
   private ?\DateTimeImmutable $updated_at = null;
 
-  #[ORM\OneToMany(mappedBy: 'id_user', targetEntity: Trick::class)]
+  #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Trick::class)]
   private Collection $tricks;
 
-  #[ORM\OneToMany(mappedBy: 'id_user', targetEntity: Message::class)]
+  #[ORM\OneToMany(mappedBy: 'user', targetEntity: Message::class)]
   private Collection $messages;
+
+  #[ORM\OneToMany(mappedBy: 'user', targetEntity: Category::class)]
+  private Collection $categories;
 
   public function __construct()
   {
@@ -58,6 +61,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     $this->messages = new ArrayCollection();
     $this->created_at = new \DateTimeImmutable();
     $this->updated_at = new \DateTimeImmutable();
+    $this->categories = new ArrayCollection();
   }
 
   public function getId(): ?int
@@ -190,7 +194,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
   {
     if (!$this->tricks->contains($trick)) {
       $this->tricks->add($trick);
-      $trick->setIdUser($this);
+      $trick->setUser($this);
     }
 
     return $this;
@@ -200,8 +204,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
   {
     if ($this->tricks->removeElement($trick)) {
       // set the owning side to null (unless already changed)
-      if ($trick->getIdUser() === $this) {
-        $trick->setIdUser(null);
+      if ($trick->getUser() === $this) {
+        $trick->setUser(null);
       }
     }
 
@@ -220,7 +224,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
   {
     if (!$this->messages->contains($message)) {
       $this->messages->add($message);
-      $message->setIdUser($this);
+      $message->setUser($this);
     }
 
     return $this;
@@ -230,11 +234,41 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
   {
     if ($this->messages->removeElement($message)) {
       // set the owning side to null (unless already changed)
-      if ($message->getIdUser() === $this) {
-        $message->setIdUser(null);
+      if ($message->getUser() === $this) {
+        $message->setUser(null);
       }
     }
 
     return $this;
+  }
+
+  /**
+   * @return Collection<int, Category>
+   */
+  public function getCategories(): Collection
+  {
+      return $this->categories;
+  }
+
+  public function addCategory(Category $category): self
+  {
+      if (!$this->categories->contains($category)) {
+          $this->categories->add($category);
+          $category->setUser($this);
+      }
+
+      return $this;
+  }
+
+  public function removeCategory(Category $category): self
+  {
+      if ($this->categories->removeElement($category)) {
+          // set the owning side to null (unless already changed)
+          if ($category->getUser() === $this) {
+              $category->setUser(null);
+          }
+      }
+
+      return $this;
   }
 }

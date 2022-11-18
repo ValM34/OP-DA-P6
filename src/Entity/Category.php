@@ -24,8 +24,12 @@ class Category
   #[ORM\Column]
   private ?\DateTimeImmutable $updated_at = null;
 
-  #[ORM\OneToMany(mappedBy: 'id_category', targetEntity: Trick::class)]
+  #[ORM\OneToMany(mappedBy: 'category', targetEntity: Trick::class)]
   private Collection $tricks;
+
+  #[ORM\ManyToOne(inversedBy: 'categories')]
+  #[ORM\JoinColumn(nullable: false, onDelete: 'SET NULL', name: 'id_user')]
+  private ?User $user = null;
 
   public function __construct()
   {
@@ -74,7 +78,7 @@ class Category
   {
     if (!$this->tricks->contains($trick)) {
       $this->tricks->add($trick);
-      $trick->setIdCategory($this);
+      $trick->setCategory($this);
     }
 
     return $this;
@@ -84,11 +88,23 @@ class Category
   {
     if ($this->tricks->removeElement($trick)) {
       // set the owning side to null (unless already changed)
-      if ($trick->getIdCategory() === $this) {
-        $trick->setIdCategory(null);
+      if ($trick->getCategory() === $this) {
+        $trick->setCategory(null);
       }
     }
 
     return $this;
+  }
+
+  public function getUser(): ?User
+  {
+      return $this->user;
+  }
+
+  public function setUser(?User $user): self
+  {
+      $this->user = $user;
+
+      return $this;
   }
 }

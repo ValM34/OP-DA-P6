@@ -28,20 +28,20 @@ class Trick
   private ?\DateTimeImmutable $updated_at = null;
 
   #[ORM\ManyToOne(inversedBy: 'tricks')]
-  #[ORM\JoinColumn(nullable: false)]
-  private ?User $id_user = null;
+  #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE', name: 'id_user')]
+  private ?User $user = null;
 
   #[ORM\ManyToOne(inversedBy: 'tricks')]
-  #[ORM\JoinColumn(nullable: false)]
-  private ?Category $id_category = null;
+  #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE', name: 'id_category')]
+  private ?Category $category = null;
 
-  #[ORM\OneToMany(mappedBy: 'id_trick', targetEntity: Message::class)]
+  #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Message::class)]
   private Collection $messages;
 
-  #[ORM\OneToMany(mappedBy: 'id_trick', targetEntity: Image::class)]
+  #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Image::class)]
   private Collection $images;
 
-  #[ORM\OneToMany(mappedBy: 'id_trick', targetEntity: Video::class)]
+  #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Video::class)]
   private Collection $videos;
 
   public function __construct()
@@ -93,26 +93,26 @@ class Trick
     return $this;
   }
 
-  public function getIdUser(): ?User
+  public function getUser(): ?User
   {
-    return $this->id_user;
+    return $this->user;
   }
 
-  public function setIdUser(?User $id_user): self
+  public function setUser(?User $user): self
   {
-    $this->id_user = $id_user;
+    $this->user = $user;
 
     return $this;
   }
 
-  public function getIdCategory(): ?Category
+  public function getCategory(): ?Category
   {
-    return $this->id_category;
+    return $this->category;
   }
 
-  public function setIdCategory(?Category $id_category): self
+  public function setCategory(?Category $category): self
   {
-    $this->id_category = $id_category;
+    $this->category = $category;
 
     return $this;
   }
@@ -129,7 +129,7 @@ class Trick
   {
     if (!$this->messages->contains($message)) {
       $this->messages->add($message);
-      $message->setIdTrick($this);
+      $message->setTrick($this);
     }
 
     return $this;
@@ -139,8 +139,8 @@ class Trick
   {
     if ($this->messages->removeElement($message)) {
       // set the owning side to null (unless already changed)
-      if ($message->getIdTrick() === $this) {
-        $message->setIdTrick(null);
+      if ($message->getTrick() === $this) {
+        $message->setTrick(null);
       }
     }
 
@@ -159,7 +159,7 @@ class Trick
   {
     if (!$this->images->contains($image)) {
       $this->images->add($image);
-      $image->setIdTrick($this);
+      $image->setTrick($this);
     }
 
     return $this;
@@ -169,8 +169,8 @@ class Trick
   {
     if ($this->images->removeElement($image)) {
       // set the owning side to null (unless already changed)
-      if ($image->getIdTrick() === $this) {
-        $image->setIdTrick(null);
+      if ($image->getTrick() === $this) {
+        $image->setTrick(null);
       }
     }
 
@@ -189,7 +189,7 @@ class Trick
   {
     if (!$this->videos->contains($video)) {
       $this->videos->add($video);
-      $video->setIdTrick($this);
+      $video->setTrick($this);
     }
 
     return $this;
@@ -199,8 +199,8 @@ class Trick
   {
     if ($this->videos->removeElement($video)) {
       // set the owning side to null (unless already changed)
-      if ($video->getIdTrick() === $this) {
-        $video->setIdTrick(null);
+      if ($video->getTrick() === $this) {
+        $video->setTrick(null);
       }
     }
 

@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: MessageRepository::class)]
 class Message
 {
-use CreatedAtTrait;
+  use CreatedAtTrait;
 
   #[ORM\Id]
   #[ORM\GeneratedValue]
@@ -17,12 +17,12 @@ use CreatedAtTrait;
   private ?int $id = null;
 
   #[ORM\ManyToOne(inversedBy: 'messages')]
-  #[ORM\JoinColumn(nullable: false)]
-  private ?Trick $id_trick = null;
+  #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE', name: 'id_trick')]
+  private ?Trick $trick = null;
 
   #[ORM\ManyToOne(inversedBy: 'messages')]
-  #[ORM\JoinColumn(nullable: false)]
-  private ?User $id_user = null;
+  #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE', name: 'id_user')]
+  private ?User $user = null;
 
   #[ORM\Column(length: 2500)]
   private ?string $content = null;
@@ -40,26 +40,26 @@ use CreatedAtTrait;
     return $this->id;
   }
 
-  public function getIdTrick(): ?Trick
+  public function getTrick(): ?Trick
   {
-    return $this->id_trick;
+    return $this->trick;
   }
 
-  public function setIdTrick(?Trick $id_trick): self
+  public function setTrick(?Trick $trick): self
   {
-    $this->id_trick = $id_trick;
+    $this->trick = $trick;
 
     return $this;
   }
 
-  public function getIdUser(): ?User
+  public function getUser(): ?User
   {
-    return $this->id_user;
+    return $this->user;
   }
 
-  public function setIdUser(?User $id_user): self
+  public function setUser(?User $user): self
   {
-    $this->id_user = $id_user;
+    $this->user = $user;
 
     return $this;
   }

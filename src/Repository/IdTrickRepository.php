@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\IdTrick;
+use App\Entity\Trick;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -21,7 +21,7 @@ class IdTrickRepository extends ServiceEntityRepository
         parent::__construct($registry, IdTrick::class);
     }
 
-    public function add(IdTrick $entity, bool $flush = false): void
+    public function add(Trick $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
 
@@ -30,7 +30,7 @@ class IdTrickRepository extends ServiceEntityRepository
         }
     }
 
-    public function remove(IdTrick $entity, bool $flush = false): void
+    public function remove(Trick $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);
 

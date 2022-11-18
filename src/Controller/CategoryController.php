@@ -7,67 +7,60 @@ use App\Entity\Trick;
 use App\Entity\User;
 use App\Entity\Category;
 use App\Entity\Message;
-// use App\Service\TrickService;
+// use App\Service\categoryService;
 use App\Entity\Trait\CreatedAtTrait;
-use App\Service\TrickServiceInterface;
+use App\Service\CategoryServiceInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class TrickController extends AbstractController
+class CategoryController extends AbstractController
 {
   use CreatedAtTrait;
 
-  private $trickService;
+  private $categoryService;
 
-  public function __construct(TrickServiceInterface $trickService)
+  public function __construct(CategoryServiceInterface $categoryService)
   {
     $this->trick = new Trick();
     $this->trick = new User();
     $this->trick = new Message();
-    $this->trick = new Category();
-    $this->trickService = $trickService;
+    $this->categoryService = $categoryService;
   }
 
-  #[Route('/trick/all', name: 'trick_show_all')]
+  #[Route('/category/all', name: 'category_show_all')]
   public function showAll(): Response
   {
-    $tricks = $this->trickService->findAll();
+    $categories = $this->categoryService->findAll();
 
-    return $this->render('trick/index.html.twig', [
-      'controller_name' => 'TrickController',
-      'tricks' => $tricks
+    return $this->render('category/index.html.twig', [
+      'categories' => $categories
     ]);
   }
 
   #[Route('/trick/showone/{id}', name: 'trick_show')]
   public function show(ManagerRegistry $doctrine, int $id): Response
   {
-    $trick = $this->trickService->getOne($id);
-    $messages = $this->trickService->getMessages($id);
+    $trick = $this->categoryService->getOne($id);
     
     return $this->render('trick/showone.html.twig', [
-      'trick' => $trick,
-      'messages' => $messages
+      'trick' => $trick
     ]);
   }
 
   #[Route('/trick/creationpage', name: 'create_trick_page')]
   public function createProductPage(): Response
   {
-    $categories = $this->trickService->findAllCategories();
-
     return $this->render('trick/creationPage.html.twig', [
       'controller_name' => 'TrickController',
-      'categories' => $categories
     ]);
   }
 
   #[Route('/trick/create', name: 'create_trick')]
   public function createProduct(): Response
   {
-    $trick = $this->trickService->create();
+    $trick = $this->categoryService->create();
 
     return new Response('Saved new product with id ' . $trick->getId());
   }
@@ -75,7 +68,7 @@ class TrickController extends AbstractController
   #[Route('/trick/updatepage/{id}', name: 'update_trick_page')]
   public function updateTrickPage(ManagerRegistry $doctrine, int $id): Response
   {
-    $trick = $this->trickService->updatePage($id);
+    $trick = $this->categoryService->updatePage($id);
 
     return $this->render('trick/updatePage.html.twig', [
       'trick' => $trick,
@@ -85,7 +78,7 @@ class TrickController extends AbstractController
   #[Route('/trick/update/{id}', name: 'update_trick')]
   public function updateTrick(int $id): Response
   {
-    $trick = $this->trickService->update($id);
+    $trick = $this->categoryService->update($id);
 
     return new Response('Saved new product with id ' . $trick->getId());
   }
@@ -93,7 +86,7 @@ class TrickController extends AbstractController
   #[Route('/trick/delete/{id}', name: 'delete_trick')]
   public function deleteTrick(int $id): Response
   {
-    $this->trickService->delete($id);
+    $this->categoryService->delete($id);
 
     return new Response('Trick supprimé ! ');
   }

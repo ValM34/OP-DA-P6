@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Message;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -16,51 +17,95 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class MessageRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
-    {
-        parent::__construct($registry, Message::class);
+  public function __construct(ManagerRegistry $registry)
+  {
+    parent::__construct($registry, Message::class);
+  }
+
+  public function add(Message $entity, bool $flush = false): void
+  {
+    $this->getEntityManager()->persist($entity);
+
+    if ($flush) {
+      $this->getEntityManager()->flush();
     }
+  }
 
-    public function add(Message $entity, bool $flush = false): void
-    {
-        $this->getEntityManager()->persist($entity);
+  public function remove(Message $entity, bool $flush = false): void
+  {
+    $this->getEntityManager()->remove($entity);
 
-        if ($flush) {
-            $this->getEntityManager()->flush();
-        }
+    if ($flush) {
+      $this->getEntityManager()->flush();
     }
+  }
 
-    public function remove(Message $entity, bool $flush = false): void
-    {
-        $this->getEntityManager()->remove($entity);
+  //    /**
+  //     * @return Message[] Returns an array of Message objects
+  //     */
+  //    public function findByExampleField($value): array
+  //    {
+  //        return $this->createQueryBuilder('m')
+  //            ->andWhere('m.exampleField = :val')
+  //            ->setParameter('val', $value)
+  //            ->orderBy('m.id', 'ASC')
+  //            ->setMaxResults(10)
+  //            ->getQuery()
+  //            ->getResult()
+  //        ;
+  //    }
 
-        if ($flush) {
-            $this->getEntityManager()->flush();
-        }
-    }
+  //    public function findOneBySomeField($value): ?Message
+  //    {
+  //        return $this->createQueryBuilder('m')
+  //            ->andWhere('m.exampleField = :val')
+  //            ->setParameter('val', $value)
+  //            ->getQuery()
+  //            ->getOneOrNullResult()
+  //        ;
+  //    }
 
-//    /**
-//     * @return Message[] Returns an array of Message objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('m')
-//            ->andWhere('m.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('m.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+  public function findByTrick($trick): array
+  {
+    $entityManager = $this->getEntityManager();
 
-//    public function findOneBySomeField($value): ?Message
-//    {
-//        return $this->createQueryBuilder('m')
-//            ->andWhere('m.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    /*
+    $query = $entityManager->createQuery(
+      'SELECT m, u
+      FROM App\Entity\Message m
+      JOIN App\Entity\User u
+      WITH m.id_user = u.id
+      WHERE m.id_trick = :id_trick'
+    )->setParameter('id_trick', $id_trick);
+*/
+    /* Equivalent sur mysql à  : 
+    SELECT p.*, u.*
+    FROM message p
+    JOIN user u
+    ON p.id_user_id = u.id
+    WHERE p.id_trick_id = 14;
+    */
+
+    return $this->createQueryBuilder('m')
+      ->select('m', 'u')
+      ->leftJoin('m.user', 'u')
+      ->where('m.trick = :trick')
+      ->setParameter('trick', $trick)
+      ->getQuery()
+      ->getResult()
+    ;
+
+    /*
+    $queryBuilder = $this->createQueryBuilder('m')
+      ->select('m', 'u')
+      ->leftJoin('m.id_user', 'u')
+      ->where('m.id_trick = :id_trick')
+      ->setParameter('id_trick', $id_trick);
+
+    $query = $queryBuilder->getQuery();
+    $results = $query->getArrayResult();
+
+    return $results;
+    */
+  }
 }

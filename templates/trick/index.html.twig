@@ -6,11 +6,13 @@
 
 {% block body %}
 	<div class="example-wrapper">
-		<h1>Liste des figures</h1>
+		<h1 class="text-4xl font-semibold mb-4">Liste des tricks</h1>
 		<ul>
 			{% for trick in tricks %}
 				<li>
-					<a href="showone{{trick.id}}">{{trick.name}}</a><a href="updatepage/{{trick.id}}">Modifier</a><a href="delete/{{trick.id}}">Supprimer</a>
+					<a class="underline text-blue-500 text-xl" href="showone/{{trick.id}}">{{trick.name}}</a>
+					<a class="bg-blue-500 hover:bg-blue-400 px-2 py-1 rounded mx-2 text-white font-semibold" href="updatepage/{{trick.id}}">Modifier</a>
+					<a class="bg-blue-500 hover:bg-blue-400 px-2 py-1 rounded mx-2 text-white font-semibold" href="delete/{{trick.id}}">Supprimer</a>
 				</li>
 			{% endfor %}
 		</ul>

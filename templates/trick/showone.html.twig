@@ -1,13 +1,23 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-Ajouter un trick
+	Ajouter un trick
 {% endblock %}
 
 {% block body %}
 
-	<h1>Nom de la figure : {{trick.name}}</h1>
-  <h2>Description : </h2>
+	<h1>Nom de la figure :
+		{{trick.name}}</h1>
+	<h2>Description :
+	</h2>
 	{{trick.description}}
+
+	{% for message in messages %}
+		<li>
+			<p>{{message.content}}</p>
+			<!--<a href="updatepage/{{message.id}}">Modifier</a>
+			<a href="delete/{{message.id}}">Supprimer</a> -->
+		</li>
+	{% endfor %}
 
 {% endblock %}

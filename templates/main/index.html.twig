@@ -4,39 +4,15 @@
 	{{ encore_entry_link_tags('app') }}
 {% endblock %}
 
-{% block title %}Hello MainController!
+{% block title %}
+	Snowtricks
 {% endblock %}
 
+
 {% block body %}
-	<style>
-		.example-wrapper {
-			margin: 1em auto;
-			max-width: 800px;
-			width: 95%;
-			font: 18px / 1.5 sans-serif;
-		}
-		.example-wrapper code {
-			background: #F5F5F5;
-			padding: 2px 6px;
-		}
-	</style>
-
-	<div class="example-wrapper">
-		<h1 class="text-3xl font-extrabold underline">Hello
-			{{ controller_name }}! ✅</h1>
-
-		This friendly message is coming from:
-		<ul>
-			<li>Your controller at
-				<code>
-					<a href="{{ 'C:/Users/vmoreau/Bureau/symfony-P6/snowtricks/src/Controller/MainController.php'|file_link(0) }}">src/Controller/MainController.php</a>
-				</code>
-			</li>
-			<li>Your template at
-				<code>
-					<a href="{{ 'C:/Users/vmoreau/Bureau/symfony-P6/snowtricks/templates/main/index.html.twig'|file_link(0) }}">templates/main/index.html.twig</a>
-				</code>
-			</li>
-		</ul>
+	<div>
+		<h2>Liste des liens du site : </h2>
+    <a href ="/trick/all">Liste des tricks</a>
+    <a href ="/trick/creationpage">Ajouter un trick</a>
 	</div>
 {% endblock %}

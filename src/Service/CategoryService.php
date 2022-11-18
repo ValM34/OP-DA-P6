@@ -3,15 +3,13 @@
 namespace App\Service;
 
 use \DateTimeImmutable;
-use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Trick;
 use App\Entity\User;
 use App\Entity\Category;
-use App\Entity\Message;
 use Symfony\Component\HttpFoundation\Request;
 
-class TrickService implements TrickServiceInterface
+class CategoryService implements CategoryServiceInterface
 {
   private $entityManager;
   public function __construct(EntityManagerInterface $entityManager)
@@ -36,10 +34,9 @@ class TrickService implements TrickServiceInterface
       ->setName($this->request->request->get('name'))
       ->setDescription($this->request->request->get('description'))
       ->setUpdatedAt($this->created_at)
-      ->setCreatedAt($this->created_at)
-    ;
+      ->setCreatedAt($this->created_at);
     $user = $this->entityManager->getRepository(User::class)->findOneById(1);
-    $category = $this->entityManager->getRepository(Category::class)->findOneById($this->request->request->get('category'));
+    $category = $this->entityManager->getRepository(Category::class)->findOneById(1);
     $trick->setUser($user);
     $trick->setCategory($category);
 
@@ -54,7 +51,7 @@ class TrickService implements TrickServiceInterface
 
   public function findAll()
   {
-    return $this->entityManager->getRepository(Trick::class)->findAll();
+    return $this->entityManager->getRepository(Category::class)->findAll();
   }
 
   public function getOne(int $id)
@@ -108,15 +105,5 @@ class TrickService implements TrickServiceInterface
     $this->entityManager->flush();
 
     return $trick;
-  }
-
-  public function getMessages(int $id)
-  {
-    return $this->entityManager->getRepository(Message::class)->findByTrick($id);
-  }
-
-  public function findAllCategories()
-  {
-    return $this->entityManager->getRepository(Category::class)->findAll();
   }
 }

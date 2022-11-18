@@ -2,7 +2,7 @@
 
 namespace App\Service;
 
-interface TrickServiceInterface
+interface CategoryServiceInterface
 {
   public function create();
   public function findAll();
@@ -10,6 +10,4 @@ interface TrickServiceInterface
   public function updatePage(int $id);
   public function update(int $id);
   public function delete(int $id);
-  public function getMessages(int $id);
-  public function findAllCategories();
 }

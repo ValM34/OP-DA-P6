@@ -16,17 +16,23 @@
 		{% endblock %}
 		{% block javascripts %}{% endblock %}
 	</head>
-	<body>
-		<header>
+	<body class="bg-neutral-100">
+		<header class="p-4 bg-blue-500 flex justify-center">
+      <a class="bg-orange-400 px-4 py-2 rounded-full mx-2 text-white font-semibold" href="{{ path('trick_show_all') }}">Tricks</a>
+      <a class="bg-orange-400 px-4 py-2 rounded-full mx-2 text-white font-semibold" href="{{ path('create_trick_page') }}">Ajouter un trick</a>
 			{% if app.user %}
-				<a href="">Mon compte</a>
-				<a href="{{ path('app_logout') }}">Déconnexion</a>
+				<a class="bg-orange-400 px-4 py-2 rounded-full mx-2 text-white font-semibold" href="">Mon compte</a>
+				<a class="bg-orange-400 px-4 py-2 rounded-full mx-2 text-white font-semibold" href="{{ path('app_logout') }}">Déconnexion</a>
 			{% else %}
-				<a href="{{ path('app_login') }}">Connexion</a>
+				<a class="bg-orange-400 px-4 py-2 rounded-full mx-2 text-white font-semibold" href="{{ path('app_login') }}">Connexion</a>
 			{% endif %}
 
 
 		</header>
-		{% block body %}{% endblock %}
+		<div class="flex justify-center py-6">
+			  <div class="max-w-5xl w-full bg-white p-4 rounded">
+          {% block body %}{% endblock %}
+				</div>
+			</div>
 	</body>
 </html>
