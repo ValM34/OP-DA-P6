@@ -15,4 +15,5 @@ interface TrickServiceInterface
   public function createMessage($id);
   public function updateMessagePage(int $id);
   public function updateMessage(int $id);
+  public function deleteMessage(int $id);
 }

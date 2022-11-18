@@ -136,4 +136,18 @@ class TrickController extends AbstractController
       'id' => $message->getTrick()->getId()
     ]);
   }
+
+  #[Route('/message/delete/{id}', name: 'update_message_update')]
+  public function deleteMessage(ManagerRegistry $doctrine, int $id): Response
+  {
+    $message = $this->trickService->deleteMessage($id);
+    $trick = $message->getTrick();
+    $messages = $this->trickService->getMessages($trick->getId());
+
+    return $this->redirectToRoute('trick_show', [
+      'trick' => $trick,
+      'messages' => $messages,
+      'id' => $message->getTrick()->getId()
+    ]);
+  }
 }
