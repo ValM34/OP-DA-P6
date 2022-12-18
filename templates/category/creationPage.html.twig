@@ -7,13 +7,10 @@
 
 	{% if app.user %}
 		<form action="http://127.0.0.1:8000/category/create" method="POST" enctype="multipart/form-data">
-			<label for="name">Nom :</label>
-			<input name="name" id="name" type="text" placeholder="Nom de la catégorie" required="true"/>
-
-			<label for="description">Description :</label>
-			<input name="description" id="description" type="text" placeholder="Description..." required="true"/>
-
-			<button type="submit">Valider</button>
+			{{ form_start(registrationForm) }}
+			{{ form_widget(registrationForm) }}
+			<button type="submit" class="btn">Valider</button>
+			{{ form_end(registrationForm) }}
 		</form>
 	{% else %}
 		Veuillez vous connecter pour pouvoir ajouter une nouvelle catégorie :

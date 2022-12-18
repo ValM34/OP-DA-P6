@@ -7,13 +7,7 @@
 	<h1>Inscription</h1>
 
 	{{ form_start(registrationForm) }}
-	{{ form_row(registrationForm.lastName, { label: 'Nom' }) }}
-	{{ form_row(registrationForm.firstName, { label: 'Prénom' }) }}
-	{{ form_row(registrationForm.email, { label: 'Email' }) }}
-	{{ form_row(registrationForm.pseudo, { label: 'Pseudo' }) }}
-
-	{{ form_row(registrationForm.plainPassword, { label: 'Password' }) }}
-	{{ form_row(registrationForm.RGPDConsent, { label: 'RGPD' }) }}
+  {{ form_widget(registrationForm) }}
 
 	<button type="submit" class="btn">Inscription</button>
 	{{ form_end(registrationForm) }}

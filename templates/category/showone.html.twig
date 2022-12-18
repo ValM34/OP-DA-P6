@@ -6,6 +6,10 @@
 
 {% block body %}
 
+  {% if succesMessage %}
+    <div>{{succesMessage}}</div>
+  {% endif %}
+
 	<h1 class="text-4xl">{{category.name}}</h1>
 	<p>{{category.description}}</p>
 

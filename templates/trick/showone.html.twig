@@ -6,6 +6,10 @@
 
 {% block body %}
 
+  {% if succesMessage %}
+    <div>{{succesMessage}}</div>
+  {% endif %}
+
 	<h1>Nom de la figure :
 		{{trick.name}}</h1>
 	<h2>Description :
@@ -22,10 +26,9 @@
 		</li>
 	{% endfor %}
 
-	<form action="http://127.0.0.1:8000/message/create/{{trick.id}}" method="POST" enctype="multipart/form-data">
-		<label for="content">Envoyer un message : </label>
-		<textarea class="w-full rounded bg-neutral-200" name="content" id="content" type="text" placeholder="Entrez votre message ici..." required="true"></textarea>
-		<button class="bg-blue-500 hover:bg-blue-400 px-2 py-1 rounded text-white font-semibold w-fit" type="submit">Valider</button>
-	</form>
+		{{ form_start(registrationForm) }}
+    {{ form_widget(registrationForm) }}
+    <button class="bg-blue-500 hover:bg-blue-400 px-2 py-1 rounded text-white font-semibold w-fit" type="submit">Valider</button>
+    {{ form_end(registrationForm) }}
 
 {% endblock %}

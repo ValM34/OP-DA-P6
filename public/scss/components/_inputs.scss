@@ -1,0 +1,27 @@
+// inputs
+.input-container {
+  position: relative;
+
+  .label-text {
+    position: absolute;
+    left: 30px;
+    top: 20px;
+    cursor: text;
+    transition: transform 0.3s ease-in-out, color 0.3s ease-in-out;
+    transform-origin: left;
+    font-weight: 500;
+  }
+
+  .input-text {
+    padding: 20px 30px;
+    border-radius: 50px;
+    border: 2px solid $black;
+    width: 500px;
+    max-width: 100%;
+
+    &:focus + .label-text {
+      transform: translateY(-15px) scale(80%);
+      color: $grey;
+    }
+  }
+}

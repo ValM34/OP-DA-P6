@@ -1,0 +1,23 @@
+// Base
+@import './base/reset';
+@import './base/variables';
+@import './base/mediaQueries';
+@import './base/fonts';
+@import './base/titles';
+
+// Components
+@import './components/buttons';
+@import './components/links';
+@import './components/notifications';
+@import './components/inputs';
+@import './components/tags';
+
+// layouts
+@import './layouts/headers';
+
+// Pages
+@import './pages/styleGuide';
+
+.hidden {
+  display: none;
+}
