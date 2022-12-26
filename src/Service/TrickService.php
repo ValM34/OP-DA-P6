@@ -6,10 +6,10 @@ use \DateTimeImmutable;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Trick;
-use App\Entity\User;
+use App\Entity\Image;
 use App\Entity\Category;
 use App\Entity\Message;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Request; 
 
 class TrickService implements TrickServiceInterface
 {
@@ -27,37 +27,12 @@ class TrickService implements TrickServiceInterface
     );
   }
 
-  public function create()
-  {
-    $this->created_at = new DateTimeImmutable();
-
-    $trick = new Trick();
-    $trick
-      ->setName($this->request->request->get('name'))
-      ->setDescription($this->request->request->get('description'))
-      ->setUpdatedAt($this->created_at)
-      ->setCreatedAt($this->created_at)
-    ;
-    $user = $this->entityManager->getRepository(User::class)->findOneById(1);
-    $category = $this->entityManager->getRepository(Category::class)->findOneById($this->request->request->get('category'));
-    $trick->setUser($user);
-    $trick->setCategory($category);
-
-    // tell Doctrine you want to (eventually) save the Product (no queries yet)
-    $this->entityManager->persist($trick);
-
-    // actually executes the queries (i.e. the INSERT query)
-    $this->entityManager->flush();
-
-    return $trick;
-  }
-
   public function findAll()
   {
     return $this->entityManager->getRepository(Trick::class)->findAll();
   }
 
-  public function getOne(int $id)
+  public function findOne(int $id)
   {
     $trick = $this->entityManager->getRepository(Trick::class)->find($id);
     if (!$trick) {
@@ -66,6 +41,40 @@ class TrickService implements TrickServiceInterface
 
     return $trick;
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  public function create($user, Trick $trick)
+  {
+    $date = new DateTimeImmutable();
+    $trick
+      ->setUser($user)
+      ->setUpdatedAt($date)
+      ->setCreatedAt($date)
+    ;
+
+    $this->entityManager->persist($trick);
+    $this->entityManager->flush();
+
+    return $trick;
+  }
+
+  
 
   public function updatePage(int $id)
   {
@@ -110,35 +119,24 @@ class TrickService implements TrickServiceInterface
     return $trick;
   }
 
-  public function createMessage($id_trick)
+  public function createMessage($user, $trick, $message)
   {
-    $this->created_at = new DateTimeImmutable();
+    $dateNow = new DateTimeImmutable();
 
-    $message = new Message();
     $message
-      ->setUpdatedAt($this->created_at)
-      ->setCreatedAt($this->created_at)
+      ->setUser($user)
+      ->setTrick($trick)
+      ->setUpdatedAt($dateNow)
+      ->setCreatedAt($dateNow)
     ;
-    $user = $this->entityManager->getRepository(User::class)->findOneById(1);
-    $trick = $this->entityManager->getRepository(Trick::class)->findOneById($id_trick);
-    $message->setUser($user);
-    $message->setTrick($trick);
-    if ($this->request->request->get('content')) {
-      $message->setContent($this->request->request->get('content'));
-    };
 
-    // tell Doctrine you want to (eventually) save the Product (no queries yet)
     $this->entityManager->persist($message);
-
-    // actually executes the queries (i.e. the INSERT query)
     $this->entityManager->flush();
-
-    return $message;
   }
 
-  public function getMessages(int $id)
+  public function getMessages($trick)
   {
-    return $this->entityManager->getRepository(Message::class)->findByTrick($id);
+    return $this->entityManager->getRepository(Message::class)->findByTrick($trick);
   }
 
   public function findAllCategories()
@@ -163,8 +161,7 @@ class TrickService implements TrickServiceInterface
     $entity = $this->entityManager->getRepository(Message::class)->find($id);
     $entity
       ->setUpdatedAt(new \DateTimeImmutable())
-      ->setCreatedAt(new \DateTimeImmutable())
-    ;
+      ->setCreatedAt(new \DateTimeImmutable());
     if ($this->request->request->get('content')) {
       $entity->setContent($this->request->request->get('content'));
     };
@@ -179,8 +176,7 @@ class TrickService implements TrickServiceInterface
     $entity = $this->entityManager->getRepository(Message::class)->find($id);
     $entity
       ->setUpdatedAt(new \DateTimeImmutable())
-      ->setCreatedAt(new \DateTimeImmutable())
-    ;
+      ->setCreatedAt(new \DateTimeImmutable());
     if ($this->request->request->get('content')) {
       $entity->setContent($this->request->request->get('content'));
     };

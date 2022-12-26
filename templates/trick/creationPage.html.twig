@@ -5,32 +5,10 @@
 
 {% block body %}
 
-	{% if app.user %}
-		<form action="http://127.0.0.1:8000/trick/create" method="POST" enctype="multipart/form-data">
-			<label for="name">Nom :</label>
-			<input name="name" id="name" type="text" placeholder="Votre nom..." required="true"/>
-
-			<label for="description">Description :</label>
-			<input name="description" id="description" type="text" placeholder="Description..." required="true"/>
-
-			<label for='category'></label>
-			<select name='category' id='category'>
-				{% for category in categories %}
-          <option value="{{category.id}}">{{category.name}}</option>
-        {% endfor %}
-			</select>
-
-			<label for="img">Image(s) :</label>
-			<input name="img" id="img" type="file"/>
-
-			<label for="video">Vidéo(s) :</label>
-			<input name="video" id="video" type="file"/>
-
-			<button type="submit">Valider</button>
-		</form>
-	{% else %}
-		Veuillez vous connecter pour pouvoir ajouter un nouveau trick :
-		<a href="{{ path('app_login') }}">Connexion</a>
-	{% endif %}
+  {{ form_start(registrationForm) }}
+  {{ form_widget(registrationForm) }}
+  <!-- Virer les forms d'en bas ou d'en haut pour que ça marche -->
+  <button type="submit" class="btn">Valider</button>
+  {{ form_end(registrationForm) }}
 
 {% endblock %}

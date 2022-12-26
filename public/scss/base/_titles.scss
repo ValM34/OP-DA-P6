@@ -1,0 +1,29 @@
+// Titles
+.title-1 {
+  font-size: 30px;
+
+  @include breakpoint(md) {
+    font-size: 40px;
+  }
+}
+
+.title-2 {
+  font-size: 27px;
+
+  @include breakpoint(md) {
+    font-size: 30px;
+  }
+}
+
+.title-3 {
+  font-size: 24px;
+
+  @include breakpoint(md) {
+    font-size: 25px;
+  }
+}
+
+.subtitle-1 {
+  font-size: 20px;
+  font-weight: 500;
+}

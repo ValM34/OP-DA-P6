@@ -1,0 +1,34 @@
+// ==============================================
+// VARIABLES - Responsive
+// ==============================================
+
+$medium:            768px;
+$medium-max:        767.98px;
+$large:             1025px;
+$large-max:         1024.98px;
+
+// ==============================================
+// MIXINS - Media Queries
+// ==============================================
+
+@mixin breakpoint($class) {
+  @if $class == md {
+      @media (min-width: $medium) { @content; }
+  }
+
+  @else if $class == only-md {
+      @media (max-width: $medium-max) { @content; }
+  }
+
+  @else if $class == lg {
+      @media (min-width: $large) { @content; }
+  }
+
+  @else if $class == only-lg {
+      @media (max-width: $large-max) { @content; }
+  }
+
+  @else {
+      @warn "Breakpoint mixin supports: md, lg";
+  }
+}

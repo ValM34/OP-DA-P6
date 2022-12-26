@@ -1,0 +1,85 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	Style guide
+{% endblock %}
+
+{% block body %}
+	<div class="styleguide-container">
+		<h2 class="styleguide-title">Police de caractère</h2>
+		<h2 class="title-2 styleguide-police-400">Montserrat - Regular (400)</h2>
+		<h2 class="title-2 styleguide-police-500">Montserrat - Regular (500)</h2>
+		<h3 class="title-2 styleguide-police-700">Montserrat - Regular (700)</h3>
+	</div>
+	<div class="styleguide-container">
+		<h2 class="styleguide-title">Niveaux de titre</h2>
+		<h2 class="title-1">Niveaux de titre 1 [.title-1]</h2>
+		<br/>
+		<h2 class="title-2">Niveaux de titre 2 [.title-2]</h2>
+		<br/>
+		<h3 class="title-3">Niveaux de titre 3 [.title-3]</h3>
+		<br/>
+		<h3 class="subtitle-1">Niveaux de sous titre 1 [.subtitle-1]</h3>
+	</div>
+	<div class="styleguide-container">
+		<h2 class="styleguide-title">Boutons</h2>
+		<button>Valider</button>
+	</div>
+	<div class="styleguide-container">
+		<h2 class="styleguide-title">Liens</h2>
+		<a class="primary" href="#">Ceci est un lien</a>
+		<br/>
+		<a class="secondary" href="#">Ceci est un lien</a>
+	</div>
+	<div class="styleguide-container">
+		<h2 class="styleguide-title">Exemple d'un paragraphe</h2>
+		<p>
+			What is Lorem Ipsum?
+			Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
+      Lorem Ipsum has been the industry's <a class="primary" href="#">exemple de lien</a> standard dummy text ever since the 1500s, 
+      when an unknown printer took a galley of type and scrambled it to make a type specimen book. 
+      It has survived not only five centuries, <strong>exemple de texte graissé</strong> but also the leap into electronic typesetting, 
+      remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, 
+      and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+		</p>
+	</div>
+  <div class="styleguide-container">
+		<h2 class="styleguide-title">Notifications</h2>
+		<div class="succes-message">Le trick a bien été ajouté.</div>
+		<div class="error-message">Une erreur est survenue durant la création du trick.</div>
+		<div class="info-message">Aucun commentaire n'a été posté pour l'instant.</div>
+	</div>
+  <div class="styleguide-container">
+		<h2 class="styleguide-title">Inputs</h2>
+    <div class="form-container">
+      <div class="form-subcontainer">
+        <form>
+          <label class="label-text" for="input">Nom et prénom*</label>
+          <input class="input-text" id="input" name="input" type="text" />
+        </form>
+      </div>
+    </div>
+	</div>
+  <div class="styleguide-container">
+		<h2 class="styleguide-title">Tags</h2>
+    <div class="tag">
+      18/12/2022
+    </div>
+	</div>
+  <div class="styleguide-container">
+		<h2 class="styleguide-title">Barres séparatrices</h2>
+    <div class="split-bar"></div>
+	</div>
+  <div class="styleguide-container">
+		<h2 class="styleguide-title">Icônes</h2>
+    <i class="fas fa-trash"></i>
+    <i class="fas fa-edit"></i>
+    <i class="fas fa-chevron-down"></i>
+    <i class="fas fa-arrow-up"></i>
+    <i class="fas fa-arrow-down"></i>
+    <i class="fas fa-arrow-alt-circle-right"></i>
+    <i class="fas fa-arrow-alt-circle-left"></i>
+    <i class="fas fa-spinner"></i>
+    <i class="fas fa-times"></i>
+	</div>
+{% endblock %}

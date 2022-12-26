@@ -3,37 +3,58 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>
-			{% block title %}Welcome!
+			{% block title %}
+        Welcome!
 			{% endblock %}
 		</title>
 		<link
 		rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
-		{# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
 		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <script src="https://kit.fontawesome.com/e869897231.js" crossorigin="anonymous"></script>
 
 		{% block stylesheets %}
-			{{ encore_entry_link_tags('app') }}
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+			<link rel="stylesheet" href="{{ asset('css/styles.css') }}"/>
 		{% endblock %}
+
+    <script type="module">
+      import burgerMenu from "{{ asset('js/allPages/header.js') }}";
+      burgerMenu();
+    </script>
+
 		{% block javascripts %}{% endblock %}
+
 	</head>
-	<body class="bg-neutral-100">
-		<header class="p-4 bg-blue-500 flex justify-center">
-      <a class="bg-orange-400 px-4 py-2 rounded-full mx-2 text-white font-semibold" href="{{ path('trick_show_all') }}">Tricks</a>
-      <a class="bg-orange-400 px-4 py-2 rounded-full mx-2 text-white font-semibold" href="{{ path('create_trick_page') }}">Ajouter un trick</a>
-			{% if app.user %}
-				<a class="bg-orange-400 px-4 py-2 rounded-full mx-2 text-white font-semibold" href="">Mon compte</a>
-				<a class="bg-orange-400 px-4 py-2 rounded-full mx-2 text-white font-semibold" href="{{ path('app_logout') }}">Déconnexion</a>
-			{% else %}
-				<a class="bg-orange-400 px-4 py-2 rounded-full mx-2 text-white font-semibold" href="{{ path('app_login') }}">Connexion</a>
-				<a class="bg-orange-400 px-4 py-2 rounded-full mx-2 text-white font-semibold" href="{{ path('app_register') }}">Inscription</a>
-			{% endif %}
 
+	<body class="{% block bodyClass %}{% endblock %}">
 
+		<header>
+      <div class="header-container">
+        <div>
+          <h2 class="title-2">Snowtricks</h2>
+        </div>
+        <div class="burger-btn">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <div class="overlay"></div>
+        <nav>
+          <a class="secondary" href="{{ path('home') }}">Home</a>
+          <a class="secondary" href="{{ path('home') }}#tricks-container">Tricks</a>
+          {% if app.user %}
+            <a class="secondary" href="{{ path('logout') }}">Logout</a>
+          {% else %}
+            <a class="secondary" href="{{ path('login') }}">Sign in</a>
+            <a class="secondary" href="{{ path('register') }}">Sign up</a>
+          {% endif %}
+        </nav>
+      </div>
 		</header>
-		<div class="flex justify-center py-6">
-			  <div class="max-w-5xl w-full bg-white p-4 rounded">
-          {% block body %}{% endblock %}
-				</div>
-			</div>
+    <div class="main-content">
+      {% block body %}{% endblock %}
+    </div>
 	</body>
 </html>

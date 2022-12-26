@@ -1,31 +1,94 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-	Ajouter un trick
+	{{trick.name}}
 {% endblock %}
+
+{% block javascripts %}
+<script type="module">
+  import showMedias from "{{ asset('js/trick/showMedias.js') }}";
+  import showMoreComments from "{{ asset('js/trick/showMoreComments.js') }}";
+  import slider from "{{ asset('js/trick/slider.js') }}";
+  showMedias();
+  showMoreComments();
+  slider();
+</script>
+{% endblock %}
+
+{% block bodyClass %}trick{% endblock %}
 
 {% block body %}
 
-	<h1>Nom de la figure :
-		{{trick.name}}</h1>
-	<h2>Description :
-	</h2>
-	{{trick.description}}
+  <div class="header-image" style="background-image: url('../../{{imagePath}}');">
+    <h1 class="title-1">{{trick.name}}</h1>
+  </div>
 
-	{% for message in messages %}
-		<li>
-			<p>{{message.content}}</p>
-			<!--<a href="updatepage/{{message.id}}">Modifier</a>
-						<a href="delete/{{message.id}}">Supprimer</a> -->
-      <a class="bg-blue-500 hover:bg-blue-400 px-2 py-1 rounded mx-2 text-white font-semibold" href="../../message/updatepage/{{message.id}}">Modifier</a>
-      <a class="bg-blue-500 hover:bg-blue-400 px-2 py-1 rounded mx-2 text-white font-semibold" href="../../message/delete/{{message.id}}">Supprimer</a>
-		</li>
-	{% endfor %}
+  <button id="see_medias_btn" class="see-medias-btn">See medias <i class="fas fa-chevron-down"></i></button>
 
-	<form action="http://127.0.0.1:8000/message/create/{{trick.id}}" method="POST" enctype="multipart/form-data">
-		<label for="content">Envoyer un message : </label>
-		<textarea class="w-full rounded bg-neutral-200" name="content" id="content" type="text" placeholder="Entrez votre message ici..." required="true"></textarea>
-		<button class="bg-blue-500 hover:bg-blue-400 px-2 py-1 rounded text-white font-semibold w-fit" type="submit">Valider</button>
-	</form>
+  <div class="arrows-container">
+    <div id="left-arrow" class="slider-arrow"><i class="fas fa-arrow-alt-circle-left"></i></div>
+    <div id="right-arrow" class="slider-arrow"><i class="fas fa-arrow-alt-circle-right"></i></div>
+  </div>
+
+  <div class="medias-container" id="medias_container" data-display="false">
+    <ul id="trick_medias_list" class="trick-medias-list">
+      {% for path in imagesPaths %}
+        <li>
+          <div style="background-image: url('../../{{path}}')" class="trick-img-container"></div>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  {% if succesMessage %}
+    <div>{{succesMessage}}</div>
+  {% endif %}
+
+  <div class="description-container">
+    <p>{{trick.description}}</p>
+  </div>
+
+  <div class="infos-container">
+    <div class="tag">Catégorie : {{category.name}}</div>
+    <div class="tag">Ajout : {{trick.createdAt|date('d-m-Y')}}</div>
+    <div class="tag">MAJ : {{trick.updatedAt|date('d-m-Y')}}</div>
+  </div>
+
+  <div class="base-container">
+    <div class="split-bar"></div>
+  </div>
+
+  <div class="form-container">
+    <div class="form-subcontainer">
+      {{ form_start(registrationForm) }}
+      {{ form_widget(registrationForm) }}
+        <button type="submit">Valider</button>
+      {{ form_end(registrationForm) }}
+    </div>
+  </div>
+
+  <div class="base-container">
+    <div class="split-bar"></div>
+  </div>
+  <ul id="comments-container" class="base-container comments-container">
+    {% for message in messages %}
+      <li>
+        <div class="infos-message">
+          <p>{{message.user}}</p>
+          <div>
+            <a href="../../message/updatepage/{{message.id}}" class="icon-container">
+            <i class="fas fa-edit"></i>
+            </a>
+            <a href="../../message/delete/{{message.id}}" class="icon-container">
+              <i class="fas fa-trash"></i>
+            </a>
+          </div>
+        </div>
+        <p>{{message.content}}</p>
+        
+      </li>
+    {% endfor %}
+  </ul>
+  <button id="show_more_comments_btn" class="show-more-btn">Voir plus</button>
 
 {% endblock %}

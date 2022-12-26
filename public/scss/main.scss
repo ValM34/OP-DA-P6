@@ -1,0 +1,39 @@
+// Base
+@import './base/reset';
+@import './base/variables';
+@import './base/mediaQueries';
+@import './base/fonts';
+@import './base/titles';
+
+// Animations
+@import './animations/display';
+
+// Components
+@import './components/buttons';
+@import './components/links';
+@import './components/notifications';
+@import './components/forms';
+@import './components/tags';
+@import './components/splitBar';
+
+// layouts
+@import './layouts/headers';
+
+// Pages
+@import './pages/styleGuide';
+@import './pages/home';
+@import './pages/trick';
+
+.hidden {
+  display: none;
+}
+
+.base-container {
+  max-width: 1280px;
+  margin: auto;
+  padding: 30px;
+}
+
+.text-center {
+  text-align: center;
+}

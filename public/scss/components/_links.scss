@@ -1,0 +1,35 @@
+// links
+a.primary {
+  color: $black;
+  font-weight: 500;
+}
+
+a.secondary {
+  color: $black;
+  font-weight: 500;
+  text-decoration: none;
+  transition: border-bottom 0.3s ease-in-out;
+  position: relative;
+
+  &::before {
+    content: "";
+    display: block;
+    background-color: $black;
+    height: 1px;
+    width: 100%;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+  }
+
+  &:hover::before {
+    opacity: 1;
+  }
+}
+
+a.icon-container {
+  text-decoration: none;
+  color: $black;
+}

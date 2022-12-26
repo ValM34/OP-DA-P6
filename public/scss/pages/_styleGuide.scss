@@ -1,0 +1,26 @@
+// styleguide
+.styleguide-container {
+  margin-left: 100px;
+  margin-top: 50px;
+  margin-bottom: 50px;
+
+  .styleguide-title {
+    font-size: 40px;
+    border-left: 5px solid $grey;
+    padding-left: 5px;
+    margin-bottom: 30px;
+    color: $grey;
+  }
+
+  .styleguide-police-400 {
+    font-weight: 400;
+  }
+
+  .styleguide-police-500 {
+    font-weight: 500;
+  }
+
+  .styleguide-police-700 {
+    font-weight: 700;
+  }
+}

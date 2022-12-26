@@ -63,4 +63,52 @@ class TrickRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
+
+public function findByTrick($trick): array
+{
+  $entityManager = $this->getEntityManager();
+
+  /*
+  $query = $entityManager->createQuery(
+    'SELECT m, u
+    FROM App\Entity\Message m
+    JOIN App\Entity\User u
+    WITH m.id_user = u.id
+    WHERE m.id_trick = :id_trick'
+  )->setParameter('id_trick', $id_trick);
+*/
+  /* Equivalent sur mysql à  : 
+    SELECT p.*, u.*
+    FROM message p
+    JOIN user u
+    ON p.id_user_id = u.id
+    WHERE p.id_trick_id = 14;
+    */
+
+    
+
+    return $this->createQueryBuilder('p')
+      ->select('p', 'u')
+      ->leftJoin('p.image', 'u')
+      ->where('p.trick = :trick')
+      ->setParameter('trick', $trick)
+      ->getQuery()
+      ->getResult()
+    ;
+
+
+  /*
+  $queryBuilder = $this->createQueryBuilder('m')
+    ->select('m', 'u')
+    ->leftJoin('m.id_user', 'u')
+    ->where('m.id_trick = :id_trick')
+    ->setParameter('id_trick', $id_trick);
+
+  $query = $queryBuilder->getQuery();
+  $results = $query->getArrayResult();
+
+  return $results;
+  */
+  }
 }

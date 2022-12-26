@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+
+
+{% block title %}
+	Snowtricks
+{% endblock %}
+
+{% block javascripts %}
+<script type="module">
+  import arrowToUp from "{{ asset('js/home/arrowToUp.js') }}";
+  arrowToUp();
+  import deleteTrick from "{{ asset('js/home/deleteTrick.js') }}";
+  deleteTrick();
+</script>
+{% endblock %}
+
+{% block body %}
+  <div class="presentation">
+    <h1 class="title-1">Phrase d'accroche de snowtricks !</h1>
+    <a href="#home-main"><i class="fas fa-arrow-down"></i></a>
+  </div>
+  <div id="tricks-container" class="tricks-container">
+    <div id="home-main" class="home-main">
+      <ul class="tricks-container">
+        {% for trick in tricks %}
+          <li class="trick-item">
+            <a href="trick/showone/{{trick.id}}" class="primary">
+              <div style="background-image: url('{{trick.path}}')" class="trick-img-container"></div>
+            </a>
+            <div class="trick-infos">
+              <div>
+                <a href="trick/showone/{{trick.id}}" class="primary">{{trick.name}}</a>
+              </div>
+              <div class="manage-trick">
+                <a href="updatepage/{{trick.id}}" class="icon-container">
+                  <i class="fas fa-edit"></i>
+                </a>
+                <a href="#" class="icon-container delete-btn" data-trick-id="{{trick.id}}">
+                  <i class="fas fa-trash"></i>
+                </a>
+              </div>
+            </div>
+          </li>
+        {% endfor %}
+        <a href="#home-main" class="icon-container arrow-to-up"><i class="fas fa-arrow-up"></i></a>
+      </ul>
+    </div>
+  </div>
+  <div id="modal" class="modal hidden">
+    <div data-close-modal="" class="close-modal"><i class="fas fa-times"></i></div>
+    <strong>Voulez-vous vraiment supprimer le trick ?</strong>
+    <div class="modal-btn-container">
+      <form id="modal_form" method="POST">
+        <button id="modal_submit_btn">Oui</button>
+        <button data-close-modal="">Non</button>
+      </form>
+    </div>
+  </div>
+  <div id="overlay" class="overlay hidden" data-close-modal=""></div>
+{% endblock %}
