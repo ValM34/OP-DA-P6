@@ -8,9 +8,30 @@
 
 
 {% block body %}
-	<div>
-		<h2>Liste des liens du site : </h2>
-    <a href ="/trick/all">Liste des tricks</a>
-    <a href ="/trick/creationpage">Ajouter un trick</a>
-	</div>
+  <div class="presentation">
+    <h1 class="title-1">Phrase d'accroche de snowtricks !</h1>
+    <a href="#home-main">></a>
+  </div>
+  <div id="tricks-container" class="tricks-container">
+    <div id="home-main" class="home-main">
+      <ul class="tricks-container">
+        {% for trick in tricks %}
+          <li class="trick-item">
+            <a href="trick/showone/{{trick.id}}" class="primary">
+              <div style="background-image: url('{{trick.path}}')" class="trick-img-container"></div>
+            </a>
+            <div class="trick-infos">
+              <div>
+                <a href="trick/showone/{{trick.id}}" class="primary">{{trick.name}}</a>
+              </div>
+              <div>
+                <a href="updatepage/{{trick.id}}" class="primary">U</a>
+                <a href="delete/{{trick.id}}" class="primary">D</a>
+              </div>
+            </div>
+          </li>
+        {% endfor %}      
+      </ul>
+    </div>
+  </div>
 {% endblock %}

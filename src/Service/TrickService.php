@@ -6,7 +6,7 @@ use \DateTimeImmutable;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Trick;
-use App\Entity\User;
+use App\Entity\Image;
 use App\Entity\Category;
 use App\Entity\Message;
 use Symfony\Component\HttpFoundation\Request; 
@@ -27,6 +27,38 @@ class TrickService implements TrickServiceInterface
     );
   }
 
+  public function findAll()
+  {
+    return $this->entityManager->getRepository(Trick::class)->findAll();
+  }
+
+  public function findOne(int $id)
+  {
+    $trick = $this->entityManager->getRepository(Trick::class)->find($id);
+    if (!$trick) {
+      $trick = null;
+    }
+
+    return $trick;
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   public function create($user, Trick $trick)
   {
     $date = new DateTimeImmutable();
@@ -42,20 +74,7 @@ class TrickService implements TrickServiceInterface
     return $trick;
   }
 
-  public function findAll()
-  {
-    return $this->entityManager->getRepository(Trick::class)->findAll();
-  }
-
-  public function getOne(int $id)
-  {
-    $trick = $this->entityManager->getRepository(Trick::class)->find($id);
-    if (!$trick) {
-      $trick = null;
-    }
-
-    return $trick;
-  }
+  
 
   public function updatePage(int $id)
   {

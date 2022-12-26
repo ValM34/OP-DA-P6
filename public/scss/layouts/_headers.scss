@@ -6,8 +6,9 @@
 header {
   position: sticky;
   top: 0;
-  z-index: 1;
+  z-index: 2;
   color: $white;
+  box-shadow: 0 0 5px #00000075;
 
   .header-container {
     position: relative;
@@ -69,6 +70,7 @@ header {
         background-color: $blue;
         animation: display 0.3s ease-in-out;
         left: 0;
+        box-shadow: 0 2px 2px #00000047;
       }
     }
   }

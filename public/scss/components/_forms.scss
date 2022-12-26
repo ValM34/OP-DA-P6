@@ -1,0 +1,62 @@
+// forms
+.form-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+
+  .form-subcontainer {
+    width: 80%;
+
+    @include breakpoint(md) {
+      width: fit-content;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      max-width: 600px;
+      
+      @include breakpoint(md) {
+        padding: 30px;
+      }
+
+      input[type="text"], input[type="password"], input[type="email"] {
+        padding: 20px 30px;
+        border-radius: 50px;
+        border: 2px solid $black;
+        width: 100%;
+        max-width: 100%;
+
+        @include breakpoint(md) {
+          width: 500px;
+        }
+      }
+
+      div {
+        width: 100%;
+
+        div {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          margin: 20px 0;
+        }
+      }
+    }
+
+    a {
+      text-align: center;
+      display: block;
+      margin-bottom: 10px;
+    }
+  }
+}
+
+body.register, body.login {
+  .form-subcontainer {
+    @include breakpoint(md) {
+      border: 2px solid black;
+    }
+  }
+}

@@ -3,12 +3,21 @@
 {% block title %}Inscription
 {% endblock %}
 
+{% block bodyClass %}register{% endblock %}
+
 {% block body %}
-	<h1>Inscription</h1>
+	<div class="base-container text-center">
+    <h1 class="title-1">Inscription</h1>
+  </div>
 
-	{{ form_start(registrationForm) }}
-  {{ form_widget(registrationForm) }}
+  <div class="form-container">
+    <div class="form-subcontainer">
+      {{ form_start(registrationForm) }}
+      {{ form_widget(registrationForm) }}
 
-	<button type="submit" class="btn">Inscription</button>
-	{{ form_end(registrationForm) }}
+      <button type="submit" class="btn">Inscription</button>
+      {{ form_end(registrationForm) }}
+      <a class="primary" href="{{ path('login') }}">Already have an account ?</a>
+    </div>
+  </div>
 {% endblock %}

@@ -8,7 +8,7 @@ interface TrickServiceInterface
 {
   public function create($user, Trick $trick);
   public function findAll();
-  public function getOne(int $id);
+  public function findOne(int $id);
   public function updatePage(int $id);
   public function update(int $id);
   public function delete(int $id);

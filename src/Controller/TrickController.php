@@ -4,11 +4,10 @@ namespace App\Controller;
 
 use DateTimeImmutable;
 use App\Entity\Trick;
-use App\Entity\User;
-use App\Entity\Category;
 use App\Entity\Message;
 use App\Entity\Trait\CreatedAtTrait;
 use App\Service\TrickServiceInterface;
+use App\Service\ImageServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -23,10 +22,12 @@ class TrickController extends AbstractController
   use CreatedAtTrait;
 
   private $trickService;
+  private $imageService;
 
-  public function __construct(TrickServiceInterface $trickService)
+  public function __construct(TrickServiceInterface $trickService, ImageServiceInterface $imageService)
   {
     $this->trickService = $trickService;
+    $this->imageService = $imageService;
   }
 
   // STYLE GUIDE
@@ -37,11 +38,28 @@ class TrickController extends AbstractController
   }
 
   // DISPLAY ALL
-  #[Route('/trick/all', name: 'trick_show_all')]
+  #[Route('/', name: 'home')]
   public function showAll(): Response
   {
-    return $this->render('trick/index.html.twig', [
-      'tricks' => $this->trickService->findAll()
+    $tricks = $this->trickService->findAll();
+    // @TODO => problème n.1
+    $tricksData = [];
+    // $tricks[0]->getImages()[0]->getPath(); -> cela nourrit l'objet trick de TOUS les paths
+    // dump($tricks);
+    for($i = 0; $i < count($tricks); $i++){
+      $tricksData[$i]['id'] = $tricks[$i]->getId();
+      $tricksData[$i]['description'] = $tricks[$i]->getDescription();
+      $tricksData[$i]['name'] = $tricks[$i]->getName();
+
+      if($tricks[$i]->getImages()[0] !== null){
+        $tricksData[$i]['path'] = $tricks[$i]->getImages()[0]->getPath();
+      } else {
+        $tricksData[$i]['path'] = 'images/defaultImage.jpg';
+      }
+    }
+
+    return $this->render('home/home.html.twig', [
+      'tricks' => $tricksData,
     ]);
   }
 
@@ -52,28 +70,71 @@ class TrickController extends AbstractController
     $message = new Message();
     $form = $this->createForm(CreationMessage::class, $message);
     $form->handleRequest($request);
-    $trick = $this->trickService->getOne($id);
+    $trick = $this->trickService->findOne($id);
     $messages = $this->trickService->getMessages($id);
+
+    // @TODO => problème n.1
+    $imagesPaths = [];
+    $imagePath = null;
+
+    if($trick->getImages()[0] !== null){
+      $imagePath = $trick->getImages()[0]->getPath();
+      for($i = 0; $i < count($trick->getImages()); $i++){  
+          $imagesPaths[$i] = $trick->getImages()[$i]->getPath();
+      }      
+    } else {
+      $imagePath = 'images/defaultImage.jpg';
+    }
 
     if ($form->isSubmitted() && $form->isValid()) {
       $this->trickService->createMessage($this->getUser(), $trick, $message);
       
-      // do anything else you need here, like send an email
-
-      // Ici je dois retourner la page du trick que je viens de créer
       return $this->redirectToRoute('trick_show', [
         'id' => $trick->getId(),
         'succesMessage' => 'Votre commentaire a bien été ajouté!'
       ]);
     }
+
+    $category['name'] = $trick->getCategory()->getName();
+    $createdAt = $trick->getCreatedAt();
+    $updatedAt = $trick->getUpdatedAt();
+
     $succesMessage = null;
+
     return $this->render('trick/showone.html.twig', [
       'trick' => $trick,
       'messages' => $messages,
       'succesMessage' => $succesMessage,
-      'registrationForm' => $form->createView()
+      'registrationForm' => $form->createView(),
+      'imagesPaths' => $imagesPaths,
+      'imagePath' => $imagePath,
+      'category' => $category,
+      'updatedAt' => $updatedAt
     ]);
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   #[Route('/trick/create', name: 'create_trick')]
   public function createProduct(Request $request): Response

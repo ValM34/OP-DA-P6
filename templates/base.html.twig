@@ -3,12 +3,12 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>
-			{% block title %}Welcome!
+			{% block title %}
+        Welcome!
 			{% endblock %}
 		</title>
 		<link
 		rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
-		{# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
 		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
 		{% block stylesheets %}
@@ -22,9 +22,9 @@
     {% endblock %}
 	</head>
 
-	<body class="bg-neutral-100">
+	<body class="{% block bodyClass %}{% endblock %}">
 
-		<header class="p-4 bg-blue-500 flex justify-center">
+		<header>
       <div class="header-container">
         <div>
           <h2 class="title-2">Snowtricks</h2>
@@ -37,21 +37,19 @@
         <div class="overlay"></div>
         <nav>
           <a class="secondary" href="{{ path('home') }}">Home</a>
-          <a class="secondary" href="{{ path('trick_show_all') }}">Tricks</a>
+          <a class="secondary" href="{{ path('home') }}#tricks-container">Tricks</a>
           {% if app.user %}
-            <a class="secondary" href="{{ path('app_logout') }}">Logout</a>
+            <a class="secondary" href="{{ path('logout') }}">Logout</a>
           {% else %}
-            <a class="secondary" href="{{ path('app_login') }}">Sign in</a>
-            <a class="secondary" href="{{ path('app_register') }}">Sign up</a>
+            <a class="secondary" href="{{ path('login') }}">Sign in</a>
+            <a class="secondary" href="{{ path('register') }}">Sign up</a>
           {% endif %}
         </nav>
       </div>
 		</header>
 
-		<div class="flex justify-center py-6">
-			  <div class="max-w-5xl w-full bg-white p-4 rounded">
-          {% block body %}{% endblock %}
-				</div>
-			</div>
+    <div class="main-content">
+      {% block body %}{% endblock %}
+    </div>
 	</body>
 </html>

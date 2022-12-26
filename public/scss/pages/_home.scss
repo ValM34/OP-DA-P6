@@ -1,0 +1,72 @@
+.presentation {
+  height: calc(100vh - 60px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image: url('../../images/homeImage.jpg');
+  background-size: cover;
+  background-position: center 20%;
+  position: relative;
+
+  @include breakpoint(md) {
+    height: calc(100vh - 120px);
+  }
+
+  h1 {
+    text-align: center;
+    background-color: #000000de;
+    color: $white;
+    max-width: 80%;
+    padding: 20px 30px;
+    box-shadow: 0 0 5px $black;
+  }
+
+  a {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    font-size: 30px;
+    text-decoration: none;
+    transform: rotate(90deg);
+    background-color: black;
+    width: 33px;
+    text-align: center;
+    color: white;
+  }
+}
+
+.tricks-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  padding: 30px 15px;
+  
+  .trick-item {
+    list-style-type: none;
+    width: 100%;
+    margin-bottom: 30px;
+    background-color: $light;
+    padding: 10px;
+    box-shadow: 0 0 5px #0000003b;
+    border-radius: 5px;
+
+    @include breakpoint(md) {
+      width: 300px;
+      margin: 30px 15px;
+    }
+
+    .trick-img-container {
+      width: 100%;
+      height: 200px;
+      background-position: center;
+      background-size: cover;
+    }
+
+    .trick-infos {
+      margin: 10px 0;
+      display: flex;
+      justify-content: space-between;
+      word-break: break-word;
+    }
+  }
+}

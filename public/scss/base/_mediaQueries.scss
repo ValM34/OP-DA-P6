@@ -2,8 +2,8 @@
 // VARIABLES - Responsive
 // ==============================================
 
-$medium:            769px;
-$medium-max:        768.98px;
+$medium:            768px;
+$medium-max:        767.98px;
 $large:             1025px;
 $large-max:         1024.98px;
 
@@ -29,6 +29,6 @@ $large-max:         1024.98px;
   }
 
   @else {
-      @warn "Breakpoint mixin supports: xs, sm, md, lg, xl";
+      @warn "Breakpoint mixin supports: md, lg";
   }
 }
