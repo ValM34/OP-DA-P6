@@ -73,6 +73,18 @@ class TrickController extends AbstractController
     $trick = $this->trickService->findOne($id);
     $messages = $this->trickService->getMessages($id);
 
+    $messagesArray = [];
+    $arr = [];
+    for($i = 0; $i < count($messages); $i++){
+      $arr = ['id'=>$messages[$i]->getId(), 'content'=>$messages[$i]->getContent(), 'user'=>$messages[$i]->getUser()->getFirstname()];
+      //array_push($arr['id'], $messages[$i]->getId());
+      //$messagesArray[$id]['content'] = $messages[$i]->getContent();
+      //array_push($arr['content'], $messages[$i]->getContent());
+      //$arr[$i]['id'] = $test;
+      //$messagesArray[$id]['user'] = $messages[$i]->getUser()->getFirstname();
+      array_push($messagesArray, $arr);
+    }
+
     // @TODO => problème n.1
     $imagesPaths = [];
     $imagePath = null;
@@ -103,7 +115,7 @@ class TrickController extends AbstractController
 
     return $this->render('trick/showone.html.twig', [
       'trick' => $trick,
-      'messages' => $messages,
+      'messages' => $messagesArray,
       'succesMessage' => $succesMessage,
       'registrationForm' => $form->createView(),
       'imagesPaths' => $imagesPaths,

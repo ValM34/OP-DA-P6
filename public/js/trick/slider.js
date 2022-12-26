@@ -7,7 +7,6 @@ export default function slider(){
   
 
   leftArrow.addEventListener('click', () => {
-    console.log(containerUl)
     containerUl.scrollTo({
       left: containerUl.scrollLeft - 330,
       behavior: 'smooth'
@@ -22,14 +21,10 @@ export default function slider(){
   });
 
   rightArrow.addEventListener('click', () => {
-    console.log(containerUl)
     containerUl.scrollTo({
       left: containerUl.scrollLeft + 330,
       behavior: 'smooth'
     });
-    console.log(containerUl.scrollLeft + containerUl.offsetWidth)
-    console.log(containerUl.scrollWidth)
-    console.log(containerUl.width)
     if(containerUl.scrollLeft + containerUl.offsetWidth >= containerUl.scrollWidth - 50){
       containerUl.scrollTo({
         left: 0,

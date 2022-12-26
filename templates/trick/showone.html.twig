@@ -4,17 +4,30 @@
 	{{trick.name}}
 {% endblock %}
 
+{% block javascripts %}
+<script type="module">
+  import showMedias from "{{ asset('js/trick/showMedias.js') }}";
+  import showMoreComments from "{{ asset('js/trick/showMoreComments.js') }}";
+  import slider from "{{ asset('js/trick/slider.js') }}";
+  showMedias();
+  showMoreComments();
+  slider();
+</script>
+{% endblock %}
+
+{% block bodyClass %}trick{% endblock %}
+
 {% block body %}
 
   <div class="header-image" style="background-image: url('../../{{imagePath}}');">
     <h1 class="title-1">{{trick.name}}</h1>
   </div>
 
-  <button id="see_medias_btn" class="see-medias-btn">See medias</button>
+  <button id="see_medias_btn" class="see-medias-btn">See medias <i class="fas fa-chevron-down"></i></button>
 
   <div class="arrows-container">
-    <div id="left-arrow" class="slider-arrow"><</div>
-    <div id="right-arrow" class="slider-arrow">></div>
+    <div id="left-arrow" class="slider-arrow"><i class="fas fa-arrow-alt-circle-left"></i></div>
+    <div id="right-arrow" class="slider-arrow"><i class="fas fa-arrow-alt-circle-right"></i></div>
   </div>
 
   <div class="medias-container" id="medias_container" data-display="false">
@@ -60,11 +73,19 @@
   <ul id="comments-container" class="base-container comments-container">
     {% for message in messages %}
       <li>
+        <div class="infos-message">
+          <p>{{message.user}}</p>
+          <div>
+            <a href="../../message/updatepage/{{message.id}}" class="icon-container">
+            <i class="fas fa-edit"></i>
+            </a>
+            <a href="../../message/delete/{{message.id}}" class="icon-container">
+              <i class="fas fa-trash"></i>
+            </a>
+          </div>
+        </div>
         <p>{{message.content}}</p>
-        <!--<a href="updatepage/{{message.id}}">Modifier</a>
-              <a href="delete/{{message.id}}">Supprimer</a> -->
-        <a href="../../message/updatepage/{{message.id}}">Modifier</a>
-        <a href="../../message/delete/{{message.id}}">Supprimer</a>
+        
       </li>
     {% endfor %}
   </ul>

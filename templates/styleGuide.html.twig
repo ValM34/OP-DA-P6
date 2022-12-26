@@ -52,8 +52,12 @@
   <div class="styleguide-container">
 		<h2 class="styleguide-title">Inputs</h2>
     <div class="form-container">
-      <input class="input-text" id="input" name="input" />
-      <label class="label-text" for="input">Nom et prénom*</label>
+      <div class="form-subcontainer">
+        <form>
+          <label class="label-text" for="input">Nom et prénom*</label>
+          <input class="input-text" id="input" name="input" type="text" />
+        </form>
+      </div>
     </div>
 	</div>
   <div class="styleguide-container">
@@ -63,7 +67,19 @@
     </div>
 	</div>
   <div class="styleguide-container">
-		<h2 class="styleguide-title">BArres séparatrices</h2>
+		<h2 class="styleguide-title">Barres séparatrices</h2>
     <div class="split-bar"></div>
+	</div>
+  <div class="styleguide-container">
+		<h2 class="styleguide-title">Icônes</h2>
+    <i class="fas fa-trash"></i>
+    <i class="fas fa-edit"></i>
+    <i class="fas fa-chevron-down"></i>
+    <i class="fas fa-arrow-up"></i>
+    <i class="fas fa-arrow-down"></i>
+    <i class="fas fa-arrow-alt-circle-right"></i>
+    <i class="fas fa-arrow-alt-circle-left"></i>
+    <i class="fas fa-spinner"></i>
+    <i class="fas fa-times"></i>
 	</div>
 {% endblock %}

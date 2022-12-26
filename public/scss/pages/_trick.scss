@@ -74,12 +74,13 @@
 
   .slider-arrow {
     display: none;
-    position: absolute;
-    z-index: 1;
-    font-size: 100px;
     
     @include breakpoint(md) {
-      display: block;
+      position: absolute;
+      z-index: 1;
+      display: flex;
+      justify-content: center;
+      width: 50px;
       top: 30px;
       height: 220px;
       display: flex;
@@ -92,6 +93,10 @@
         color: $white;
         cursor: pointer;
       }
+    }
+
+    i.fas {
+      font-size: 40px;
     }
   }
   
@@ -136,18 +141,40 @@
     list-style-type: none;
     background-color: $light;
     margin-bottom: 30px;
-    padding: 20px 10px;
+    padding: 10px;
     box-shadow: 0 2px 2px #00000047;
     animation: opacity 0.3s;
+
+    .infos-message {
+      display: flex;
+      justify-content: space-between;
+
+      div {
+        display: flex;
+      }
+    }
   }
 }
 
 .see-medias-btn {
   margin: 30px auto 0;
   display: block;
+  position: relative;
 
   @include breakpoint(md) {
     display: none;
+  }
+
+  .fa-chevron-down {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    transition: transform 0.3s;
+
+    &.open {
+      transform: translateY(-50%) rotate(180deg);
+    }
   }
 }
 
@@ -157,5 +184,60 @@
 
   @include breakpoint(md) {
     display: none;
+  }
+}
+
+.modal {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+  background-color: white;
+  padding: 30px;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: opacity 0.3s;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 0 10px #000000c7;
+
+  @include breakpoint(md) {
+    width: auto;
+    min-width: 600px;
+  }
+
+  .modal-btn-container {
+    margin-top: 20px;
+  }
+
+  .close-modal {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}
+
+.overlay {
+  position: fixed;
+  display: block;
+  height: 100vh;
+  width: 100vw;
+  z-index: 2;
+  background-color: #00000061;
+  left: 0;
+  top: 0;
+  animation: opacity 0.3s;
+}
+
+body.trick {
+  .form-subcontainer {
+    box-shadow: none;
   }
 }

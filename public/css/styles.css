@@ -57,10 +57,10 @@
 }
 button {
   padding: 7px 30px;
-  background-color: black;
+  background-color: rgb(19, 19, 19);
   color: white;
   border-radius: 50px;
-  border: 2px solid black;
+  border: 2px solid rgb(19, 19, 19);
   box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.15);
   width: fit-content;
   transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
@@ -69,17 +69,17 @@ button {
 button:hover {
   cursor: pointer;
   background-color: white;
-  color: black;
+  color: rgb(19, 19, 19);
   box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
 }
 
 a.primary {
-  color: black;
+  color: rgb(19, 19, 19);
   font-weight: 500;
 }
 
 a.secondary {
-  color: black;
+  color: rgb(19, 19, 19);
   font-weight: 500;
   text-decoration: none;
   transition: border-bottom 0.3s ease-in-out;
@@ -88,7 +88,7 @@ a.secondary {
 a.secondary::before {
   content: "";
   display: block;
-  background-color: black;
+  background-color: rgb(19, 19, 19);
   height: 1px;
   width: 100%;
   position: absolute;
@@ -99,6 +99,11 @@ a.secondary::before {
 }
 a.secondary:hover::before {
   opacity: 1;
+}
+
+a.icon-container {
+  text-decoration: none;
+  color: rgb(19, 19, 19);
 }
 
 .succes-message {
@@ -132,6 +137,8 @@ a.secondary:hover::before {
 }
 .form-container .form-subcontainer {
   width: 80%;
+  box-shadow: 0px 0px 14px rgba(0, 0, 0, 0.2);
+  border-radius: 20px;
 }
 @media (min-width: 768px) {
   .form-container .form-subcontainer {
@@ -152,7 +159,7 @@ a.secondary:hover::before {
 .form-container .form-subcontainer form input[type=text], .form-container .form-subcontainer form input[type=password], .form-container .form-subcontainer form input[type=email] {
   padding: 20px 30px;
   border-radius: 50px;
-  border: 2px solid black;
+  border: 2px solid rgb(19, 19, 19);
   width: 100%;
   max-width: 100%;
 }
@@ -173,7 +180,7 @@ a.secondary:hover::before {
 .form-container .form-subcontainer a {
   text-align: center;
   display: block;
-  margin-bottom: 10px;
+  margin: 10px 0;
 }
 
 @media (min-width: 768px) {
@@ -192,7 +199,7 @@ a.secondary:hover::before {
 
 .split-bar {
   height: 3px;
-  background-color: black;
+  background-color: rgb(19, 19, 19);
   border-radius: 100%;
 }
 
@@ -349,19 +356,24 @@ header .overlay.is-active {
   color: white;
   max-width: 80%;
   padding: 20px 30px;
-  box-shadow: 0 0 5px black;
+  box-shadow: 0 0 5px rgb(19, 19, 19);
 }
 .presentation a {
   position: absolute;
   right: 10px;
   bottom: 10px;
-  font-size: 30px;
   text-decoration: none;
-  transform: rotate(90deg);
-  background-color: black;
+  background-color: rgb(19, 19, 19);
   width: 33px;
   text-align: center;
   color: white;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.presentation a i {
+  font-size: 20px;
 }
 
 .tricks-container {
@@ -369,6 +381,7 @@ header .overlay.is-active {
   flex-wrap: wrap;
   justify-content: space-around;
   padding: 30px 15px;
+  position: relative;
 }
 .tricks-container .trick-item {
   list-style-type: none;
@@ -378,6 +391,7 @@ header .overlay.is-active {
   padding: 10px;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.231372549);
   border-radius: 5px;
+  position: relative;
 }
 @media (min-width: 768px) {
   .tricks-container .trick-item {
@@ -396,6 +410,30 @@ header .overlay.is-active {
   display: flex;
   justify-content: space-between;
   word-break: break-word;
+}
+.tricks-container a.arrow-to-up {
+  display: none;
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  text-decoration: none;
+  background-color: rgb(19, 19, 19);
+  width: 33px;
+  text-align: center;
+  color: white;
+  height: 30px;
+  align-items: center;
+  justify-content: center;
+}
+.tricks-container a.arrow-to-up i {
+  font-size: 20px;
+}
+
+.manage-trick {
+  display: flex;
+}
+.manage-trick a:first-child {
+  margin-right: 10px;
 }
 
 .header-image {
@@ -418,7 +456,7 @@ header .overlay.is-active {
   color: white;
   max-width: 80%;
   padding: 20px 30px;
-  box-shadow: 0 0 5px black;
+  box-shadow: 0 0 5px rgb(19, 19, 19);
 }
 
 .medias-container {
@@ -474,13 +512,14 @@ header .overlay.is-active {
 }
 .arrows-container .slider-arrow {
   display: none;
-  position: absolute;
-  z-index: 1;
-  font-size: 100px;
 }
 @media (min-width: 768px) {
   .arrows-container .slider-arrow {
-    display: block;
+    position: absolute;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    width: 50px;
     top: 30px;
     height: 220px;
     display: flex;
@@ -493,6 +532,9 @@ header .overlay.is-active {
     color: white;
     cursor: pointer;
   }
+}
+.arrows-container .slider-arrow i.fas {
+  font-size: 40px;
 }
 .arrows-container #left-arrow {
   left: 0;
@@ -533,19 +575,37 @@ header .overlay.is-active {
   list-style-type: none;
   background-color: #f5f5f5;
   margin-bottom: 30px;
-  padding: 20px 10px;
+  padding: 10px;
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2784313725);
   animation: opacity 0.3s;
+}
+.base-container.comments-container li .infos-message {
+  display: flex;
+  justify-content: space-between;
+}
+.base-container.comments-container li .infos-message div {
+  display: flex;
 }
 
 .see-medias-btn {
   margin: 30px auto 0;
   display: block;
+  position: relative;
 }
 @media (min-width: 768px) {
   .see-medias-btn {
     display: none;
   }
+}
+.see-medias-btn .fa-chevron-down {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: transform 0.3s;
+}
+.see-medias-btn .fa-chevron-down.open {
+  transform: translateY(-50%) rotate(180deg);
 }
 
 .show-more-btn {
@@ -556,6 +616,57 @@ header .overlay.is-active {
   .show-more-btn {
     display: none;
   }
+}
+
+.modal {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+  background-color: white;
+  padding: 30px;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: opacity 0.3s;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.7803921569);
+}
+@media (min-width: 768px) {
+  .modal {
+    width: auto;
+    min-width: 600px;
+  }
+}
+.modal .modal-btn-container {
+  margin-top: 20px;
+}
+.modal .close-modal {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+}
+.modal .close-modal:hover {
+  cursor: pointer;
+}
+
+.overlay {
+  position: fixed;
+  display: block;
+  height: 100vh;
+  width: 100vw;
+  z-index: 2;
+  background-color: rgba(0, 0, 0, 0.3803921569);
+  left: 0;
+  top: 0;
+  animation: opacity 0.3s;
+}
+
+body.trick .form-subcontainer {
+  box-shadow: none;
 }
 
 .hidden {
