@@ -45,6 +45,7 @@
           <a class="secondary" href="{{ path('home') }}">Home</a>
           <a class="secondary" href="{{ path('home') }}#tricks-container">Tricks</a>
           {% if app.user %}
+            <a class="secondary" href="{{ path('trick_create') }}">Ajouter un trick</a>
             <a class="secondary" href="{{ path('logout') }}">Logout</a>
           {% else %}
             <a class="secondary" href="{{ path('login') }}">Sign in</a>

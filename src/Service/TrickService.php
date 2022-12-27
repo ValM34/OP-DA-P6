@@ -27,6 +27,7 @@ class TrickService implements TrickServiceInterface
     );
   }
 
+  // DISPLAY ALL TRICKS
   public function findAll()
   {
     return $this->entityManager->getRepository(Trick::class)->findAll();
@@ -87,19 +88,15 @@ class TrickService implements TrickServiceInterface
     return $trick;
   }
 
-  public function update(int $id)
+  public function update(Trick $trick)
   {
-    $trick = $this->entityManager->getRepository(Trick::class)->find($id);
+    $date = new DateTimeImmutable();
+    $trick
+      ->setUpdatedAt($date)
+      ->setCreatedAt($date)
+    ;
 
-    if (!$trick) {
-      $trick = null;
-    }
-    if ($this->request->request->get('name')) {
-      $trick->setName($this->request->request->get('name'));
-    };
-    if ($this->request->request->get('description')) {
-      $trick->setDescription($this->request->request->get('description'));
-    };
+    $this->entityManager->persist($trick);
     $this->entityManager->flush();
 
     return $trick;

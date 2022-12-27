@@ -95,7 +95,7 @@ class CategoryController extends AbstractController
   }
 
   #[Route('/category/create', name: 'create_category')]
-  public function createProduct(): Response
+  public function create(): Response
   {
     $category = $this->categoryService->create();
 

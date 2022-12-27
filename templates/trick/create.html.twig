@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+  Ajouter un trick
+{% endblock %}
+
+{% block bodyClass %}create-trick{% endblock %}
+
+{% block body %}
+  <div class="title-1 text-center">Ajouter un trick</div>
+  {% if app.user %}
+    <div class="base-container">
+      <div class="form-container">
+        <div class="form-subcontainer">
+          {{ form_start(createTrickForm) }}
+          {{ form_widget(createTrickForm) }}
+            <button type="submit">Valider</button>
+          {{ form_end(createTrickForm) }}
+        </div>
+      </div>
+    </div>
+  {% else %}
+    <div class="base-container text-center">
+      Vous devez <a class="primary" href="{{ path('login') }}">vous connecter</a> pour pouvoir créer un trick.
+    <div>
+  {% endif %}
+{% endblock %}

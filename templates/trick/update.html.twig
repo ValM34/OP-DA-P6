@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter un trick
+{% endblock %}
+
+{% block body %}
+
+	{% if app.user %}
+		<div class="base-container">
+      <div class="form-container">
+        <div class="form-subcontainer">
+          {{ form_start(updateTrickForm) }}
+          {{ form_widget(updateTrickForm) }}
+            <button type="submit">Valider</button>
+          {{ form_end(updateTrickForm) }}
+        </div>
+      </div>
+    </div>
+	{% else %}
+		Veuillez vous connecter pour pouvoir ajouter un nouveau trick :
+		<a href="{{ path('app_login') }}">Connexion</a>
+	{% endif %}
+
+{% endblock %}

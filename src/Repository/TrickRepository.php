@@ -39,6 +39,11 @@ class TrickRepository extends ServiceEntityRepository
         }
     }
 
+    public function findAll()
+    {
+        return $this->findBy(array(), array('updated_at' => 'DESC'));
+    }
+
 //    /**
 //     * @return Trick[] Returns an array of Trick objects
 //     */

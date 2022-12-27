@@ -181,10 +181,11 @@
 .show-more-btn {
   margin: 0 auto 30px;
   display: block;
+}
 
-  @include breakpoint(md) {
-    display: none;
-  }
+.show-more-messages-btn {
+  margin: 0 auto 30px;
+  display: block;
 }
 
 .modal {
@@ -239,5 +240,26 @@
 body.trick {
   .form-subcontainer {
     box-shadow: none;
+  }
+
+  .header-image {
+    position: relative;
+
+    .trick-icons-container {
+      position: absolute;
+      padding: 20px;
+      background-color: #0000006e;
+      top: 15px;
+      right: 15px;
+      display: flex;
+
+      .icon-container {
+        color: $light;
+      }
+
+      .trick-icon-update {
+        margin-right: 15px;
+      }
+    }
   }
 }

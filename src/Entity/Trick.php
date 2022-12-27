@@ -7,8 +7,13 @@ use App\Repository\TrickRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: TrickRepository::class)]
+#[UniqueEntity(
+  fields: ['name'],
+  message: 'Ce trick existe déjà.',
+)]
 class Trick
 {
   use CreatedAtTrait;
@@ -18,7 +23,7 @@ class Trick
   #[ORM\Column]
   private ?int $id = null;
 
-  #[ORM\Column(length: 150)]
+  #[ORM\Column(name: 'name', length: 150, type: 'string', unique: true)]
   private ?string $name = null;
 
   #[ORM\Column(length: 2500)]

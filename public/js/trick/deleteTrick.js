@@ -13,7 +13,7 @@ export default function deleteTrick(){
       overlay.classList.toggle("hidden");
 
       selectedTrick = deleteBtn.getAttribute("data-trick-id");
-      form.action = `trick/delete/${selectedTrick}`;
+      form.action = deleteBtn.getAttribute("data-trick-action");
     })
   })
 
