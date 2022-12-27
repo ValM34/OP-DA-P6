@@ -26,20 +26,7 @@
           <label for="inputPassword">Password</label>
           <input class="bg-neutral-300 p-1" type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
 
-          <input type="hidden" name="_csrf_token"
-                value="{{ csrf_token('authenticate') }}"
-          >
-
-          {#
-              Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
-              See https://symfony.com/doc/current/security/remember_me.html
-
-              <div class="checkbox mb-3">
-                  <label>
-                      <input type="checkbox" name="_remember_me"> Remember me
-                  </label>
-              </div>
-          #}
+          <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
           <button class="bg-blue-500 hover:bg-blue-400 px-2 py-1 rounded text-white font-semibold" type="submit">
               Valider
