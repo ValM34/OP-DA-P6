@@ -27,7 +27,7 @@ class TrickService implements TrickServiceInterface
     );
   }
 
-  // DISPLAY ALL TRICKS
+  // DISPLAY ALL
   public function findAll()
   {
     return $this->entityManager->getRepository(Trick::class)->findAll();
@@ -116,70 +116,16 @@ class TrickService implements TrickServiceInterface
     return $trick;
   }
 
-  public function createMessage($user, $trick, $message)
-  {
-    $dateNow = new DateTimeImmutable();
 
-    $message
-      ->setUser($user)
-      ->setTrick($trick)
-      ->setUpdatedAt($dateNow)
-      ->setCreatedAt($dateNow)
-    ;
 
-    $this->entityManager->persist($message);
-    $this->entityManager->flush();
-  }
 
-  public function getMessages($trick)
-  {
-    return $this->entityManager->getRepository(Message::class)->findByTrick($trick);
-  }
+
+
+
+
 
   public function findAllCategories()
   {
     return $this->entityManager->getRepository(Category::class)->findAll();
-  }
-
-  public function updateMessagePage(int $id)
-  {
-    $entity['message'] = $this->entityManager->getRepository(Message::class)->find($id);
-    $entity['trick'] = $entity['message']->getTrick();
-
-    if (!$entity['message']) {
-      $message = null;
-    }
-
-    return $entity;
-  }
-
-  public function updateMessage(int $id)
-  {
-    $entity = $this->entityManager->getRepository(Message::class)->find($id);
-    $entity
-      ->setUpdatedAt(new \DateTimeImmutable())
-      ->setCreatedAt(new \DateTimeImmutable());
-    if ($this->request->request->get('content')) {
-      $entity->setContent($this->request->request->get('content'));
-    };
-    $this->entityManager->persist($entity);
-    $this->entityManager->flush();
-
-    return $entity;
-  }
-
-  public function deleteMessage(int $id)
-  {
-    $entity = $this->entityManager->getRepository(Message::class)->find($id);
-    $entity
-      ->setUpdatedAt(new \DateTimeImmutable())
-      ->setCreatedAt(new \DateTimeImmutable());
-    if ($this->request->request->get('content')) {
-      $entity->setContent($this->request->request->get('content'));
-    };
-    $this->entityManager->remove($entity);
-    $this->entityManager->flush();
-
-    return $entity;
   }
 }

@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	{{category.name}}
+{% endblock %}
+
+{% block body %}
+
+  {% if succesMessage %}
+    <div class="base-container">
+      <div class="succes-message">{{succesMessage}}</div>
+    </div>
+  {% endif %}
+
+	<h1 class="title-1 text-center">{{category.name}}</h1>
+	<div class="base-container">
+    <p>{{category.description}}</p>
+  </div>
+
+{% endblock %}

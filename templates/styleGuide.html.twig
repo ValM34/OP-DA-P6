@@ -50,12 +50,21 @@
 		<div class="info-message">Aucun commentaire n'a été posté pour l'instant.</div>
 	</div>
   <div class="styleguide-container">
-		<h2 class="styleguide-title">Inputs</h2>
+		<h2 class="styleguide-title">Formulaire</h2>
     <div class="form-container">
       <div class="form-subcontainer">
         <form>
-          <label class="label-text" for="input">Nom et prénom*</label>
-          <input class="input-text" id="input" name="input" type="text" />
+          <div>
+            <div>
+              <label class="label-text" for="input">Nom*</label>
+              <input class="input-text" id="input" name="input" type="text" />
+            </div>
+            <div>
+              <label class="label-text" for="input2">Prénom*</label>
+              <input class="input-text" id="input2" name="input2" type="text" />
+            </div>
+          </div>
+          <button type="submit" class="primary">Valider</button>
         </form>
       </div>
     </div>
@@ -81,5 +90,6 @@
     <i class="fas fa-arrow-alt-circle-left"></i>
     <i class="fas fa-spinner"></i>
     <i class="fas fa-times"></i>
+    <i class="fas fa-plus"></i>
 	</div>
 {% endblock %}

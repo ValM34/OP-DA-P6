@@ -90,14 +90,16 @@
           <li>
             <div class="infos-message">
               <p>{{message.firstname}} {{message.lastname}}</p>
-              <div>
-                <a href="../../message/updatepage/{{message.id}}" class="icon-container">
-                <i class="fas fa-edit"></i>
-                </a>
-                <a href="../../message/delete/{{message.id}}" class="icon-container">
-                  <i class="fas fa-trash"></i>
-                </a>
-              </div>
+              {% if message.isOwner is same as true %}
+                <div>
+                  <a href="../../message/update/{{message.id}}" class="icon-container">
+                  <i class="fas fa-edit"></i>
+                  </a>
+                  <a href="../../message/delete/{{message.id}}" class="icon-container">
+                    <i class="fas fa-trash"></i>
+                  </a>
+                </div>
+              {% endif %}
             </div>
             <p>{{message.content}}</p>
             

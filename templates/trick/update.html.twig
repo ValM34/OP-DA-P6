@@ -17,8 +17,9 @@
       </div>
     </div>
 	{% else %}
-		Veuillez vous connecter pour pouvoir ajouter un nouveau trick :
-		<a href="{{ path('app_login') }}">Connexion</a>
+		<div class="base-container">
+      Veuillez vous connecter pour pouvoir modifier le trick : <a class="primary" href="{{ path('login') }}">Connexion</a>
+    </div>
 	{% endif %}
 
 {% endblock %}

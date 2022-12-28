@@ -20,8 +20,10 @@
 		{% endblock %}
 
     <script type="module">
-      import burgerMenu from "{{ asset('js/allPages/header.js') }}";
+      import burgerMenu from "{{ asset('js/allPages/burgerMenu.js') }}";
+      import displayHeader from "{{ asset('js/allPages/displayHeader.js') }}";
       burgerMenu();
+      displayHeader();
     </script>
 
 		{% block javascripts %}{% endblock %}
@@ -30,7 +32,7 @@
 
 	<body class="{% block bodyClass %}{% endblock %}">
 
-		<header>
+		<header id="header">
       <div class="header-container">
         <div>
           <h2 class="title-2">Snowtricks</h2>

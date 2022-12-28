@@ -25,34 +25,14 @@ class CategoryService implements CategoryServiceInterface
     );
   }
 
-  public function create()
-  {
-    $this->created_at = new DateTimeImmutable();
-
-    $category = new Category();
-    $category
-      ->setName($this->request->request->get('name'))
-      ->setDescription($this->request->request->get('description'))
-      ->setUpdatedAt($this->created_at)
-      ->setCreatedAt($this->created_at);
-    $user = $this->entityManager->getRepository(User::class)->findOneById(1);
-    $category->setUser($user);
-
-    // tell Doctrine you want to (eventually) save the Product (no queries yet)
-    $this->entityManager->persist($category);
-
-    // actually executes the queries (i.e. the INSERT query)
-    $this->entityManager->flush();
-
-    return $category;
-  }
-
+  // FIND ALL
   public function findAll()
   {
     return $this->entityManager->getRepository(Category::class)->findAll();
   }
 
-  public function getOne(int $id)
+  // FIND ONE
+  public function findOne(int $id)
   {
     $category = $this->entityManager->getRepository(Category::class)->find($id);
     if (!$category) {
@@ -62,10 +42,24 @@ class CategoryService implements CategoryServiceInterface
     return $category;
   }
 
+  // CREATE
+  public function create($user, Category $category)
+  {
+    $this->date = new DateTimeImmutable();
+    $category
+      ->setUser($user)
+      ->setUpdatedAt($this->date)
+      ->setCreatedAt($this->date)
+    ;
+    $this->entityManager->persist($category);
+    $this->entityManager->flush();
+
+    return $category;
+  }
+
   public function updatePage(int $id)
   {
     $category = $this->entityManager->getRepository(Category::class)->find($id);
-
     if (!$category) {
       $category = null;
     }
@@ -76,16 +70,7 @@ class CategoryService implements CategoryServiceInterface
   public function update(int $id)
   {
     $category = $this->entityManager->getRepository(Category::class)->find($id);
-
-    if (!$category) {
-      $category = null;
-    }
-    if ($this->request->request->get('name')) {
-      $category->setName($this->request->request->get('name'));
-    };
-    if ($this->request->request->get('description')) {
-      $category->setDescription($this->request->request->get('description'));
-    };
+    $this->entityManager->persist($category);
     $this->entityManager->flush();
 
     return $category;
@@ -94,14 +79,7 @@ class CategoryService implements CategoryServiceInterface
   public function delete(int $id)
   {
     $category = $this->entityManager->getRepository(Category::class)->find($id);
-
-    if (!$category) {
-      $category = null;
-    }
-
     $this->entityManager->remove($category);
     $this->entityManager->flush();
-
-    return $category;
   }
 }

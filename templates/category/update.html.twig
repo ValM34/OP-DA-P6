@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Ajouter une catégorie
+{% block title %}Modifier la catégorie
 {% endblock %}
 
 {% block body %}
@@ -9,16 +9,16 @@
 		<div class="base-container">
       <div class="form-container">
         <div class="form-subcontainer">
-            {{ form_start(CreationCategoryForm) }}
-            {{ form_widget(CreationCategoryForm) }}
+            {{ form_start(updateCategoryForm) }}
+            {{ form_widget(updateCategoryForm) }}
               <button type="submit" class="btn">Valider</button>
-            {{ form_end(CreationCategoryForm) }}
+            {{ form_end(updateCategoryForm) }}
         </div>
       </div>
     </div>
 	{% else %}
 		<div class="base-container">
-      Veuillez vous connecter pour pouvoir ajouter une nouvelle catégorie : <a class="primary" href="{{ path('login') }}">Connexion</a>
+      Veuillez vous connecter pour pouvoir modifier une catégorie : <a class="primary" href="{{ path('login') }}">Connexion</a>
     </div>
 	{% endif %}
 

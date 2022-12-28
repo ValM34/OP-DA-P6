@@ -2,21 +2,20 @@
 
 namespace App\Controller;
 
-use DateTimeImmutable;
 use App\Entity\Trick;
 use App\Entity\Message;
 use App\Entity\Trait\CreatedAtTrait;
 use App\Service\TrickServiceInterface;
 use App\Service\ImageServiceInterface;
+use App\Service\UserServiceInterface;
+use App\Service\MessageServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Form\CreationTrick;
 use App\Form\UpdateTrickForm;
 use App\Form\CreationMessage;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 class TrickController extends AbstractController
 {
@@ -24,11 +23,14 @@ class TrickController extends AbstractController
 
   private $trickService;
   private $imageService;
+  private $messageService;
 
-  public function __construct(TrickServiceInterface $trickService, ImageServiceInterface $imageService)
+  public function __construct(TrickServiceInterface $trickService, MessageServiceInterface $messageService, ImageServiceInterface $imageService, UserServiceInterface $userService)
   {
     $this->trickService = $trickService;
     $this->imageService = $imageService;
+    $this->userService = $userService;
+    $this->messageService = $messageService;
     $this->request = new Request(
       $_GET,
       $_POST,
@@ -38,9 +40,6 @@ class TrickController extends AbstractController
       $_SERVER
     );
   }
-
-  // Nom des methods : 
-  // displayAll, displayOne, create, update, delete
 
   // STYLE GUIDE
   #[Route('/styleguide', name: 'style_guide')]
@@ -86,17 +85,29 @@ class TrickController extends AbstractController
     $form = $this->createForm(CreationMessage::class, $message);
     $form->handleRequest($request);
     $trick = $this->trickService->findOne($id);
-    $messages = $this->trickService->getMessages($id);
+    $messages = $this->messageService->findByTrick($id);
+    $actualUser = $this->userService->findOne($this->getUser())->getId();
 
     $messagesArray = [];
     $arr = [];
     for($i = 0; $i < count($messages); $i++){
-      $arr = [
-        'id'=>$messages[$i]->getId(),
-        'content'=>$messages[$i]->getContent(),
-        'firstname'=>$messages[$i]->getUser()->getFirstname(),
-        'lastname'=>$messages[$i]->getUser()->getLastName()]
-      ;
+      if($messages[$i]->getUser()->getId() === $actualUser){
+        $arr = [
+          'id'=>$messages[$i]->getId(),
+          'content'=>$messages[$i]->getContent(),
+          'firstname'=>$messages[$i]->getUser()->getFirstname(),
+          'lastname'=>$messages[$i]->getUser()->getLastName(),
+          'isOwner'=>true]
+        ;
+      } else {
+        $arr = [
+          'id'=>$messages[$i]->getId(),
+          'content'=>$messages[$i]->getContent(),
+          'firstname'=>$messages[$i]->getUser()->getFirstname(),
+          'lastname'=>$messages[$i]->getUser()->getLastName(),
+          'isOwner'=>false]
+        ;
+      }  
       array_push($messagesArray, $arr);
     }
 
@@ -114,7 +125,7 @@ class TrickController extends AbstractController
     }
 
     if ($form->isSubmitted() && $form->isValid()) {
-      $this->trickService->createMessage($this->getUser(), $trick, $message);
+      $this->messageService->create($this->getUser(), $trick, $message);
       
       return $this->redirectToRoute('trick_display_one', [
         'id' => $trick->getId(),
@@ -155,10 +166,10 @@ class TrickController extends AbstractController
     $form->handleRequest($request);
 
     if ($form->isSubmitted() && $form->isValid() && $this->getUser()) {
-      $trick = $this->trickService->create($this->getUser(), $trick);
+      $this->trickService->create($this->getUser(), $trick);
 
       return $this->redirectToRoute('home', [
-        '_fragment' => '#tricks-container', // @TODO j'essaie de renvoyer vers un ancre mais ça ne fonctionne pas
+        '_fragment' => 'tricks-container',
         'succesMessage' => 'Votre trick a bien été ajouté!'
       ]);
     }
@@ -206,59 +217,5 @@ class TrickController extends AbstractController
     }
     
     return $this->redirectToRoute('home');
-  }
-
-
-
-
-
-
-
-  
-
-
-
-  // A ENVOYER DANS MESSAGES
-
-  // UPDATE (à fusionner avec celle d'en bas et à envoyer dans message controller)
-  #[Route('/message/updatepage/{id}', name: 'update_message_page')]
-  public function updateMessagePage(int $id): Response
-  {
-    $entity = $this->trickService->updateMessagePage($id);
-
-    return $this->render('message/updatePage.html.twig', [
-      'trick' => $entity['trick'],
-      'message' => $entity['message']
-    ]);
-  }
-
-  // UPDATE
-  #[Route('/message/update/{id}', name: 'update_message_update')]
-  public function updateMessage(int $id): Response
-  {
-    $message = $this->trickService->updateMessage($id);
-    $trick = $message->getTrick();
-    $messages = $this->trickService->getMessages($trick->getId());
-
-    return $this->redirectToRoute('trick_display_one', [
-      'trick' => $trick,
-      'messages' => $messages,
-      'id' => $message->getTrick()->getId()
-    ]);
-  }
-
-  // DELETE (à envoyer dans messageController)
-  #[Route('/message/delete/{id}', name: 'update_message_delete')]
-  public function deleteMessage(int $id): Response
-  {
-    $message = $this->trickService->deleteMessage($id);
-    $trick = $message->getTrick();
-    $messages = $this->trickService->getMessages($trick->getId());
-
-    return $this->redirectToRoute('trick_display_one', [
-      'trick' => $trick,
-      'messages' => $messages,
-      'id' => $message->getTrick()->getId()
-    ]);
   }
 }

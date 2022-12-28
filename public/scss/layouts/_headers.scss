@@ -3,12 +3,21 @@
   overflow: hidden;
 }
 
+.header-hidden {
+  transform: translateY(-60px);
+
+  @include breakpoint(md) {
+    transform: translateY(-120px);
+  }
+}
+
 header {
   position: sticky;
   top: 0;
   z-index: 2;
   color: $white;
   box-shadow: 0 0 5px #00000075;
+  transition: transform 0.3s;
 
   .header-container {
     position: relative;
