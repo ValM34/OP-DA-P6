@@ -33,6 +33,12 @@ class MessageService implements MessageServiceInterface
     return $this->entityManager->getRepository(Message::class)->findByTrick($trick);
   }
 
+  // FIND BY ID
+  public function findById(int $id)
+  {
+    return $this->entityManager->getRepository(Message::class)->findOneBy(['id' => $id]);
+  }
+
   // CREATE
   public function create($user, $trick, $message)
   {

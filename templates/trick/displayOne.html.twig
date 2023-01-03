@@ -21,7 +21,7 @@
 
 {% block body %}
 
-  <div class="header-image" style="background-image: url('../../{{imagePath}}');">
+  <div class="header-image" style="background-image: url('../../images/tricks/{{imagePath}}');">
     <h1 class="title-1">{{trick.name}}</h1>
     {% if app.user %}
       <div class="trick-icons-container">
@@ -44,9 +44,14 @@
 
   <div class="medias-container" id="medias_container" data-display="false">
     <ul id="trick_medias_list" class="trick-medias-list">
-      {% for path in imagesPaths %}
+      {% for image in images %}
         <li>
-          <div style="background-image: url('../../{{path}}')" class="trick-img-container"></div>
+          <div style="background-image: url('../../images/tricks/{{image.path}}')" class="trick-img-container"></div>
+          {% if app.user %}
+            <a href="../../image/delete/{{image.id}}" class="icon-container delete-media secondary">
+              Supprimer <i class="fas fa-trash"></i>
+            </a>
+          {% endif %}
         </li>
       {% endfor %}
     </ul>
@@ -70,7 +75,7 @@
       <div class="form-subcontainer">
         {{ form_start(createMessageForm) }}
         {{ form_widget(createMessageForm) }}
-          <button type="submit">Valider</button>
+          <button type="submit">Envoyer un commentaire</button>
         {{ form_end(createMessageForm) }}
       </div>
     </div>
@@ -87,23 +92,25 @@
         <div class="succes-message">{{succesMessage}}</div>
       {% endif %}
         {% for message in messages %}
-          <li>
-            <div class="infos-message">
-              <p>{{message.firstname}} {{message.lastname}}</p>
-              {% if message.isOwner is same as true %}
-                <div>
-                  <a href="../../message/update/{{message.id}}" class="icon-container">
-                  <i class="fas fa-edit"></i>
-                  </a>
-                  <a href="../../message/delete/{{message.id}}" class="icon-container">
-                    <i class="fas fa-trash"></i>
-                  </a>
-                </div>
-              {% endif %}
-            </div>
-            <p>{{message.content}}</p>
-            
-          </li>
+          <div class="message-container">
+            <img class="avatar" src="../../images/avatar/{{message.avatar}}" />
+            <li>
+              <div class="infos-message">
+                <strong>{{message.firstname}} {{message.lastname}}</strong>
+                {% if message.isOwner is same as true %}
+                  <div>
+                    <a href="../../message/update/{{message.id}}" class="icon-container">
+                    <i class="fas fa-edit"></i>
+                    </a>
+                    <a href="../../message/delete/{{message.id}}" class="icon-container">
+                      <i class="fas fa-trash"></i>
+                    </a>
+                  </div>
+                {% endif %}
+              </div>
+              <p>{{message.content}}</p>
+            </li>
+          </div>
         {% endfor %}
     </ul>
   {% else %}

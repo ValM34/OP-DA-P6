@@ -52,6 +52,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
   #[ORM\OneToMany(mappedBy: 'user', targetEntity: Category::class)]
   private Collection $categories;
 
+  #[ORM\Column(length: 150, nullable: true)]
+  private ?string $avatar = null;
+
+  #[ORM\Column(options: ['default' => false])]
+  private ?bool $is_verified = false;
+
   public function __construct()
   {
     $this->tricks = new ArrayCollection();
@@ -253,6 +259,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
               $category->setUser(null);
           }
       }
+
+      return $this;
+  }
+
+  public function getAvatar(): ?string
+  {
+      return $this->avatar;
+  }
+
+  public function setAvatar(?string $avatar): self
+  {
+      $this->avatar = $avatar;
+
+      return $this;
+  }
+
+  public function isIsVerified(): ?bool
+  {
+      return $this->is_verified;
+  }
+
+  public function setIsVerified(bool $is_verified): self
+  {
+      $this->is_verified = $is_verified;
 
       return $this;
   }

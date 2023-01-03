@@ -13,39 +13,55 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use App\Service\UserServiceInterface;
 
 class RegistrationController extends AbstractController
 {
-    #[Route('/inscription', name: 'register')]
-    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, UsersAuthenticator $authenticator, EntityManagerInterface $entityManager): Response
-    {
-        $user = new User();
-        $form = $this->createForm(RegistrationFormType::class, $user);
-        $form->handleRequest($request);
-        
+  private $userService;
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            // encode the plain password
-            $user->setPassword(
-                $userPasswordHasher->hashPassword(
-                    $user,
-                    $form->get('plainPassword')->getData()
-                )
-            );
+  public function __construct(UserServiceInterface $userService)
+  {
+    $this->userService = $userService;
+  }
 
-            $entityManager->persist($user);
-            $entityManager->flush();
-            // do anything else you need here, like send an email
+  // SIGN UP
+  #[Route('/inscription', name: 'register')]
+  public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, UsersAuthenticator $authenticator, EntityManagerInterface $entityManager): Response
+  {
+    $user = new User();
+    $form = $this->createForm(RegistrationFormType::class, $user);
+    $form->handleRequest($request);
 
-            return $userAuthenticator->authenticateUser(
-                $user,
-                $authenticator,
-                $request
-            );
-        }
 
-        return $this->render('registration/register.html.twig', [
-            'registrationForm' => $form->createView(),
-        ]);
+    if ($form->isSubmitted() && $form->isValid()) {
+      // encode the plain password
+      $user->setPassword(
+        $userPasswordHasher->hashPassword(
+          $user,
+          $form->get('plainPassword')->getData()
+        )
+      );
+
+      $avatar = $form->get('avatar')->getData();
+      if($avatar !== null){
+        $avatarPath = $this->userService->upload($avatar);
+        $this->userService->create($user, $avatarPath);
+      } else {
+        $this->userService->create($user);
+      }
+      
+
+      // do anything else you need here, like send an email @TODO envoi d'email de validation
+
+      return $userAuthenticator->authenticateUser(
+        $user,
+        $authenticator,
+        $request
+      );
     }
+
+    return $this->render('registration/register.html.twig', [
+      'registrationForm' => $form->createView(),
+    ]);
+  }
 }

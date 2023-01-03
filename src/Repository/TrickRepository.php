@@ -16,65 +16,72 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class TrickRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
-    {
-        parent::__construct($registry, Trick::class);
+  public function __construct(ManagerRegistry $registry)
+  {
+    parent::__construct($registry, Trick::class);
+  }
+
+  public function add(Trick $entity, bool $flush = false): void
+  {
+    $this->getEntityManager()->persist($entity);
+
+    if ($flush) {
+      $this->getEntityManager()->flush();
     }
+  }
 
-    public function add(Trick $entity, bool $flush = false): void
-    {
-        $this->getEntityManager()->persist($entity);
+  public function remove(Trick $entity, bool $flush = false): void
+  {
+    $this->getEntityManager()->remove($entity);
 
-        if ($flush) {
-            $this->getEntityManager()->flush();
-        }
+    if ($flush) {
+      $this->getEntityManager()->flush();
     }
+  }
 
-    public function remove(Trick $entity, bool $flush = false): void
-    {
-        $this->getEntityManager()->remove($entity);
+  public function findAll()
+  {
+    return $this->createQueryBuilder('t')
+      ->select('t', 'i')
+      ->leftJoin('t.images', 'i')
+      ->orderBy('t.updated_at', 'DESC')
+      ->getQuery()
+      ->getResult()
+    ;
+  }
 
-        if ($flush) {
-            $this->getEntityManager()->flush();
-        }
-    }
+  //    /**
+  //     * @return Trick[] Returns an array of Trick objects
+  //     */
+  //    public function findByExampleField($value): array
+  //    {
+  //        return $this->createQueryBuilder('t')
+  //            ->andWhere('t.exampleField = :val')
+  //            ->setParameter('val', $value)
+  //            ->orderBy('t.id', 'ASC')
+  //            ->setMaxResults(10)
+  //            ->getQuery()
+  //            ->getResult()
+  //        ;
+  //    }
 
-    public function findAll()
-    {
-        return $this->findBy(array(), array('updated_at' => 'DESC'));
-    }
-
-//    /**
-//     * @return Trick[] Returns an array of Trick objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('t')
-//            ->andWhere('t.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('t.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
-
-//    public function findOneBySomeField($value): ?Trick
-//    {
-//        return $this->createQueryBuilder('t')
-//            ->andWhere('t.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+  //    public function findOneBySomeField($value): ?Trick
+  //    {
+  //        return $this->createQueryBuilder('t')
+  //            ->andWhere('t.exampleField = :val')
+  //            ->setParameter('val', $value)
+  //            ->getQuery()
+  //            ->getOneOrNullResult()
+  //        ;
+  //    }
 
 
-public function findByTrick($trick): array
-{
-  $entityManager = $this->getEntityManager();
+  // @TODO => voir si cette fonction sert toujours à quelque chose
+  public function findByTrick($trick): array
+  {
+    $entityManager = $this->getEntityManager();
 
-  /*
+    /*
   $query = $entityManager->createQuery(
     'SELECT m, u
     FROM App\Entity\Message m
@@ -83,7 +90,7 @@ public function findByTrick($trick): array
     WHERE m.id_trick = :id_trick'
   )->setParameter('id_trick', $id_trick);
 */
-  /* Equivalent sur mysql à  : 
+    /* Equivalent sur mysql à  : 
     SELECT p.*, u.*
     FROM message p
     JOIN user u
@@ -91,7 +98,7 @@ public function findByTrick($trick): array
     WHERE p.id_trick_id = 14;
     */
 
-    
+
 
     return $this->createQueryBuilder('p')
       ->select('p', 'u')
@@ -99,11 +106,10 @@ public function findByTrick($trick): array
       ->where('p.trick = :trick')
       ->setParameter('trick', $trick)
       ->getQuery()
-      ->getResult()
-    ;
+      ->getResult();
 
 
-  /*
+    /*
   $queryBuilder = $this->createQueryBuilder('m')
     ->select('m', 'u')
     ->leftJoin('m.id_user', 'u')

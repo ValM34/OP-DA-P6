@@ -10,13 +10,17 @@ use App\Entity\Image;
 use App\Entity\Category;
 use App\Entity\Message;
 use Symfony\Component\HttpFoundation\Request; 
+use App\Service\ImageServiceInterface;
 
 class TrickService implements TrickServiceInterface
 {
   private $entityManager;
-  public function __construct(EntityManagerInterface $entityManager)
+  private $imageService;
+
+  public function __construct(EntityManagerInterface $entityManager, ImageServiceInterface $imageService)
   {
     $this->entityManager = $entityManager;
+    $this->imageService = $imageService;
     $this->request = new Request(
       $_GET,
       $_POST,
@@ -60,7 +64,7 @@ class TrickService implements TrickServiceInterface
 
 
 
-  public function create($user, Trick $trick)
+  public function create($user, Trick $trick, array $imageFiles)
   {
     $date = new DateTimeImmutable();
     $trick
@@ -70,9 +74,27 @@ class TrickService implements TrickServiceInterface
     ;
 
     $this->entityManager->persist($trick);
+
+    // $this->imageService->create($trick, $arrayOfImages); @TODO gérer l'ajout d'images ici (puis les vidéos aussi)
+
     $this->entityManager->flush();
 
-    return $trick;
+
+    if (isset($imageFiles[0])) {
+      $arrayOfImages = [];
+      foreach($imageFiles as $imageFile){
+        $arrayOfImages[] = $this->imageService->upload($imageFile);
+      }
+
+      $this->entityManager->persist($trick);
+      $this->entityManager->flush();
+
+      $this->imageService->create($trick, $arrayOfImages);
+
+    } else {
+      $this->entityManager->persist($trick);
+      $this->entityManager->flush();
+    }
   }
 
   
@@ -88,7 +110,7 @@ class TrickService implements TrickServiceInterface
     return $trick;
   }
 
-  public function update(Trick $trick)
+  public function update(Trick $trick, array $imageFiles)
   {
     $date = new DateTimeImmutable();
     $trick
@@ -96,29 +118,28 @@ class TrickService implements TrickServiceInterface
       ->setCreatedAt($date)
     ;
 
-    $this->entityManager->persist($trick);
-    $this->entityManager->flush();
-
-    return $trick;
+    if (isset($imageFiles[0])) {
+      $arrayOfImages = [];
+      foreach($imageFiles as $imageFile){
+        $arrayOfImages[] = $this->imageService->upload($imageFile);
+      }
+      $this->entityManager->persist($trick);
+      $this->entityManager->flush();
+      $this->imageService->create($trick, $arrayOfImages);
+    } else {
+      $this->entityManager->persist($trick);
+      $this->entityManager->flush();
+    }
   }
 
   public function delete(int $id)
   {
     $trick = $this->entityManager->getRepository(Trick::class)->find($id);
-
-    if (!$trick) {
-      $trick = null;
-    }
-
+    $images = $this->entityManager->getRepository(Image::class)->findByTrick($trick);
+    $this->imageService->deleteByTrick($images);
     $this->entityManager->remove($trick);
     $this->entityManager->flush();
-
-    return $trick;
   }
-
-
-
-
 
 
 

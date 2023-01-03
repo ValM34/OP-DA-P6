@@ -16,6 +16,9 @@ use App\Form\CreationTrick;
 use App\Form\UpdateTrickForm;
 use App\Form\CreationMessage;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use App\Entity\Image;
 
 class TrickController extends AbstractController
 {
@@ -59,9 +62,9 @@ class TrickController extends AbstractController
       $tricksData[$i]['id'] = $tricks[$i]->getId();
       $tricksData[$i]['name'] = $tricks[$i]->getName();
       if($tricks[$i]->getImages()[0] !== null){
-        $tricksData[$i]['path'] = $tricks[$i]->getImages()[0]->getPath();
+        $tricksData[$i]['path'] = 'images/tricks/' . $tricks[$i]->getImages()[0]->getPath();
       } else {
-        $tricksData[$i]['path'] = 'images/defaultImage.jpg';
+        $tricksData[$i]['path'] = 'images/tricks/default.jpg';
       }
     }
 
@@ -86,42 +89,59 @@ class TrickController extends AbstractController
     $form->handleRequest($request);
     $trick = $this->trickService->findOne($id);
     $messages = $this->messageService->findByTrick($id);
-    $actualUser = $this->userService->findOne($this->getUser())->getId();
-
+    if($this->getUser()){
+      $actualUser = $this->userService->findOne($this->getUser())->getId();
+    } else {
+      $actualUser = null;
+    }
     $messagesArray = [];
     $arr = [];
     for($i = 0; $i < count($messages); $i++){
-      if($messages[$i]->getUser()->getId() === $actualUser){
-        $arr = [
-          'id'=>$messages[$i]->getId(),
-          'content'=>$messages[$i]->getContent(),
-          'firstname'=>$messages[$i]->getUser()->getFirstname(),
-          'lastname'=>$messages[$i]->getUser()->getLastName(),
-          'isOwner'=>true]
-        ;
+      if($this->getUser()){
+        if($messages[$i]->getUser()->getId() === $actualUser){
+          $arr = [
+            'id'=>$messages[$i]->getId(),
+            'content'=>$messages[$i]->getContent(),
+            'firstname'=>$messages[$i]->getUser()->getFirstname(),
+            'lastname'=>$messages[$i]->getUser()->getLastName(),
+            'avatar'=>$messages[$i]->getUser()->getAvatar(),
+            'isOwner'=>true]
+          ;
+        } else {
+          $arr = [
+            'id'=>$messages[$i]->getId(),
+            'content'=>$messages[$i]->getContent(),
+            'firstname'=>$messages[$i]->getUser()->getFirstname(),
+            'lastname'=>$messages[$i]->getUser()->getLastName(),
+            'avatar'=>$messages[$i]->getUser()->getAvatar(),
+            'isOwner'=>false]
+          ;
+        }
       } else {
         $arr = [
           'id'=>$messages[$i]->getId(),
           'content'=>$messages[$i]->getContent(),
           'firstname'=>$messages[$i]->getUser()->getFirstname(),
           'lastname'=>$messages[$i]->getUser()->getLastName(),
+          'avatar'=>$messages[$i]->getUser()->getAvatar(),
           'isOwner'=>false]
         ;
-      }  
+      }
       array_push($messagesArray, $arr);
     }
 
     // @TODO => problème n.1
-    $imagesPaths = [];
+    $images = [];
     $imagePath = null;
 
     if($trick->getImages()[0] !== null){
       $imagePath = $trick->getImages()[0]->getPath();
       for($i = 0; $i < count($trick->getImages()); $i++){  
-          $imagesPaths[$i] = $trick->getImages()[$i]->getPath();
+          $images[$i]['path'] = $trick->getImages()[$i]->getPath();
+          $images[$i]['id'] = $trick->getImages()[$i]->getId();
       }      
     } else {
-      $imagePath = 'images/defaultImage.jpg';
+      $imagePath = 'default.jpg';
     }
 
     if ($form->isSubmitted() && $form->isValid()) {
@@ -145,7 +165,7 @@ class TrickController extends AbstractController
       'messages' => $messagesArray,
       'succesMessage' => $succesMessage,
       'createMessageForm' => $form->createView(),
-      'imagesPaths' => $imagesPaths,
+      'images' => $images,
       'imagePath' => $imagePath,
       'category' => $category
     ]);
@@ -153,20 +173,15 @@ class TrickController extends AbstractController
 
   // CREATE
   #[Route('/trick/create', name: 'trick_create')]
-  public function create(Request $request): Response
+  public function create(Request $request, SluggerInterface $slugger): Response
   {
-    /*if(null === $this->getUser()){
-      // @TODO mettre en place le voter => update : je vérifie en-dessous si l'utilisateur est connecté avant de créer le trick.
-      echo 'Veuillez vous connecter pour pouvoir ajouter un nouveau trick :';
-      exit();
-    }*/
-
     $trick = new Trick();
     $form = $this->createForm(CreationTrick::class, $trick);
     $form->handleRequest($request);
 
     if ($form->isSubmitted() && $form->isValid() && $this->getUser()) {
-      $this->trickService->create($this->getUser(), $trick);
+      $imageFile = $form->get('image')->getData();
+      $this->trickService->create($this->getUser(), $trick, $imageFile);
 
       return $this->redirectToRoute('home', [
         '_fragment' => 'tricks-container',
@@ -189,9 +204,11 @@ class TrickController extends AbstractController
     $form->handleRequest($request);
     
     if(($form->isSubmitted() && $form->isValid() && $this->getUser())){
-      $trick = $this->trickService->update($trick);
-      $this->redirectToRoute('trick_display_one', [
-        'id' => $id
+      $imageFiles = $form->get('image')->getData();
+      $trick = $this->trickService->update($trick, $imageFiles);
+      return $this->redirectToRoute('trick_display_one', [
+        'id' => $id,
+        'succesMessage' => 'Le trick a bien été modifié.'
       ]);
     }
 
@@ -204,12 +221,12 @@ class TrickController extends AbstractController
   }
 
   // DELETE
-  #[Route('/trick/delete/{id}', name: 'delete_trick')]
+  #[Route('/trick/delete/{id}', name: 'trick_delete')]
   public function delete(int $id): Response
   {
     if($this->getUser()){
       $this->trickService->delete($id);
-      $succesMessage = 'Le trick a bien été supprimé!';
+      $succesMessage = 'Le trick a bien été supprimé.';
   
       return $this->redirectToRoute('home', [
         'succesMessage' => $succesMessage

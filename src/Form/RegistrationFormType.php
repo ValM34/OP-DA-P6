@@ -11,6 +11,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Validator\Constraints\File;
 
 class RegistrationFormType extends AbstractType
 {
@@ -44,6 +46,23 @@ class RegistrationFormType extends AbstractType
                         'max' => 4096,
                     ]),
                 ],
+            ])
+            ->add('avatar', FileType::class, [
+              'label' => 'Ajouter une image (jpg, jpeg, png)',
+              'mapped' => false,
+              'required' => false,
+              'constraints' => [
+                new File([
+                    'maxSize' => '1024k',
+                    'mimeTypes' => [
+                        'image/jpg',
+                        'image/jpeg',
+                        'image/png'
+                    ],
+                    'mimeTypesMessage' => 'Veuillez upload une image sous le format jpg, jpeg ou png',
+                    'maxSizeMessage' => 'La taille maximale est de 1024k. Votre image fait ({{ size }} {{ suffix }}).',
+                ])
+              ],
             ])
         ;
     }

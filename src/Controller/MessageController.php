@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Message;
 use App\Entity\Trait\CreatedAtTrait;
 use App\Service\MessageServiceInterface;
+use App\Service\TrickServiceInterface;
 use App\Service\UserServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,11 +18,14 @@ class MessageController extends AbstractController
   use CreatedAtTrait;
 
   private $messageService;
+  private $trickService;
+  private $userService;
 
-  public function __construct(UserServiceInterface $userService, MessageServiceInterface $messageService)
+  public function __construct(UserServiceInterface $userService, MessageServiceInterface $messageService, TrickServiceInterface $trickService)
   {
     $this->userService = $userService;
     $this->messageService = $messageService;
+    $this->trickService = $trickService;
   }
 
   // UPDATE
@@ -60,14 +64,25 @@ class MessageController extends AbstractController
   #[Route('/message/delete/{id}', name: 'message_delete')]
   public function delete(int $id): Response
   {
-    $message = $this->messageService->delete($id);
-    $trick = $message->getTrick();
+    $message = $this->messageService->findById($id);
+    $owner = $message->getUser()->getId();
+    if($this->getUser()){
+      $actualUser = $this->userService->findOne($this->getUser())->getId();
+    } else {
+      $actualUser = null;
+    }
+    if($this->getUser() && $owner === $actualUser){
+      $this->messageService->delete($id);
+      $trick = $message->getTrick();
+    } else {
+      $trick = $message->getTrick();
+    }
     $messages = $this->messageService->findByTrick($trick->getId());
 
     return $this->redirectToRoute('trick_display_one', [
       'trick' => $trick,
       'messages' => $messages,
-      'id' => $message->getTrick()->getId()
+      'id' => $trick->getId()
     ]);
   }
 }

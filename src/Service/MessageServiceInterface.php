@@ -11,4 +11,5 @@ interface MessageServiceInterface
   public function updatePage(int $id);
   public function update(int $id);
   public function delete(int $id);
+  public function findById(int $id);
 }

@@ -73,7 +73,7 @@ class MessageRepository extends ServiceEntityRepository
   public function findByTrick($trick): array
   {
     $entityManager = $this->getEntityManager();
-
+    
     /*
     $query = $entityManager->createQuery(
       'SELECT m, u

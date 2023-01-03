@@ -42,7 +42,7 @@ class CategoryController extends AbstractController
   }
 
   // DISPLAY ALL
-  #[Route('/category/{succesMessage}', name: 'category_display_all')]
+  #[Route('/category/displayall/{succesMessage}', name: 'category_display_all')]
   public function displayAll($succesMessage = null): Response
   {
     $categories = $this->categoryService->findAll();
@@ -84,7 +84,6 @@ class CategoryController extends AbstractController
     }
 
     return $this->render('category/creationPage.html.twig', [
-      'controller_name' => 'CategoryController',
       'CreationCategoryForm' => $form->createView()
     ]);
   }
