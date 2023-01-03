@@ -7,15 +7,15 @@ use App\Entity\Trick;
 use App\Entity\User;
 use App\Entity\Category;
 use App\Entity\Message;
-// use App\Service\categoryService;
 use App\Entity\Trait\CreatedAtTrait;
 use App\Service\CategoryServiceInterface;
+use App\Service\UserServiceInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-
 use App\Form\CreationCategory;
+use App\Form\UpdateCategory;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -25,90 +25,75 @@ class CategoryController extends AbstractController
   use CreatedAtTrait;
 
   private $categoryService;
+  private $userService;
 
-  public function __construct(CategoryServiceInterface $categoryService)
+  public function __construct(CategoryServiceInterface $categoryService, UserServiceInterface $userService)
   {
-    $this->trick = new Trick();
-    $this->trick = new User();
-    $this->trick = new Message();
     $this->categoryService = $categoryService;
+    $this->userService = $userService;
+    $this->request = new Request(
+      $_GET,
+      $_POST,
+      [],
+      $_COOKIE,
+      $_FILES,
+      $_SERVER
+    );
   }
 
-  #[Route('/category/all', name: 'category_show_all')]
-  public function showAll(): Response
+  // DISPLAY ALL
+  #[Route('/category/displayall/{succesMessage}', name: 'category_display_all')]
+  public function displayAll($succesMessage = null): Response
   {
     $categories = $this->categoryService->findAll();
 
-    return $this->render('category/index.html.twig', [
-      'categories' => $categories
+    return $this->render('category/displayAll.html.twig', [
+      'categories' => $categories,
+      'succesMessage' => $succesMessage
     ]);
   }
 
-  #[Route('/category/showone/{id}/{succesMessage}', name: 'category_show')]
-  public function show(int $id, string $succesMessage = null): Response
+  // DISPLAY ONE
+  #[Route('/category/displayone/{id}/{succesMessage}', name: 'category_display_one')]
+  public function displayOne(int $id, string $succesMessage = null): Response
   {
-    $category = $this->categoryService->getOne($id);
+    $category = $this->categoryService->findOne($id);
     
-    return $this->render('category/showone.html.twig', [
+    return $this->render('category/displayOne.html.twig', [
       'category' => $category,
       'succesMessage' => $succesMessage
     ]);
   }
 
-  #[Route('/category/create', name: 'create_category')]
+  // CREATE
+  #[Route('/category/create', name: 'category_create')]
   public function createCategory(Request $request, EntityManagerInterface $entityManager, UserInterface $user): Response
   {
     $category = new Category();
     $form = $this->createForm(CreationCategory::class, $category);
     $form->handleRequest($request);
 
-    if ($form->isSubmitted() && $form->isValid()) {
-      $this->updated_at = new DateTimeImmutable();
-      $category
-        ->setUser($user)
-        ->setUpdatedAt($this->updated_at)
-      ;
-      $entityManager->persist($category);
-      $entityManager->flush();
-      // do anything else you need here, like send an email
-
-      // Ici je dois retourner la page du trick que je viens de créer
+    if ($form->isSubmitted() && $form->isValid() && $this->getUser()) {
+      $this->categoryService->create($this->getUser(), $category);
       $succesMessage = 'Votre catégorie a bien été ajoutée!';
-      return $this->redirectToRoute('category_show', [
+      
+      return $this->redirectToRoute('category_display_one', [
         'id' => $category->getId(),
         'succesMessage' => $succesMessage
       ]);
     }
 
     return $this->render('category/creationPage.html.twig', [
-      'controller_name' => 'CategoryController',
-      'registrationForm' => $form->createView()
+      'CreationCategoryForm' => $form->createView()
     ]);
   }
 
-  /*#[Route('/category/creationpage', name: 'create_category_page')]
-  public function createCategoryPage(): Response
+  // UPDATE
+  #[Route('/category/update/{id}', name: 'category_update')] // changer nom route @TODO
+  public function update(int $id, Request $request, EntityManagerInterface $entityManager, UserInterface $user): Response
   {
-    return $this->render('category/creationPage.html.twig', [
-      'controller_name' => 'CategoryController',
-    ]);
-  }
-
-  #[Route('/category/create', name: 'create_category')]
-  public function createProduct(): Response
-  {
-    $category = $this->categoryService->create();
-
-    return $this->render('category/showone.html.twig', [
-      'category' => $category
-    ]);
-  }*/
-
-  #[Route('/category/update/{id}', name: 'update_category')]
-  public function updateCategory(int $id, Request $request, EntityManagerInterface $entityManager, UserInterface $user): Response
-  {
-    $category = new Category();
-    $form = $this->createForm(CreationCategory::class, $category);
+    $category = $this->categoryService->findOne($id);
+    $form = $this->createForm(UpdateCategory::class, $category);
     $form->handleRequest($request);
 
     if ($form->isSubmitted() && $form->isValid()) {
@@ -117,13 +102,10 @@ class CategoryController extends AbstractController
         ->setUser($user)
         ->setUpdatedAt($this->updated_at)
       ;
-      $test = $this->categoryService->update($id);
-      dd($test);
-      // do anything else you need here, like send an email
+      $this->categoryService->update($id);
 
-      // Ici je dois retourner la page du trick que je viens de créer
-      $succesMessage = 'Votre catégorie a bien été ajoutée!';
-      return $this->redirectToRoute('category_show', [
+      $succesMessage = 'La catégorie a été modifiée.';
+      return $this->redirectToRoute('category_display_one', [
         'id' => $category->getId(),
         'succesMessage' => $succesMessage
       ]);
@@ -131,35 +113,21 @@ class CategoryController extends AbstractController
 
     $category = $this->categoryService->updatePage($id);
 
-    return $this->render('category/updatePage.html.twig', [
+    return $this->render('category/update.html.twig', [
       'category' => $category,
-      'registrationForm' => $form->createView()
+      'updateCategoryForm' => $form->createView()
     ]);
   }
 
-  /*#[Route('/category/updatepage/{id}', name: 'update_category_page')]
-  public function updateCategoryPage(ManagerRegistry $doctrine, int $id): Response
-  {
-    $category = $this->categoryService->updatePage($id);
-
-    return $this->render('category/updatePage.html.twig', [
-      'category' => $category,
-    ]);
-  }
-
-  #[Route('/category/update/{id}', name: 'update_category')]
-  public function updateCategory(int $id): Response
-  {
-    $category = $this->categoryService->update($id);
-
-    return new Response('Saved new category with id ' . $category->getId());
-  }*/
-
-  #[Route('/category/delete/{id}', name: 'delete_category')]
+  // DELETE
+  #[Route('/category/delete/{id}', name: 'category_delete')]
   public function deleteCategory(int $id): Response
   {
     $this->categoryService->delete($id);
+    $succesMessage = 'La catégorie a bien été supprimée.';
 
-    return new Response('Catégorie supprimée ! ');
+    return $this->redirectToRoute('category_display_all', [
+      'succesMessage' => $succesMessage
+    ]);
   }
 }

@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	Liste des figures
+{% endblock %}
+
+{% block body %}
+	<div class="base-container">
+    {% if succesMessage %}
+      <div class="succes-message">{{succesMessage}}</div>
+    {% endif %}
+		<h1 class="text-center title-1">Liste des catégories</h1>
+    <h2 class="title-3">
+      <a class="secondary" href="{{ path('category_create') }}"><i class="fas fa-plus"></i> Ajouter une catégorie</a>
+    </h2>
+		<ul>
+			{% for category in categories %}
+				<li>
+					<a class="secondary" href="/category/displayone/{{category.id}}">{{category.name}}</a>
+					<a class="secondary" href="/category/update/{{category.id}}">Modifier</a>
+					<a class="secondary" href="/category/delete/{{category.id}}">Supprimer</a>
+				</li>
+			{% endfor %}
+		</ul>
+	</div>
+{% endblock %}

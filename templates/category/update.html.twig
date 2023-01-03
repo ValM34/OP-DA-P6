@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier la catégorie
+{% endblock %}
+
+{% block body %}
+
+	{% if app.user %}
+		<div class="base-container">
+      <div class="form-container">
+        <div class="form-subcontainer">
+            {{ form_start(updateCategoryForm) }}
+            {{ form_widget(updateCategoryForm) }}
+              <button type="submit" class="btn">Valider</button>
+            {{ form_end(updateCategoryForm) }}
+        </div>
+      </div>
+    </div>
+	{% else %}
+		<div class="base-container">
+      Veuillez vous connecter pour pouvoir modifier une catégorie : <a class="primary" href="{{ path('login') }}">Connexion</a>
+    </div>
+	{% endif %}
+
+{% endblock %}

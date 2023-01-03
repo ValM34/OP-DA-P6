@@ -6,44 +6,34 @@
 
 {% block body %}
   <div class="base-container text-center">
-      <h1 class="title-1">Inscription</h1>
+      <h1 class="title-1">Connexion</h1>
   </div>
   <div class="form-container">
     <div class="form-subcontainer">
       <form method="post">
+        <div>
           {% if error %}
               <div class="bg-red-300 px-1">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
           {% endif %}
 
           {% if app.user %}
               <div class="mb-3">
-                  You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
+                  Vous êtes connecté en tant que {{ app.user.userIdentifier }}, <a href="{{ path('logout') }}" class="primary">Logout</a>
               </div>
           {% endif %}
-
-          <label for="inputEmail">Email</label>
-          <input class="bg-neutral-300 p-1" type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
-          <label for="inputPassword">Password</label>
-          <input class="bg-neutral-300 p-1" type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
-
-          <input type="hidden" name="_csrf_token"
-                value="{{ csrf_token('authenticate') }}"
-          >
-
-          {#
-              Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
-              See https://symfony.com/doc/current/security/remember_me.html
-
-              <div class="checkbox mb-3">
-                  <label>
-                      <input type="checkbox" name="_remember_me"> Remember me
-                  </label>
-              </div>
-          #}
-
-          <button class="bg-blue-500 hover:bg-blue-400 px-2 py-1 rounded text-white font-semibold" type="submit">
-              Valider
-          </button>
+          <div>
+            <label for="inputEmail">Email</label>
+            <input class="bg-neutral-300 p-1" type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
+          </div>
+          <div>
+            <label for="inputPassword">Password</label>
+            <input class="bg-neutral-300 p-1" type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
+          </div>
+          <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+        </div>
+        <button class="bg-blue-500 hover:bg-blue-400 px-2 py-1 rounded text-white font-semibold" type="submit">
+            Valider
+        </button>
       </form>
       <a class="primary" href="{{ path('register') }}">Register</a>
       <a class="primary" href="{{ path('login') }}">Forgot password ?</a>

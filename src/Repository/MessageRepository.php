@@ -40,6 +40,11 @@ class MessageRepository extends ServiceEntityRepository
     }
   }
 
+  public function findAll()
+  {
+      return $this->findBy(array(), array('created_at' => 'DESC'));
+  }
+
   //    /**
   //     * @return Message[] Returns an array of Message objects
   //     */
@@ -68,7 +73,7 @@ class MessageRepository extends ServiceEntityRepository
   public function findByTrick($trick): array
   {
     $entityManager = $this->getEntityManager();
-
+    
     /*
     $query = $entityManager->createQuery(
       'SELECT m, u
@@ -91,6 +96,7 @@ class MessageRepository extends ServiceEntityRepository
       ->leftJoin('m.user', 'u')
       ->where('m.trick = :trick')
       ->setParameter('trick', $trick)
+      ->orderBy('m.created_at', 'DESC')
       ->getQuery()
       ->getResult()
     ;

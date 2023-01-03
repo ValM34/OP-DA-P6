@@ -19,6 +19,23 @@
     padding: 20px 30px;
     box-shadow: 0 0 5px $black;
   }
+
+  .trick-icons-container {
+    position: absolute;
+    padding: 20px;
+    background-color: #0000006e;
+    top: 15px;
+    right: 15px;
+    display: flex;
+
+    .icon-container {
+      color: $light;
+    }
+
+    .trick-icon-update {
+      margin-right: 15px;
+    }
+  }
 }
 
 .medias-container {
@@ -64,6 +81,11 @@
           width: 100%;
           max-width: 350px;
         }
+      }
+
+      .delete-media {
+        display: inline-block;
+        margin-top: 5px;
       }
     }
   }
@@ -136,23 +158,60 @@
 
 .base-container.comments-container {
   max-width: 800px;
+  padding: 10px;
 
-  li {
-    list-style-type: none;
-    background-color: $light;
-    margin-bottom: 30px;
-    padding: 10px;
-    box-shadow: 0 2px 2px #00000047;
-    animation: opacity 0.3s;
+  @include breakpoint(md) {
+    padding: 30px;
+  }
 
-    .infos-message {
-      display: flex;
-      justify-content: space-between;
+  .message-container {
+    display: flex;
+    align-items: center;
 
-      div {
-        display: flex;
+    img.avatar {
+      width: 40px;
+      height: 40px;
+      min-width: 40px;
+      margin-right: 5px;
+      border-radius: 100%;
+      box-shadow: 0 0 5px #0000004d;
+      margin-bottom: 30px;
+
+      @include breakpoint(md) {
+        min-width: 50px;
+        width: 50px;
+        height: 50px;
+        margin-right: 15px;
       }
     }
+
+    li {
+      list-style-type: none;
+      background-color: $light;
+      margin-bottom: 30px;
+      padding: 10px;
+      box-shadow: 0 0 5px #0000004d;
+      animation: opacity 0.3s;
+      width: 100%;
+      border-radius: 10px;
+  
+      .infos-message {
+        display: flex;
+        justify-content: space-between;
+  
+        div {
+          display: flex;
+
+          .icon-container:first-child {
+            margin-right: 5px;
+          }
+        }
+      }
+    }
+  }
+
+  .message-container:nth-child(odd) > li{
+    background-color: $white;
   }
 }
 
@@ -181,10 +240,11 @@
 .show-more-btn {
   margin: 0 auto 30px;
   display: block;
+}
 
-  @include breakpoint(md) {
-    display: none;
-  }
+.show-more-messages-btn {
+  margin: 0 auto 30px;
+  display: block;
 }
 
 .modal {

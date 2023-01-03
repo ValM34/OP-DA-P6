@@ -40,9 +40,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
   #[ORM\Column(length: 100)]
   private ?string $firstname = null;
 
-  #[ORM\Column(length: 100)]
-  private ?string $pseudo = null;
-
   #[ORM\Column(options: ['default' => 'CURRENT_TIMESTAMP'])]
   private ?\DateTimeImmutable $updated_at = null;
 
@@ -54,6 +51,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
   #[ORM\OneToMany(mappedBy: 'user', targetEntity: Category::class)]
   private Collection $categories;
+
+  #[ORM\Column(length: 150, nullable: true)]
+  private ?string $avatar = null;
+
+  #[ORM\Column(options: ['default' => false])]
+  private ?bool $is_verified = false;
 
   public function __construct()
   {
@@ -158,18 +161,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     return $this;
   }
 
-  public function getPseudo(): ?string
-  {
-    return $this->pseudo;
-  }
-
-  public function setPseudo(string $pseudo): self
-  {
-    $this->pseudo = $pseudo;
-
-    return $this;
-  }
-
   public function getUpdatedAt(): ?\DateTimeImmutable
   {
     return $this->updated_at;
@@ -268,6 +259,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
               $category->setUser(null);
           }
       }
+
+      return $this;
+  }
+
+  public function getAvatar(): ?string
+  {
+      return $this->avatar;
+  }
+
+  public function setAvatar(?string $avatar): self
+  {
+      $this->avatar = $avatar;
+
+      return $this;
+  }
+
+  public function isIsVerified(): ?bool
+  {
+      return $this->is_verified;
+  }
+
+  public function setIsVerified(bool $is_verified): self
+  {
+      $this->is_verified = $is_verified;
 
       return $this;
   }

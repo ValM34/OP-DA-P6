@@ -3,12 +3,21 @@
   overflow: hidden;
 }
 
+.header-hidden {
+  transform: translateY(-60px);
+
+  @include breakpoint(md) {
+    transform: translateY(-120px);
+  }
+}
+
 header {
   position: sticky;
   top: 0;
   z-index: 2;
   color: $white;
   box-shadow: 0 0 5px #00000075;
+  transition: transform 0.3s;
 
   .header-container {
     position: relative;
@@ -111,6 +120,10 @@ header {
       display: flex;
       justify-content: space-between;
       padding: 10px;
+
+      .title-2 {
+        font-family: 'Architects Daughter', 'Montserrat', sans-serif;
+      }
 
       .burger-btn {
         display: none;

@@ -1,0 +1,131 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	{{trick.name}}
+{% endblock %}
+
+{% block javascripts %}
+<script type="module">
+  import showMedias from "{{ asset('js/trick/showMedias.js') }}";
+  import showMoreMessages from "{{ asset('js/trick/showMoreMessages.js') }}";
+  import slider from "{{ asset('js/trick/slider.js') }}";
+  import deleteTrick from "{{ asset('js/trick/deleteTrick.js') }}";
+  showMedias();
+  showMoreMessages();
+  slider();
+  deleteTrick();
+</script>
+{% endblock %}
+
+{% block bodyClass %}trick{% endblock %}
+
+{% block body %}
+
+  <div class="header-image" style="background-image: url('../../images/tricks/{{imagePath}}');">
+    <h1 class="title-1">{{trick.name}}</h1>
+    {% if app.user %}
+      <div class="trick-icons-container">
+        <a href="../update/{{trick.id}}" class="icon-container trick-icon-update">
+        <i class="fas fa-edit"></i>
+        </a>
+        <a href="#" class="icon-container trick-icon-delete delete-btn" data-trick-id="{{trick.id}}" data-trick-action="../../trick/delete/{{trick.id}}">
+          <i class="fas fa-trash"></i>
+        </a>
+      </div>
+    {% endif %}
+  </div>
+
+  <button id="see_medias_btn" class="see-medias-btn">See medias <i class="fas fa-chevron-down"></i></button>
+
+  <div id="arrows_container" class="arrows-container">
+    <div id="left-arrow" class="slider-arrow"><i class="fas fa-arrow-alt-circle-left"></i></div>
+    <div id="right-arrow" class="slider-arrow"><i class="fas fa-arrow-alt-circle-right"></i></div>
+  </div>
+
+  <div class="medias-container" id="medias_container" data-display="false">
+    <ul id="trick_medias_list" class="trick-medias-list">
+      {% for image in images %}
+        <li>
+          <div style="background-image: url('../../images/tricks/{{image.path}}')" class="trick-img-container"></div>
+          {% if app.user %}
+            <a href="../../image/delete/{{image.id}}" class="icon-container delete-media secondary">
+              Supprimer <i class="fas fa-trash"></i>
+            </a>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <div class="description-container">
+    <p>{{trick.description}}</p>
+  </div>
+
+  <div class="infos-container">
+    <div class="tag">Catégorie : {{category.name}}</div>
+    <div class="tag">Ajout : {{trick.createdAt|date('d-m-Y')}}</div>
+    <div class="tag">MAJ : {{trick.updatedAt|date('d-m-Y')}}</div>
+  </div>
+
+  <div class="base-container">
+    <div class="split-bar"></div>
+  </div>
+  {% if app.user %}
+		<div class="form-container">
+      <div class="form-subcontainer">
+        {{ form_start(createMessageForm) }}
+        {{ form_widget(createMessageForm) }}
+          <button type="submit">Envoyer un commentaire</button>
+        {{ form_end(createMessageForm) }}
+      </div>
+    </div>
+	{% else %}
+  <div class="base-container text-center">Vous devez <a class="primary" href="{{ path('login') }}">vous connecter</a> pour pouvoir poster un message.</div>
+  {% endif %}
+
+  <div class="base-container">
+    <div class="split-bar"></div>
+  </div>
+  {% if messages %}
+    <ul id="messages-container" class="base-container comments-container">
+      {% if succesMessage %}
+        <div class="succes-message">{{succesMessage}}</div>
+      {% endif %}
+        {% for message in messages %}
+          <div class="message-container">
+            <img class="avatar" src="../../images/avatar/{{message.avatar}}" />
+            <li>
+              <div class="infos-message">
+                <strong>{{message.firstname}} {{message.lastname}}</strong>
+                {% if message.isOwner is same as true %}
+                  <div>
+                    <a href="../../message/update/{{message.id}}" class="icon-container">
+                    <i class="fas fa-edit"></i>
+                    </a>
+                    <a href="../../message/delete/{{message.id}}" class="icon-container">
+                      <i class="fas fa-trash"></i>
+                    </a>
+                  </div>
+                {% endif %}
+              </div>
+              <p>{{message.content}}</p>
+            </li>
+          </div>
+        {% endfor %}
+    </ul>
+  {% else %}
+  <div class="base-container text-center">Il n'y a aucun message à propos de ce trick.</div>
+  {% endif %}
+  <button id="show_more_comments_btn" class="show-more-messages-btn hidden">Voir plus</button>
+  <div id="modal" class="modal hidden">
+    <div data-close-modal="" class="close-modal"><i class="fas fa-times"></i></div>
+    <strong>Voulez-vous vraiment supprimer le trick ?</strong>
+    <div class="modal-btn-container">
+      <form id="modal_form" method="POST">
+        <button id="modal_submit_btn">Oui</button>
+        <button data-close-modal="">Non</button>
+      </form>
+    </div>
+  </div>
+  <div id="overlay" class="overlay hidden" data-close-modal=""></div>
+{% endblock %}

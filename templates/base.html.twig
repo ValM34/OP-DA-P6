@@ -16,12 +16,15 @@
       <link rel="preconnect" href="https://fonts.googleapis.com">
       <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
       <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+      <link href="https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap" rel="stylesheet">
 			<link rel="stylesheet" href="{{ asset('css/styles.css') }}"/>
 		{% endblock %}
 
     <script type="module">
-      import burgerMenu from "{{ asset('js/allPages/header.js') }}";
+      import burgerMenu from "{{ asset('js/allPages/burgerMenu.js') }}";
+      import displayHeader from "{{ asset('js/allPages/displayHeader.js') }}";
       burgerMenu();
+      displayHeader();
     </script>
 
 		{% block javascripts %}{% endblock %}
@@ -30,7 +33,7 @@
 
 	<body class="{% block bodyClass %}{% endblock %}">
 
-		<header>
+		<header id="header">
       <div class="header-container">
         <div>
           <h2 class="title-2">Snowtricks</h2>
@@ -45,6 +48,8 @@
           <a class="secondary" href="{{ path('home') }}">Home</a>
           <a class="secondary" href="{{ path('home') }}#tricks-container">Tricks</a>
           {% if app.user %}
+            <a class="secondary" href="{{ path('trick_create') }}">Ajouter un trick</a>
+            <a class="secondary" href="{{ path('category_display_all') }}">Catégories</a>
             <a class="secondary" href="{{ path('logout') }}">Logout</a>
           {% else %}
             <a class="secondary" href="{{ path('login') }}">Sign in</a>

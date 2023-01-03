@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier le message
+{% endblock %}
+
+{% block body %}
+
+	{% if app.user %}
+    <div class="base-container">
+      <div class="form-container">
+        <div class="form-subcontainer">
+          <form class="flex flex-col" action="http://127.0.0.1:8000/message/update/{{message.id}}" method="POST" enctype="multipart/form-data">
+            {{ form_start(updateMessageFormType) }}
+            {{ form_widget(updateMessageFormType) }}
+            <button class="bg-blue-500 hover:bg-blue-400 px-2 py-1 rounded text-white font-semibold w-fit" type="submit">Valider</button>
+            {{ form_end(updateMessageFormType) }}
+          </form>
+        </div>
+      </div>
+    </div>
+	{% else %}
+		Vous êtes celui qui a écrit ce message ? <a class="primary" href="{{ path('login') }}">Connexion</a>
+	{% endif %}
+
+{% endblock %}

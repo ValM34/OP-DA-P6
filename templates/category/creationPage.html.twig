@@ -6,15 +6,20 @@
 {% block body %}
 
 	{% if app.user %}
-		<form action="http://127.0.0.1:8000/category/create" method="POST" enctype="multipart/form-data">
-			{{ form_start(registrationForm) }}
-			{{ form_widget(registrationForm) }}
-			<button type="submit" class="btn">Valider</button>
-			{{ form_end(registrationForm) }}
-		</form>
+		<div class="base-container">
+      <div class="form-container">
+        <div class="form-subcontainer">
+            {{ form_start(CreationCategoryForm) }}
+            {{ form_widget(CreationCategoryForm) }}
+              <button type="submit" class="btn">Valider</button>
+            {{ form_end(CreationCategoryForm) }}
+        </div>
+      </div>
+    </div>
 	{% else %}
-		Veuillez vous connecter pour pouvoir ajouter une nouvelle catégorie :
-		<a href="{{ path('app_login') }}">Connexion</a>
+		<div class="base-container">
+      Veuillez vous connecter pour pouvoir ajouter une nouvelle catégorie : <a class="primary" href="{{ path('login') }}">Connexion</a>
+    </div>
 	{% endif %}
 
 {% endblock %}

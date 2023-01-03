@@ -4,6 +4,11 @@ export default function slider(){
   let medias = document.querySelectorAll("#trick_medias_list > li") // La liste des li non clonés
   let leftArrow = document.querySelector('#left-arrow');
   let rightArrow = document.querySelector('#right-arrow');
+  let arrowsContainer = document.querySelector("#arrows_container");
+
+  if(medias.length === 0){
+    arrowsContainer.classList.add("hidden");
+  }
   
 
   leftArrow.addEventListener('click', () => {
