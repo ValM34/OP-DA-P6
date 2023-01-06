@@ -8,15 +8,19 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use App\Service\SendMailServiceInterface;
 
 class UserService implements UserServiceInterface
 {
   private $entityManager;
-  public function __construct(EntityManagerInterface $entityManager, $targetDirectory, SluggerInterface $slugger)
+  private $sendMailService;
+
+  public function __construct(EntityManagerInterface $entityManager, $targetDirectory, SluggerInterface $slugger, SendMailServiceInterface $sendMailService)
   {
     $this->entityManager = $entityManager;
     $this->targetDirectory = $targetDirectory;
     $this->slugger = $slugger;
+    $this->sendMailService = $sendMailService;
     $this->request = new Request(
       $_GET,
       $_POST,
@@ -46,7 +50,14 @@ class UserService implements UserServiceInterface
     $this->entityManager->flush();
   }
 
-  // UPLOAD
+  // UPDATE
+  public function update(User $user)
+  {
+    $this->entityManager->persist($user);
+    $this->entityManager->flush();
+  }
+
+  // UPLOAD AVATAR
   public function upload(UploadedFile $file)
   {
     $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
@@ -79,7 +90,32 @@ class UserService implements UserServiceInterface
   public function validateUser(User $user)
   {
     $user->setIsVerified(true);
+    $user->setRegistrationToken('valid');
     $this->entityManager->persist($user);
     $this->entityManager->flush();
+  }
+
+  // SEND PASSWORD VALIDATION TOKEN
+  public function sendPasswordRecoveryToken(User $user)
+  {
+    // Je vais envoyer le token en BDD et envoyer un mail à l'utilisateur en question.
+    $token = hash('sha512', $user->getEmail() . uniqId() . 'dsf51dsf15dsSDFSqsdf521d65s');
+    $user->setPasswordRecoveryToken($token);
+    $this->entityManager->persist($user);
+    $this->entityManager->flush();
+
+    $this->sendMailService->passwordRecovery($user, $token);
+  }
+
+  // FIND BY EMAIL
+  public function findByEmail(string $email)
+  {
+    return $this->entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
+  }
+
+  // FIND BY RECOVERY TOKEN
+  public function findByRecoveryToken(string $token)
+  {
+    return $this->entityManager->getRepository(User::class)->findOneBy(['password_recovery_token' => $token]);
   }
 }

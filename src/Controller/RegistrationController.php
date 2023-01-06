@@ -58,11 +58,10 @@ class RegistrationController extends AbstractController
       }
 
       // Send validation mail
-      $mail->send(
+      $mail->emailValidation(
         'snow@tricks.fr',
         $user->getEmail(),
         'Activation de votre compte sur le site Snowtricks',
-        'register',
         $token
       );
 
@@ -105,6 +104,7 @@ class RegistrationController extends AbstractController
         $request
       );
       $succes = true;
+      
       return $this->redirectToRoute('user_validate', ['succes' => $succes]);
     }
 
