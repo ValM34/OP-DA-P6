@@ -12,7 +12,7 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
+#[UniqueEntity(fields: ['email'], message: 'Il existe déjà un utilisateur avec cet email')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
   use CreatedAtTrait;
@@ -60,6 +60,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
   #[ORM\Column(length: 255)]
   private ?string $registration_token = null;
+
+  #[ORM\Column(length: 255, nullable: true)]
+  private ?string $password_recovery_token = null;
 
   public function __construct()
   {
@@ -298,6 +301,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
   public function setRegistrationToken(string $registration_token): self
   {
       $this->registration_token = $registration_token;
+
+      return $this;
+  }
+
+  public function getPasswordRecoveryToken(): ?string
+  {
+      return $this->password_recovery_token;
+  }
+
+  public function setPasswordRecoveryToken(string $password_recovery_token): self
+  {
+      $this->password_recovery_token = $password_recovery_token;
 
       return $this;
   }
