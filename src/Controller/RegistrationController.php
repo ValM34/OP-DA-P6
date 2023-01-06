@@ -12,8 +12,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
 use App\Service\UserServiceInterface;
+use App\Service\SendMailServiceInterface;
+use App\Repository\UserRepository;
 
 class RegistrationController extends AbstractController
 {
@@ -24,14 +25,17 @@ class RegistrationController extends AbstractController
     $this->userService = $userService;
   }
 
-  // SIGN UP
+  // REGISTRATION
   #[Route('/inscription', name: 'register')]
-  public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, UsersAuthenticator $authenticator, EntityManagerInterface $entityManager): Response
+  public function register(
+    Request $request,
+    UserPasswordHasherInterface $userPasswordHasher,
+    SendMailServiceInterface $mail
+  ): Response 
   {
     $user = new User();
     $form = $this->createForm(RegistrationFormType::class, $user);
     $form->handleRequest($request);
-
 
     if ($form->isSubmitted() && $form->isValid()) {
       // encode the plain password
@@ -42,26 +46,71 @@ class RegistrationController extends AbstractController
         )
       );
 
+      $token = hash('sha512', $user->getEmail() . uniqId() . 'dsf51dsf15dsSDFSf521d65s');
+      $user->setRegistrationToken($token);
+
       $avatar = $form->get('avatar')->getData();
-      if($avatar !== null){
+      if ($avatar !== null) {
         $avatarPath = $this->userService->upload($avatar);
         $this->userService->create($user, $avatarPath);
       } else {
         $this->userService->create($user);
       }
-      
 
-      // do anything else you need here, like send an email @TODO envoi d'email de validation
-
-      return $userAuthenticator->authenticateUser(
-        $user,
-        $authenticator,
-        $request
+      // Send validation mail
+      $mail->send(
+        'snow@tricks.fr',
+        $user->getEmail(),
+        'Activation de votre compte sur le site Snowtricks',
+        'register',
+        $token
       );
+
+      return $this->redirectToRoute('registration_succes');
     }
 
     return $this->render('registration/register.html.twig', [
       'registrationForm' => $form->createView(),
     ]);
+  }
+
+  // SUCCES REGISTRATION MESSAGE
+  #[Route('/registration/succes', name: 'registration_succes')]
+  public function registrationSucces()
+  {
+    return $this->render('registration/succesRegistration.html.twig');
+  }
+
+  // SUCCES ACCOUNT VALIDATION MESSAGE
+  #[Route('/user/validate/{succes}', name: 'user_validate')]
+  public function validate(bool $succes)
+  {
+    return $this->render('registration/validate.html.twig', [
+      'succes' => $succes
+    ]);
+  }
+
+  // TOKEN VERIFICATION
+  #[Route('/verif/{token}', name: 'verify_user')]
+  public function verifyUser($token, UserAuthenticatorInterface $userAuthenticator, UsersAuthenticator $authenticator, Request $request): Response
+  {
+    $user = $this->userService->findByToken($token);
+
+    // if token is true
+    if($user){
+      $this->userService->validateUser($user);
+      $userAuthenticator->authenticateUser(
+        $user,
+        $authenticator,
+        $request
+      );
+      $succes = true;
+      return $this->redirectToRoute('user_validate', ['succes' => $succes]);
+    }
+
+    // if token is false
+    $succes = 0;
+
+    return $this->redirectToRoute('user_validate', ['succes' => $succes]);
   }
 }
