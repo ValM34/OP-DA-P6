@@ -2,13 +2,7 @@
 
 namespace App\Service;
 
-use \DateTimeImmutable;
-use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Entity\Trick;
-use App\Entity\Image;
-use App\Entity\Category;
-use App\Entity\Message;
 use App\Entity\User;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
@@ -33,6 +27,7 @@ class UserService implements UserServiceInterface
     );
   }
 
+  // FIND ONE
   public function findOne(User $user)
   {
     $user = $this->entityManager->getRepository(User::class)->find($user);
@@ -43,6 +38,7 @@ class UserService implements UserServiceInterface
     return $user;
   }
 
+  // CREATE
   public function create(User $user, string $avatarPath = 'default.jpg')
   {
     $user->setAvatar($avatarPath);
@@ -50,6 +46,7 @@ class UserService implements UserServiceInterface
     $this->entityManager->flush();
   }
 
+  // UPLOAD
   public function upload(UploadedFile $file)
   {
     $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
@@ -70,5 +67,19 @@ class UserService implements UserServiceInterface
   public function getTargetDirectory()
   {
     return $this->targetDirectory;
+  }
+
+  // FIND BY TOKEN
+  public function findByToken(string $token)
+  {
+    return $this->entityManager->getRepository(User::class)->findOneBy(['registration_token' => $token]);
+  }
+
+  // VALIDATE USER
+  public function validateUser(User $user)
+  {
+    $user->setIsVerified(true);
+    $this->entityManager->persist($user);
+    $this->entityManager->flush();
   }
 }

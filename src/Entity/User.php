@@ -58,6 +58,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
   #[ORM\Column(options: ['default' => false])]
   private ?bool $is_verified = false;
 
+  #[ORM\Column(length: 255)]
+  private ?string $registration_token = null;
+
   public function __construct()
   {
     $this->tricks = new ArrayCollection();
@@ -275,7 +278,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
       return $this;
   }
 
-  public function isIsVerified(): ?bool
+  public function getIsVerified(): ?bool
   {
       return $this->is_verified;
   }
@@ -283,6 +286,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
   public function setIsVerified(bool $is_verified): self
   {
       $this->is_verified = $is_verified;
+
+      return $this;
+  }
+
+  public function getRegistrationToken(): ?string
+  {
+      return $this->registration_token;
+  }
+
+  public function setRegistrationToken(string $registration_token): self
+  {
+      $this->registration_token = $registration_token;
 
       return $this;
   }

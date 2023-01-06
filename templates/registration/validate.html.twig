@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	Inscription validée
+{% endblock %}
+
+{% block body %}
+  {% if succes == true %}
+    <div class="base-container">
+      <div class="succes-message">Votre compte a bien été validé. Vous êtes maintenant connecté.</div>
+    </div>
+  {% else %}
+   <div class="base-container">
+      <div class="error-message">Votre compte n'a pas pu être validé car le code d'activation est erroné.</div>
+    </div>
+  {% endif %}
+{% endblock %}
