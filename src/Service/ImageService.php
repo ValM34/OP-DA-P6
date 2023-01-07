@@ -34,6 +34,7 @@ class ImageService implements ImageServiceInterface
     );
   }
 
+  // @TODO commentaires des méthodes
   public function findAll()
   {
     dd($this->entityManager->getRepository(Image::class)->findAll()[0]->setTrick());
@@ -47,11 +48,11 @@ class ImageService implements ImageServiceInterface
     for($i = 0; $i < count($arrayOfImages); $i++){
       $image = new Image();
       $image
-      ->setPath($arrayOfImages[$i])
-      ->setUpdatedAt($date)
-      ->setCreatedAt($date)
-      ->setTrick($trick)
-    ;
+        ->setPath($arrayOfImages[$i])
+        ->setUpdatedAt($date)
+        ->setCreatedAt($date)
+        ->setTrick($trick)
+      ;
     $this->entityManager->persist($image);
     }
 

@@ -23,6 +23,9 @@ class Video
   #[ORM\Column]
   private ?\DateTimeImmutable $updated_at = null;
 
+  #[ORM\Column(length: 2048)]
+  private ?string $path = null;
+
   public function getId(): ?int
   {
     return $this->id;
@@ -50,5 +53,17 @@ class Video
     $this->updated_at = $updated_at;
 
     return $this;
+  }
+
+  public function getPath(): ?string
+  {
+      return $this->path;
+  }
+
+  public function setPath(string $path): self
+  {
+      $this->path = $path;
+
+      return $this;
   }
 }
