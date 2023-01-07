@@ -137,11 +137,19 @@ class TrickController extends AbstractController
     if($trick->getImages()[0] !== null){
       $imagePath = $trick->getImages()[0]->getPath();
       for($i = 0; $i < count($trick->getImages()); $i++){  
-          $images[$i]['path'] = $trick->getImages()[$i]->getPath();
-          $images[$i]['id'] = $trick->getImages()[$i]->getId();
+        $images[$i]['path'] = $trick->getImages()[$i]->getPath();
+        $images[$i]['id'] = $trick->getImages()[$i]->getId();
       }      
     } else {
       $imagePath = 'default.jpg';
+    }
+
+    $videos = [];
+    if($trick->getVideos()[0] !== null){
+      for($i = 0; $i < count($trick->getVideos()); $i++){  
+          $videos[$i]['path'] = $trick->getVideos()[$i]->getPath();
+          $videos[$i]['id'] = $trick->getVideos()[$i]->getId();
+      }      
     }
 
     if ($form->isSubmitted() && $form->isValid()) {
@@ -166,6 +174,7 @@ class TrickController extends AbstractController
       'succesMessage' => $succesMessage,
       'createMessageForm' => $form->createView(),
       'images' => $images,
+      'videos' => $videos,
       'imagePath' => $imagePath,
       'category' => $category
     ]);
@@ -173,7 +182,7 @@ class TrickController extends AbstractController
 
   // CREATE
   #[Route('/trick/create', name: 'trick_create')]
-  public function create(Request $request, SluggerInterface $slugger): Response
+  public function create(Request $request): Response
   {
     $trick = new Trick();
     $form = $this->createForm(CreationTrick::class, $trick);
@@ -181,7 +190,11 @@ class TrickController extends AbstractController
 
     if ($form->isSubmitted() && $form->isValid() && $this->getUser()) {
       $imageFile = $form->get('image')->getData();
-      $this->trickService->create($this->getUser(), $trick, $imageFile);
+      $videos = $form->get('videos')->getData();
+      if($videos === null){
+        $videos = '';
+      }
+      $this->trickService->create($this->getUser(), $trick, $imageFile, $videos);
 
       return $this->redirectToRoute('home', [
         '_fragment' => 'tricks-container',
@@ -205,7 +218,11 @@ class TrickController extends AbstractController
     
     if(($form->isSubmitted() && $form->isValid() && $this->getUser())){
       $imageFiles = $form->get('image')->getData();
-      $trick = $this->trickService->update($trick, $imageFiles);
+      $videos = $form->get('videos')->getData();
+      if($videos === null){
+        $videos = '';
+      }
+      $trick = $this->trickService->update($trick, $imageFiles, $videos);
       return $this->redirectToRoute('trick_display_one', [
         'id' => $id,
         'succesMessage' => 'Le trick a bien été modifié.'

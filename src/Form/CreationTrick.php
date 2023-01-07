@@ -4,12 +4,14 @@ namespace App\Form;
 
 use App\Entity\Trick;
 use App\Entity\Category;
+use App\Entity\Video;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\All;
 
@@ -23,6 +25,11 @@ class CreationTrick extends AbstractType
             ->add('category', EntityType::class, [
               'class' => Category::class,
               'choice_label' => 'name',
+            ])
+            ->add('videos', TextType::class, [
+              'mapped' => false,
+              'label' => "url de vidéo(s) youtube ou vimeo : séparer d'une virgule pour en ajouter plusieurs (ex: url1, url2, etc...)",
+              'required' => false
             ])
             ->add('image', FileType::class, [
               'label' => 'Ajouter une image (jpg, jpeg, png)',

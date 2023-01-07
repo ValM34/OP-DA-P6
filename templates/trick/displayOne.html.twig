@@ -44,6 +44,16 @@
 
   <div class="medias-container" id="medias_container" data-display="false">
     <ul id="trick_medias_list" class="trick-medias-list">
+      {% for video in videos %}
+        <li>
+          <iframe width="280" height="200" src="{{video.path}}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+          {% if app.user %}
+            <a href="../../video/delete/{{video.id}}" class="icon-container delete-media secondary">
+              Supprimer <i class="fas fa-trash"></i>
+            </a>
+          {% endif %}
+        </li>
+      {% endfor %}
       {% for image in images %}
         <li>
           <div style="background-image: url('../../images/tricks/{{image.path}}')" class="trick-img-container"></div>
