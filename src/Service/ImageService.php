@@ -16,7 +16,7 @@ class ImageService implements ImageServiceInterface
   private $targetDirectory;
   private $slugger;
   
-  public function __construct(EntityManagerInterface $entityManager, $targetDirectory, SluggerInterface $slugger)
+  public function __construct(EntityManagerInterface $entityManager, string $targetDirectory, SluggerInterface $slugger)
   {
     $this->entityManager = $entityManager;
     $this->targetDirectory = $targetDirectory;
@@ -30,7 +30,7 @@ class ImageService implements ImageServiceInterface
   }
 
   // CREATE
-  public function create(Trick $trick, $arrayOfImages): void
+  public function create(Trick $trick, array $arrayOfImages): void
   {
     $date = new DateTimeImmutable();
     
@@ -66,7 +66,7 @@ class ImageService implements ImageServiceInterface
   }
 
   // GET TARGET DIRECTORY
-  public function getTargetDirectory()
+  public function getTargetDirectory(): string
   {
     return $this->targetDirectory;
   }

@@ -13,7 +13,7 @@ interface UserServiceInterface
   public function upload(UploadedFile $file);
   public function findByToken(string $token);
   public function validateUser(User $user): void;
-  public function getTargetDirectory();
+  public function getTargetDirectory(): string;
   public function sendPasswordRecoveryToken(User $user): void;
   public function findByEmail(string $email);
   public function findByRecoveryToken(string $token);

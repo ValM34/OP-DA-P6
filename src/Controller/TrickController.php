@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Form\CreationTrick;
 use App\Form\UpdateTrickForm;
-use App\Form\CreationMessage;
+use App\Form\MessageCreateType;
 use Symfony\Component\HttpFoundation\Request;
 
 class TrickController extends AbstractController
@@ -60,7 +60,7 @@ class TrickController extends AbstractController
   public function displayOne(int $id, Request $request): Response
   {
     $message = new Message();
-    $form = $this->createForm(CreationMessage::class, $message);
+    $form = $this->createForm(MessageCreateType::class, $message);
     $form->handleRequest($request);
     $trick = $this->trickService->findOne($id);
     $messages = $this->messageService->findByTrick($id);

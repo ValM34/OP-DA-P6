@@ -8,9 +8,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 use App\Entity\Message;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
-class CreationMessage extends AbstractType
+class MessageCreateType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {

@@ -14,7 +14,7 @@ class UserService implements UserServiceInterface
   private $entityManager;
   private $sendMailService;
 
-  public function __construct(EntityManagerInterface $entityManager, $targetDirectory, SluggerInterface $slugger, SendMailServiceInterface $sendMailService)
+  public function __construct(EntityManagerInterface $entityManager, string $targetDirectory, SluggerInterface $slugger, SendMailServiceInterface $sendMailService)
   {
     $this->entityManager = $entityManager;
     $this->targetDirectory = $targetDirectory;
@@ -66,7 +66,7 @@ class UserService implements UserServiceInterface
     return $newFilename;
   }
 
-  public function getTargetDirectory()
+  public function getTargetDirectory(): string
   {
     return $this->targetDirectory;
   }

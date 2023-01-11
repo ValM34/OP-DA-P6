@@ -31,7 +31,7 @@ class VideoService implements VideoServiceInterface
     $this->entityManager->flush();
   }
 
-  public function delete(int $id): int
+  public function delete(int $id): ?int
   {
     $video = $this->entityManager->getRepository(Video::class)->find($id);
     if($video === null){
