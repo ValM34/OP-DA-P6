@@ -7,9 +7,8 @@ use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Trick;
 use App\Entity\Image;
-use App\Entity\Video;
+use App\Entity\User;
 use App\Entity\Category;
-use App\Entity\Message;
 use App\Service\ImageServiceInterface;
 use App\Service\VideoServiceInterface;
 
@@ -43,7 +42,7 @@ class TrickService implements TrickServiceInterface
   }
 
   // CREATE
-  public function create($user, Trick $trick, array $imageFiles, string $videos): void
+  public function create(User $user, Trick $trick, array $imageFiles, string $videos): void
   {
     $date = new DateTimeImmutable();
     $trick
@@ -130,7 +129,7 @@ class TrickService implements TrickServiceInterface
   }
 
   // FILTER VIDEOS
-  public function filterVideos($videos)
+  public function filterVideos(string $videos)
   {
     $videos = str_replace(' ', '', $videos);
     $separators = ", ;";

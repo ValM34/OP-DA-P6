@@ -34,7 +34,7 @@ class CategoryService implements CategoryServiceInterface
   }
 
   // CREATE
-  public function create($user, Category $category): void
+  public function create(User $user, Category $category): void
   {
     $this->date = new DateTimeImmutable();
     $category

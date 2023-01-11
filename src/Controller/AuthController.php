@@ -63,7 +63,7 @@ class AuthController extends AbstractController
 
   // PASSWORD RECOVERY
   #[Route(path: '/password/recovery/new/{token}', name: 'password_recovery')]
-  public function passwordRecovery($token, Request $request, UserPasswordHasherInterface $userPasswordHasher): Response
+  public function passwordRecovery(string $token, Request $request, UserPasswordHasherInterface $userPasswordHasher): Response
   {
     $user = $this->userService->findByRecoveryToken($token);
     if($user){

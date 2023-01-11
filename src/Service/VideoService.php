@@ -16,7 +16,7 @@ class VideoService implements VideoServiceInterface
     $this->entityManager = $entityManager;
   }
 
-  public function create(Trick $trick, $arrayOfVideos): void
+  public function create(Trick $trick, array $arrayOfVideos): void
   {
     $date = new DateTimeImmutable();
     foreach($arrayOfVideos as $videoUpdated){

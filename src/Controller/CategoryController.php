@@ -3,14 +3,10 @@
 namespace App\Controller;
 
 use DateTimeImmutable;
-use App\Entity\Trick;
-use App\Entity\User;
 use App\Entity\Category;
-use App\Entity\Message;
 use App\Entity\Trait\CreatedAtTrait;
 use App\Service\CategoryServiceInterface;
 use App\Service\UserServiceInterface;
-use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -57,7 +53,7 @@ class CategoryController extends AbstractController
 
   // CREATE
   #[Route('/category/create', name: 'category_create')]
-  public function createCategory(Request $request, EntityManagerInterface $entityManager, UserInterface $user): Response
+  public function createCategory(Request $request): Response
   {
     $category = new Category();
     $form = $this->createForm(CreationCategory::class, $category);
@@ -79,7 +75,7 @@ class CategoryController extends AbstractController
 
   // UPDATE
   #[Route('/category/update/{id}', name: 'category_update')]
-  public function update(int $id, Request $request, EntityManagerInterface $entityManager, UserInterface $user): Response
+  public function update(int $id, Request $request, UserInterface $user): Response
   {
     $category = $this->categoryService->findOne($id);
     $form = $this->createForm(UpdateCategory::class, $category);
