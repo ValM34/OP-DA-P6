@@ -48,7 +48,7 @@ class ImageService implements ImageServiceInterface
   }
 
   // UPLOAD
-  public function upload(UploadedFile $file)
+  public function upload(UploadedFile $file): string
   {
     $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
     // this is needed to safely include the file name as part of the URL
@@ -72,7 +72,7 @@ class ImageService implements ImageServiceInterface
   }
 
   // DELETE
-  public function delete(int $id)
+  public function delete(int $id): int
   {
     $image = $this->entityManager->getRepository(Image::class)->find($id);
     $idTrick = $image->getTrick()->getId();

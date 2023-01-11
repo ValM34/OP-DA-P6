@@ -13,6 +13,8 @@ class UserService implements UserServiceInterface
 {
   private $entityManager;
   private $sendMailService;
+  private $targetDirectory;
+  private $slugger;
 
   public function __construct(EntityManagerInterface $entityManager, string $targetDirectory, SluggerInterface $slugger, SendMailServiceInterface $sendMailService)
   {
@@ -23,7 +25,7 @@ class UserService implements UserServiceInterface
   }
 
   // FIND ONE
-  public function findOne(User $user)
+  public function findOne(User $user): User
   {
     $user = $this->entityManager->getRepository(User::class)->find($user);
     if (!$user) {
@@ -49,7 +51,7 @@ class UserService implements UserServiceInterface
   }
 
   // UPLOAD AVATAR
-  public function upload(UploadedFile $file)
+  public function upload(UploadedFile $file): string
   {
     $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
     // this is needed to safely include the file name as part of the URL
@@ -72,7 +74,7 @@ class UserService implements UserServiceInterface
   }
 
   // FIND BY TOKEN
-  public function findByToken(string $token)
+  public function findByToken(string $token): User
   {
     return $this->entityManager->getRepository(User::class)->findOneBy(['registration_token' => $token]);
   }
@@ -99,13 +101,13 @@ class UserService implements UserServiceInterface
   }
 
   // FIND BY EMAIL
-  public function findByEmail(string $email)
+  public function findByEmail(string $email): User
   {
     return $this->entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
   }
 
   // FIND BY RECOVERY TOKEN
-  public function findByRecoveryToken(string $token)
+  public function findByRecoveryToken(string $token): User
   {
     return $this->entityManager->getRepository(User::class)->findOneBy(['password_recovery_token' => $token]);
   }

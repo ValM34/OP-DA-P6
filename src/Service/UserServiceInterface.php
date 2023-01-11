@@ -7,14 +7,14 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 interface UserServiceInterface
 {
-  public function findOne(User $user);
+  public function findOne(User $user): User;
   public function create(User $user, string $avatarPath = 'default.jpg'): void;
   public function update(User $user): void;
-  public function upload(UploadedFile $file);
-  public function findByToken(string $token);
+  public function upload(UploadedFile $file): string;
+  public function findByToken(string $token): User;
   public function validateUser(User $user): void;
   public function getTargetDirectory(): string;
   public function sendPasswordRecoveryToken(User $user): void;
-  public function findByEmail(string $email);
-  public function findByRecoveryToken(string $token);
+  public function findByEmail(string $email): User;
+  public function findByRecoveryToken(string $token): User;
 }

@@ -24,6 +24,7 @@ class TrickController extends AbstractController
   private $trickService;
   private $imageService;
   private $messageService;
+  private $userService;
 
   public function __construct(TrickServiceInterface $trickService, MessageServiceInterface $messageService, ImageServiceInterface $imageService, UserServiceInterface $userService)
   {

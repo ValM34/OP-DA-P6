@@ -123,13 +123,13 @@ class TrickService implements TrickServiceInterface
   }
 
   // FIND ALL CATEGORIES
-  public function findAllCategories()
+  public function findAllCategories(): array
   {
     return $this->entityManager->getRepository(Category::class)->findAll();
   }
 
   // FILTER VIDEOS
-  public function filterVideos(string $videos)
+  public function filterVideos(string $videos): array
   {
     $videos = str_replace(' ', '', $videos);
     $separators = ", ;";

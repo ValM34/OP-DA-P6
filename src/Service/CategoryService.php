@@ -23,7 +23,7 @@ class CategoryService implements CategoryServiceInterface
   }
 
   // FIND ONE
-  public function findOne(int $id)
+  public function findOne(int $id): Category
   {
     $category = $this->entityManager->getRepository(Category::class)->find($id);
     if (!$category) {
@@ -36,17 +36,18 @@ class CategoryService implements CategoryServiceInterface
   // CREATE
   public function create(User $user, Category $category): void
   {
-    $this->date = new DateTimeImmutable();
+    $date = new DateTimeImmutable();
     $category
       ->setUser($user)
-      ->setUpdatedAt($this->date)
-      ->setCreatedAt($this->date)
+      ->setUpdatedAt($date)
+      ->setCreatedAt($date)
     ;
     $this->entityManager->persist($category);
     $this->entityManager->flush();
   }
 
-  public function updatePage(int $id)
+  // UPDATE PAGE
+  public function updatePage(int $id): Category
   {
     $category = $this->entityManager->getRepository(Category::class)->find($id);
     if (!$category) {
@@ -56,7 +57,7 @@ class CategoryService implements CategoryServiceInterface
     return $category;
   }
 
-  public function update(int $id)
+  public function update(int $id): void
   {
     $category = $this->entityManager->getRepository(Category::class)->find($id);
     $this->entityManager->persist($category);

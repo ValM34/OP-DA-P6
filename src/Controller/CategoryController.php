@@ -82,10 +82,10 @@ class CategoryController extends AbstractController
     $form->handleRequest($request);
 
     if ($form->isSubmitted() && $form->isValid()) {
-      $this->updated_at = new DateTimeImmutable();
+      $updated_at = new DateTimeImmutable();
       $category
         ->setUser($user)
-        ->setUpdatedAt($this->updated_at)
+        ->setUpdatedAt($updated_at)
       ;
       $this->categoryService->update($id);
 
