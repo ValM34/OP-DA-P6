@@ -24,12 +24,13 @@ class VideoController extends AbstractController
       if($idTrick === null){
         return $this->redirectToRoute('home');
       }
+      $this->addFlash('succes', 'La video a bien été supprimé.');
 
       return $this->redirectToRoute('trick_display_one', [
-        'id' => $idTrick,
-        'succesMessage' => "La video a bien été supprimé."
+        'id' => $idTrick
       ]);
     }
+    $this->addFlash('error', "Action non autorisée.");
 
     return $this->redirectToRoute('trick_display_one');
   }

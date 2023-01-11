@@ -35,7 +35,7 @@
     {% endif %}
   </div>
 
-  <button id="see_medias_btn" class="see-medias-btn">See medias <i class="fas fa-chevron-down"></i></button>
+  <button id="see_medias_btn" class="see-medias-btn">Voir les médias <i class="fas fa-chevron-down"></i></button>
 
   <div id="arrows_container" class="arrows-container">
     <div id="left-arrow" class="slider-arrow"><i class="fas fa-arrow-alt-circle-left"></i></div>
@@ -98,30 +98,34 @@
   </div>
   {% if messages %}
     <ul id="messages-container" class="base-container comments-container">
-      {% if succesMessage %}
-        <div class="succes-message">{{succesMessage}}</div>
-      {% endif %}
+      {% for label, messages in app.flashes %}
         {% for message in messages %}
-          <div class="message-container">
-            <img class="avatar" src="../../images/avatar/{{message.avatar}}" />
-            <li>
-              <div class="infos-message">
-                <strong>{{message.firstname}} {{message.lastname}}</strong>
-                {% if message.isOwner is same as true %}
-                  <div>
-                    <a href="../../message/update/{{message.id}}" class="icon-container">
-                    <i class="fas fa-edit"></i>
-                    </a>
-                    <a href="../../message/delete/{{message.id}}" class="icon-container">
-                      <i class="fas fa-trash"></i>
-                    </a>
-                  </div>
-                {% endif %}
-              </div>
-              <p>{{message.content}}</p>
-            </li>
+          <div class="{{ label }}-message">
+            <div>{{ message }}</div>
           </div>
         {% endfor %}
+      {% endfor %}
+      {% for message in messages %}
+        <div class="message-container">
+          <img class="avatar" src="../../images/avatar/{{message.avatar}}" />
+          <li>
+            <div class="infos-message">
+              <strong>{{message.firstname}} {{message.lastname}}</strong>
+              {% if message.isOwner is same as true %}
+                <div>
+                  <a href="../../message/update/{{message.id}}" class="icon-container">
+                  <i class="fas fa-edit"></i>
+                  </a>
+                  <a href="../../message/delete/{{message.id}}" class="icon-container">
+                    <i class="fas fa-trash"></i>
+                  </a>
+                </div>
+              {% endif %}
+            </div>
+            <p>{{message.content}}</p>
+          </li>
+        </div>
+      {% endfor %}
     </ul>
   {% else %}
   <div class="base-container text-center">Il n'y a aucun message à propos de ce trick.</div>

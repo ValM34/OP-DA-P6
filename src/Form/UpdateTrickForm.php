@@ -18,11 +18,12 @@ class UpdateTrickForm extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('name', TextType::class)
+            ->add('name', TextType::class, ['label' => 'Nom'])
             ->add('description', TextType::class)
             ->add('category', EntityType::class, [
               'class' => Category::class,
               'choice_label' => 'name',
+              'label' => 'Catégorie'
             ])
             ->add('videos', TextType::class, [
               'mapped' => false,

@@ -80,20 +80,7 @@ class TrickService implements TrickServiceInterface
       $this->entityManager->flush();
     }
 
-    $videos = str_replace(' ', '', $videos);
-    $separators = ", ;";
-    $videosArray = preg_split("/[" . $separators . "]/", $videos);
-    foreach($videosArray as $video){
-      if (strpos($video, 'https://www.youtube.com') !== false || strpos($video, 'https://vimeo.com') !== false) {
-        dump("La chaîne contient l'URL de YouTube ou l'URL de Vimeo");
-      } else {
-        dump("La chaîne ne contient pas l'URL de YouTube ni l'URL de Vimeo");
-        $videosArray = array_diff($videosArray, [$video]);
-      }
-    }
-    $videosArray = array_values($videosArray);
-    $videosArray = str_replace('https://www.youtube.com/watch?v=', 'https://www.youtube.com/embed/', $videosArray);
-    $videosArray = str_replace('https://vimeo.com/', 'https://player.vimeo.com/video/', $videosArray);
+    $videosArray = $this->filterVideos($videos);
     $this->videoService->create($trick, $videosArray);
   }
 
@@ -131,20 +118,7 @@ class TrickService implements TrickServiceInterface
       $this->entityManager->flush();
     }
 
-    $videos = str_replace(' ', '', $videos);
-    $separators = ", ;";
-    $videosArray = preg_split("/[" . $separators . "]/", $videos);
-    foreach($videosArray as $video){
-      if (strpos($video, 'https://www.youtube.com') !== false || strpos($video, 'https://vimeo.com') !== false) {
-        dump("La chaîne contient l'URL de YouTube ou l'URL de Vimeo");
-      } else {
-        dump("La chaîne ne contient pas l'URL de YouTube ni l'URL de Vimeo");
-        $videosArray = array_diff($videosArray, [$video]);
-      }
-    }
-    $videosArray = array_values($videosArray);
-    $videosArray = str_replace('https://www.youtube.com/watch?v=', 'https://www.youtube.com/embed/', $videosArray);
-    $videosArray = str_replace('https://vimeo.com/', 'https://player.vimeo.com/video/', $videosArray);
+    $videosArray = $this->filterVideos($videos);
     $this->videoService->create($trick, $videosArray);
   }
 
@@ -162,5 +136,26 @@ class TrickService implements TrickServiceInterface
   public function findAllCategories()
   {
     return $this->entityManager->getRepository(Category::class)->findAll();
+  }
+
+  // FILTER VIDEOS
+  public function filterVideos($videos)
+  {
+    $videos = str_replace(' ', '', $videos);
+    $separators = ", ;";
+    $videosArray = preg_split("/[" . $separators . "]/", $videos);
+    foreach($videosArray as $video){
+      if (str_starts_with($video, 'https://www.youtube.com') !== false || str_starts_with($video, 'https://vimeo.com') !== false) {
+        // La chaîne contient l'URL de YouTube ou l'URL de Vimeo
+      } else {
+        // La chaîne ne contient pas l'URL de YouTube ni l'URL de Vimeo
+        $videosArray = array_diff($videosArray, [$video]);
+      }
+    }
+    $videosArray = array_values($videosArray);
+    $videosArray = str_replace('https://www.youtube.com/watch?v=', 'https://www.youtube.com/embed/', $videosArray);
+    $videosArray = str_replace('https://vimeo.com/', 'https://player.vimeo.com/video/', $videosArray);
+    
+    return $videosArray;
   }
 }

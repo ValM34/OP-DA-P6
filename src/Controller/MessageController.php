@@ -41,9 +41,9 @@ class MessageController extends AbstractController
 
     if($form->isSubmitted() && $form->isValid() && $this->getUser() && $owner === $actualUser){
       $message = $this->messageService->update($id);
+      $this->addFlash('succes', 'Votre message a bien été modifié.');
       
       return $this->redirectToRoute('trick_display_one', [
-        'succesMessage' => 'Votre message a bien été modifié.',
         'id' => $message->getTrick()->getId()
       ]);
     }

@@ -16,9 +16,6 @@ use App\Form\CreationTrick;
 use App\Form\UpdateTrickForm;
 use App\Form\CreationMessage;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\String\Slugger\SluggerInterface;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
-use App\Entity\Image;
 
 class TrickController extends AbstractController
 {
@@ -44,13 +41,6 @@ class TrickController extends AbstractController
     );
   }
 
-  // STYLE GUIDE
-  #[Route('/styleguide', name: 'style_guide')]
-  public function styleGuide(): Response
-  {
-    return $this->render('styleGuide.html.twig');
-  }
-
   // DISPLAY ALL
   #[Route('/', name: 'home')]
   public function displayAll(): Response
@@ -68,21 +58,14 @@ class TrickController extends AbstractController
       }
     }
 
-    if(isset($_GET['succesMessage'])){
-      $succesMessage = $this->request->get('succesMessage');
-    } else {
-      $succesMessage = null;
-    }
-
     return $this->render('home/home.html.twig', [
-      'tricks' => $tricksData,
-      'succesMessage' => $succesMessage
+      'tricks' => $tricksData
     ]);
   }
 
   // DISPLAY ONE
   #[Route('/trick/displayone/{id}', name: 'trick_display_one')]
-  public function displayOne(int $id, string $succesMessage = null, Request $request): Response
+  public function displayOne(int $id, Request $request): Response
   {
     $message = new Message();
     $form = $this->createForm(CreationMessage::class, $message);
@@ -130,7 +113,6 @@ class TrickController extends AbstractController
       array_push($messagesArray, $arr);
     }
 
-    // @TODO => problème n.1
     $images = [];
     $imagePath = null;
 
@@ -139,7 +121,7 @@ class TrickController extends AbstractController
       for($i = 0; $i < count($trick->getImages()); $i++){  
         $images[$i]['path'] = $trick->getImages()[$i]->getPath();
         $images[$i]['id'] = $trick->getImages()[$i]->getId();
-      }      
+      }
     } else {
       $imagePath = 'default.jpg';
     }
@@ -154,24 +136,18 @@ class TrickController extends AbstractController
 
     if ($form->isSubmitted() && $form->isValid()) {
       $this->messageService->create($this->getUser(), $trick, $message);
+      $this->addFlash('succes', 'Votre commentaire a bien été ajouté!');
       
       return $this->redirectToRoute('trick_display_one', [
-        'id' => $trick->getId(),
-        'succesMessage' => 'Votre commentaire a bien été ajouté!'
+        'id' => $trick->getId()
       ]);
     }
 
     $category['name'] = $trick->getCategory()->getName();
-    if(isset($_GET['succesMessage'])){
-      $succesMessage = $this->request->get('succesMessage');
-    } else {
-      $succesMessage = null;
-    }
     
     return $this->render('trick/displayone.html.twig', [
       'trick' => $trick,
       'messages' => $messagesArray,
-      'succesMessage' => $succesMessage,
       'createMessageForm' => $form->createView(),
       'images' => $images,
       'videos' => $videos,
@@ -195,10 +171,10 @@ class TrickController extends AbstractController
         $videos = '';
       }
       $this->trickService->create($this->getUser(), $trick, $imageFile, $videos);
+      $this->addFlash('succes', 'Votre trick a bien été ajouté!');
 
       return $this->redirectToRoute('home', [
-        '_fragment' => 'tricks-container',
-        'succesMessage' => 'Votre trick a bien été ajouté!'
+        '_fragment' => 'tricks-container'
       ]);
     }
 
@@ -223,9 +199,10 @@ class TrickController extends AbstractController
         $videos = '';
       }
       $trick = $this->trickService->update($trick, $imageFiles, $videos);
+      $this->addFlash('succes', 'Le trick a bien été modifié.');
+
       return $this->redirectToRoute('trick_display_one', [
-        'id' => $id,
-        'succesMessage' => 'Le trick a bien été modifié.'
+        'id' => $id
       ]);
     }
 
@@ -243,11 +220,9 @@ class TrickController extends AbstractController
   {
     if($this->getUser()){
       $this->trickService->delete($id);
-      $succesMessage = 'Le trick a bien été supprimé.';
-  
-      return $this->redirectToRoute('home', [
-        'succesMessage' => $succesMessage
-      ]);
+      $this->addFlash('succes', 'Le trick a bien été supprimé.');
+      
+      return $this->redirectToRoute('home');
     }
     
     return $this->redirectToRoute('home');

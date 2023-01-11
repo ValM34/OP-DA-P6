@@ -5,8 +5,6 @@ namespace App\Service;
 use \DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Image;
-use App\Entity\Category;
-use App\Entity\Message;
 use App\Entity\Trick;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
@@ -34,7 +32,7 @@ class ImageService implements ImageServiceInterface
     );
   }
 
-  // @TODO commentaires des méthodes
+  // FIND ALL
   public function findAll()
   {
     dd($this->entityManager->getRepository(Image::class)->findAll()[0]->setTrick());
@@ -49,7 +47,6 @@ class ImageService implements ImageServiceInterface
       $image = new Image();
       $image
         ->setPath($arrayOfImages[$i])
-        ->setUpdatedAt($date)
         ->setCreatedAt($date)
         ->setTrick($trick)
       ;
@@ -59,6 +56,7 @@ class ImageService implements ImageServiceInterface
     $this->entityManager->flush();
   }
 
+  // UPLOAD
   public function upload(UploadedFile $file)
   {
     $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
@@ -76,11 +74,13 @@ class ImageService implements ImageServiceInterface
     return $newFilename;
   }
 
+  // GET TARGET DIRECTORY
   public function getTargetDirectory()
   {
     return $this->targetDirectory;
   }
 
+  // DELETE
   public function delete(int $id)
   {
     $image = $this->entityManager->getRepository(Image::class)->find($id);
@@ -96,6 +96,7 @@ class ImageService implements ImageServiceInterface
     return $idTrick;
   }
 
+  // DELETE BY TRICK
   public function deleteByTrick(array $images)
   {
     foreach($images as $image){

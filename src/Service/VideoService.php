@@ -38,7 +38,6 @@ class VideoService implements VideoServiceInterface
       $vdo
         ->setPath($videoUpdated)
         ->setTrick($trick)
-        ->setUpdatedAt($date)
         ->setCreatedAt($date)
       ;
       dump($vdo);

@@ -15,15 +15,16 @@ class ImageController extends AbstractController
   {
     $this->imageService = $imageService;
   }
+  
   #[Route('/image/delete/{id}', name: 'image_delete')]
   public function delete(int $id): Response
   {
     if ($this->getUser()) {
       $idTrick = $this->imageService->delete($id);
+      $this->addFlash('succes', "L'image a bien été supprimé.");
 
       return $this->redirectToRoute('trick_display_one', [
-        'id' => $idTrick,
-        'succesMessage' => "L'image a bien été supprimé."
+        'id' => $idTrick
       ]);
     }
 

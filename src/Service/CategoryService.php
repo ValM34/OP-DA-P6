@@ -53,8 +53,6 @@ class CategoryService implements CategoryServiceInterface
     ;
     $this->entityManager->persist($category);
     $this->entityManager->flush();
-
-    return $category;
   }
 
   public function updatePage(int $id)
@@ -72,8 +70,6 @@ class CategoryService implements CategoryServiceInterface
     $category = $this->entityManager->getRepository(Category::class)->find($id);
     $this->entityManager->persist($category);
     $this->entityManager->flush();
-
-    return $category;
   }
 
   public function delete(int $id)

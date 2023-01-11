@@ -14,7 +14,6 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 use App\Service\UserServiceInterface;
 use App\Service\SendMailServiceInterface;
-use App\Repository\UserRepository;
 
 class RegistrationController extends AbstractController
 {

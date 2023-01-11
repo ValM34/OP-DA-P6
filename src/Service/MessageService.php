@@ -30,7 +30,7 @@ class MessageService implements MessageServiceInterface
   // FIND BY TRICK
   public function findByTrick($trick)
   {
-    return $this->entityManager->getRepository(Message::class)->findByTrick($trick);
+    return $this->entityManager->getRepository(Message::class)->findByTrick($trick, ['created_at' => 'DESC']);
   }
 
   // FIND BY ID

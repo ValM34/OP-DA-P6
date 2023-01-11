@@ -42,26 +42,24 @@ class CategoryController extends AbstractController
   }
 
   // DISPLAY ALL
-  #[Route('/category/displayall/{succesMessage}', name: 'category_display_all')]
-  public function displayAll($succesMessage = null): Response
+  #[Route('/category/displayall', name: 'category_display_all')]
+  public function displayAll(): Response
   {
     $categories = $this->categoryService->findAll();
 
     return $this->render('category/displayAll.html.twig', [
-      'categories' => $categories,
-      'succesMessage' => $succesMessage
+      'categories' => $categories
     ]);
   }
 
   // DISPLAY ONE
-  #[Route('/category/displayone/{id}/{succesMessage}', name: 'category_display_one')]
-  public function displayOne(int $id, string $succesMessage = null): Response
+  #[Route('/category/displayone/{id}', name: 'category_display_one')]
+  public function displayOne(int $id): Response
   {
     $category = $this->categoryService->findOne($id);
     
     return $this->render('category/displayOne.html.twig', [
-      'category' => $category,
-      'succesMessage' => $succesMessage
+      'category' => $category
     ]);
   }
 
@@ -75,11 +73,10 @@ class CategoryController extends AbstractController
 
     if ($form->isSubmitted() && $form->isValid() && $this->getUser()) {
       $this->categoryService->create($this->getUser(), $category);
-      $succesMessage = 'Votre catégorie a bien été ajoutée!';
+      $this->addFlash('succes', 'Votre catégorie a bien été ajoutée!');
       
       return $this->redirectToRoute('category_display_one', [
-        'id' => $category->getId(),
-        'succesMessage' => $succesMessage
+        'id' => $category->getId()
       ]);
     }
 
@@ -89,7 +86,7 @@ class CategoryController extends AbstractController
   }
 
   // UPDATE
-  #[Route('/category/update/{id}', name: 'category_update')] // changer nom route @TODO
+  #[Route('/category/update/{id}', name: 'category_update')]
   public function update(int $id, Request $request, EntityManagerInterface $entityManager, UserInterface $user): Response
   {
     $category = $this->categoryService->findOne($id);
@@ -104,10 +101,9 @@ class CategoryController extends AbstractController
       ;
       $this->categoryService->update($id);
 
-      $succesMessage = 'La catégorie a été modifiée.';
+      $this->addFlash('succes', 'La catégorie a été modifiée.');
       return $this->redirectToRoute('category_display_one', [
-        'id' => $category->getId(),
-        'succesMessage' => $succesMessage
+        'id' => $category->getId()
       ]);
     }
 
@@ -124,10 +120,8 @@ class CategoryController extends AbstractController
   public function deleteCategory(int $id): Response
   {
     $this->categoryService->delete($id);
-    $succesMessage = 'La catégorie a bien été supprimée.';
+    $this->addFlash('succes', 'La catégorie a bien été supprimée.');
 
-    return $this->redirectToRoute('category_display_all', [
-      'succesMessage' => $succesMessage
-    ]);
+    return $this->redirectToRoute('category_display_all');
   }
 }
