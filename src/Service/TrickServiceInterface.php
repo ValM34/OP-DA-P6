@@ -13,6 +13,5 @@ interface TrickServiceInterface
   public function updatePage(int $id): Trick;
   public function update(Trick $trick, array $imageFiles, string $videos): void;
   public function delete(int $id): void;
-  public function findAllCategories(): array; // @TODO Envoyer dans categoryService (findAll())
   public function filterVideos(string $videos): array;
 }

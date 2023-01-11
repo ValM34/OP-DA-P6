@@ -123,12 +123,6 @@ class TrickService implements TrickServiceInterface
     $this->entityManager->flush();
   }
 
-  // FIND ALL CATEGORIES
-  public function findAllCategories(): array
-  {
-    return $this->entityManager->getRepository(Category::class)->findAll();
-  }
-
   // FILTER VIDEOS
   public function filterVideos(string $videos): array
   {

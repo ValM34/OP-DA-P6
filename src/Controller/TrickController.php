@@ -9,6 +9,7 @@ use App\Service\TrickServiceInterface;
 use App\Service\ImageServiceInterface;
 use App\Service\UserServiceInterface;
 use App\Service\MessageServiceInterface;
+use App\Service\CategoryServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -25,13 +26,15 @@ class TrickController extends AbstractController
   private $imageService;
   private $messageService;
   private $userService;
+  private $categoryService;
 
-  public function __construct(TrickServiceInterface $trickService, MessageServiceInterface $messageService, ImageServiceInterface $imageService, UserServiceInterface $userService)
+  public function __construct(TrickServiceInterface $trickService, MessageServiceInterface $messageService, ImageServiceInterface $imageService, UserServiceInterface $userService, CategoryServiceInterface $categoryService)
   {
     $this->trickService = $trickService;
     $this->imageService = $imageService;
     $this->userService = $userService;
     $this->messageService = $messageService;
+    $this->categoryService = $categoryService;
   }
 
   // DISPLAY ALL
@@ -172,7 +175,7 @@ class TrickController extends AbstractController
     }
 
     return $this->render('trick/create.html.twig', [
-      'categories' => $this->trickService->findAllCategories(),
+      'categories' => $this->categoryService->findAll(),
       'createTrickForm' => $form->createView()
     ]);
   }
