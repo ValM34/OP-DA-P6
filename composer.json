@@ -98,7 +98,7 @@
             "allow-contrib": false,
             "require": "6.1.*"
         },
-        "symfony-web-dir": "web"
+        "symfony-web-dir": "public"
     },
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^3.4",
