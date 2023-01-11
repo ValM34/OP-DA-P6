@@ -74,14 +74,14 @@ class RegistrationController extends AbstractController
 
   // SUCCES REGISTRATION MESSAGE
   #[Route('/registration/succes', name: 'registration_succes')]
-  public function registrationSucces()
+  public function registrationSucces(): Response
   {
     return $this->render('registration/succesRegistration.html.twig');
   }
 
   // SUCCES ACCOUNT VALIDATION MESSAGE
   #[Route('/user/validate/{succes}', name: 'user_validate')]
-  public function validate(bool $succes)
+  public function validate(bool $succes): Response
   {
     return $this->render('registration/validate.html.twig', [
       'succes' => $succes

@@ -16,7 +16,7 @@ class VideoService implements VideoServiceInterface
     $this->entityManager = $entityManager;
   }
 
-  public function create(Trick $trick, $arrayOfVideos)
+  public function create(Trick $trick, $arrayOfVideos): void
   {
     $date = new DateTimeImmutable();
     foreach($arrayOfVideos as $videoUpdated){
@@ -31,7 +31,7 @@ class VideoService implements VideoServiceInterface
     $this->entityManager->flush();
   }
 
-  public function delete(int $id)
+  public function delete(int $id): int
   {
     $video = $this->entityManager->getRepository(Video::class)->find($id);
     if($video === null){

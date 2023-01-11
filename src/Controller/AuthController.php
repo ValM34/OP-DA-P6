@@ -43,7 +43,7 @@ class AuthController extends AbstractController
 
   // SEND PASSWORD RECOVERY
   #[Route(path: '/password/recovery/send', name: 'send_password_recovery')]
-  public function sendTokenRecovery(Request $request)
+  public function sendTokenRecovery(Request $request): Response
   {
     $user = new User();
     $form = $this->createForm(PasswordRecoveryForm::class, $user);
@@ -63,7 +63,7 @@ class AuthController extends AbstractController
 
   // PASSWORD RECOVERY
   #[Route(path: '/password/recovery/new/{token}', name: 'password_recovery')]
-  public function passwordRecovery($token, Request $request, UserPasswordHasherInterface $userPasswordHasher)
+  public function passwordRecovery($token, Request $request, UserPasswordHasherInterface $userPasswordHasher): Response
   {
     $user = $this->userService->findByRecoveryToken($token);
     if($user){

@@ -34,7 +34,7 @@ class UserService implements UserServiceInterface
   }
 
   // CREATE
-  public function create(User $user, string $avatarPath = 'default.jpg')
+  public function create(User $user, string $avatarPath = 'default.jpg'): void
   {
     $user->setAvatar($avatarPath);
     $this->entityManager->persist($user);
@@ -42,7 +42,7 @@ class UserService implements UserServiceInterface
   }
 
   // UPDATE
-  public function update(User $user)
+  public function update(User $user): void
   {
     $this->entityManager->persist($user);
     $this->entityManager->flush();
@@ -78,7 +78,7 @@ class UserService implements UserServiceInterface
   }
 
   // VALIDATE USER
-  public function validateUser(User $user)
+  public function validateUser(User $user): void
   {
     $user->setIsVerified(true);
     $user->setRegistrationToken('valid');
@@ -87,7 +87,7 @@ class UserService implements UserServiceInterface
   }
 
   // SEND PASSWORD VALIDATION TOKEN
-  public function sendPasswordRecoveryToken(User $user)
+  public function sendPasswordRecoveryToken(User $user): void
   {
     // Je vais envoyer le token en BDD et envoyer un mail à l'utilisateur en question.
     $token = hash('sha512', $user->getEmail() . uniqId() . 'dsf51dsf15dsSDFSqsdf521d65s');

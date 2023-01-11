@@ -30,7 +30,7 @@ class ImageService implements ImageServiceInterface
   }
 
   // CREATE
-  public function create(Trick $trick, $arrayOfImages)
+  public function create(Trick $trick, $arrayOfImages): void
   {
     $date = new DateTimeImmutable();
     
@@ -88,7 +88,7 @@ class ImageService implements ImageServiceInterface
   }
 
   // DELETE BY TRICK
-  public function deleteByTrick(array $images)
+  public function deleteByTrick(array $images): void
   {
     foreach($images as $image){
       $imageWholePath = $this->getTargetDirectory() . '/' . $image->getPath();

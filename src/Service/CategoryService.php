@@ -34,7 +34,7 @@ class CategoryService implements CategoryServiceInterface
   }
 
   // CREATE
-  public function create($user, Category $category)
+  public function create($user, Category $category): void
   {
     $this->date = new DateTimeImmutable();
     $category
@@ -63,7 +63,7 @@ class CategoryService implements CategoryServiceInterface
     $this->entityManager->flush();
   }
 
-  public function delete(int $id)
+  public function delete(int $id): void
   {
     $category = $this->entityManager->getRepository(Category::class)->find($id);
     $this->entityManager->remove($category);

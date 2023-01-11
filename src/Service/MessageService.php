@@ -3,11 +3,7 @@
 namespace App\Service;
 
 use \DateTimeImmutable;
-use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Entity\Trick;
-use App\Entity\Image;
-use App\Entity\Category;
 use App\Entity\Message;
 use Symfony\Component\HttpFoundation\Request; 
 
@@ -33,7 +29,7 @@ class MessageService implements MessageServiceInterface
   }
 
   // CREATE
-  public function create($user, $trick, $message)
+  public function create($user, $trick, $message): void
   {
     $dateNow = new DateTimeImmutable();
 

@@ -43,7 +43,7 @@ class TrickService implements TrickServiceInterface
   }
 
   // CREATE
-  public function create($user, Trick $trick, array $imageFiles, string $videos)
+  public function create($user, Trick $trick, array $imageFiles, string $videos): void
   {
     $date = new DateTimeImmutable();
     $trick
@@ -88,7 +88,7 @@ class TrickService implements TrickServiceInterface
   }
 
   // UPDATE
-  public function update(Trick $trick, array $imageFiles, string $videos)
+  public function update(Trick $trick, array $imageFiles, string $videos): void
   {
     $date = new DateTimeImmutable();
     $trick
@@ -114,7 +114,7 @@ class TrickService implements TrickServiceInterface
   }
 
   // DELETE
-  public function delete(int $id)
+  public function delete(int $id): void
   {
     $trick = $this->entityManager->getRepository(Trick::class)->find($id);
     $images = $this->entityManager->getRepository(Image::class)->findByTrick($trick);
