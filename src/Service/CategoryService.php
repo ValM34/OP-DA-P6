@@ -17,7 +17,7 @@ class CategoryService implements CategoryServiceInterface
   }
 
   // FIND ALL
-  public function findAll()
+  public function findAll(): array
   {
     return $this->entityManager->getRepository(Category::class)->findAll();
   }

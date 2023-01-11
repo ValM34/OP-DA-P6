@@ -21,7 +21,7 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
     $this->entityManager = $entityManager;
   }
   // CREATE 10 TRICKS
-  public function load(ObjectManager $manager)
+  public function load(ObjectManager $manager): void
   {
     $date = new DateTimeImmutable();
     for ($i = 0; $i < 10; $i++) {

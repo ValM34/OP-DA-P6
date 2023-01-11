@@ -24,7 +24,7 @@ class ImageService implements ImageServiceInterface
   }
 
   // FIND ALL
-  public function findAll()
+  public function findAll(): array
   {
     return $this->entityManager->getRepository(Image::class)->findAll();
   }

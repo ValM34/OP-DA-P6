@@ -25,13 +25,14 @@ class TrickService implements TrickServiceInterface
     $this->videoService = $videoService;
   }
 
-  // DISPLAY ALL
-  public function findAll()
+  // FIND ALL
+  public function findAll(): array
   {
     return $this->entityManager->getRepository(Trick::class)->findAll();
   }
 
-  public function findOne(int $id)
+  // FIND ONE
+  public function findOne(int $id): Trick
   {
     $trick = $this->entityManager->getRepository(Trick::class)->find($id);
     if (!$trick) {
@@ -75,7 +76,7 @@ class TrickService implements TrickServiceInterface
   }
 
   // UPDATE PAGE
-  public function updatePage(int $id)
+  public function updatePage(int $id): Trick
   {
     $trick = $this->entityManager->getRepository(Trick::class)->find($id);
 
