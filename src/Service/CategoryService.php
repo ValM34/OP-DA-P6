@@ -7,7 +7,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Trick;
 use App\Entity\User;
 use App\Entity\Category;
-use Symfony\Component\HttpFoundation\Request;
 
 class CategoryService implements CategoryServiceInterface
 {
@@ -15,14 +14,6 @@ class CategoryService implements CategoryServiceInterface
   public function __construct(EntityManagerInterface $entityManager)
   {
     $this->entityManager = $entityManager;
-    $this->request = new Request(
-      $_GET,
-      $_POST,
-      [],
-      $_COOKIE,
-      $_FILES,
-      $_SERVER
-    );
   }
 
   // FIND ALL

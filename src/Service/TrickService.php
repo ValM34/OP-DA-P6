@@ -10,7 +10,6 @@ use App\Entity\Image;
 use App\Entity\Video;
 use App\Entity\Category;
 use App\Entity\Message;
-use Symfony\Component\HttpFoundation\Request; 
 use App\Service\ImageServiceInterface;
 use App\Service\VideoServiceInterface;
 
@@ -25,14 +24,6 @@ class TrickService implements TrickServiceInterface
     $this->entityManager = $entityManager;
     $this->imageService = $imageService;
     $this->videoService = $videoService;
-    $this->request = new Request(
-      $_GET,
-      $_POST,
-      [],
-      $_COOKIE,
-      $_FILES,
-      $_SERVER
-    );
   }
 
   // DISPLAY ALL

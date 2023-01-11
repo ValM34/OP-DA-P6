@@ -6,7 +6,6 @@ use \DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Image;
 use App\Entity\Trick;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\String\Slugger\SluggerInterface;
@@ -22,14 +21,6 @@ class ImageService implements ImageServiceInterface
     $this->entityManager = $entityManager;
     $this->targetDirectory = $targetDirectory;
     $this->slugger = $slugger;
-    $this->request = new Request(
-      $_GET,
-      $_POST,
-      [],
-      $_COOKIE,
-      $_FILES,
-      $_SERVER
-    );
   }
 
   // FIND ALL

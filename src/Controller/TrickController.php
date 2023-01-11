@@ -31,14 +31,6 @@ class TrickController extends AbstractController
     $this->imageService = $imageService;
     $this->userService = $userService;
     $this->messageService = $messageService;
-    $this->request = new Request(
-      $_GET,
-      $_POST,
-      [],
-      $_COOKIE,
-      $_FILES,
-      $_SERVER
-    );
   }
 
   // DISPLAY ALL

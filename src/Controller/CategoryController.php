@@ -31,14 +31,6 @@ class CategoryController extends AbstractController
   {
     $this->categoryService = $categoryService;
     $this->userService = $userService;
-    $this->request = new Request(
-      $_GET,
-      $_POST,
-      [],
-      $_COOKIE,
-      $_FILES,
-      $_SERVER
-    );
   }
 
   // DISPLAY ALL

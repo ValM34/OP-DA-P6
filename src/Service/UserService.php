@@ -4,7 +4,6 @@ namespace App\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\User;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\String\Slugger\SluggerInterface;
@@ -21,14 +20,6 @@ class UserService implements UserServiceInterface
     $this->targetDirectory = $targetDirectory;
     $this->slugger = $slugger;
     $this->sendMailService = $sendMailService;
-    $this->request = new Request(
-      $_GET,
-      $_POST,
-      [],
-      $_COOKIE,
-      $_FILES,
-      $_SERVER
-    );
   }
 
   // FIND ONE
