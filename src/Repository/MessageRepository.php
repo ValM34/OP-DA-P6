@@ -44,43 +44,4 @@ class MessageRepository extends ServiceEntityRepository
   {
       return $this->findBy(array(), array('created_at' => 'DESC'));
   }
-
-  //    /**
-  //     * @return Message[] Returns an array of Message objects
-  //     */
-  //    public function findByExampleField($value): array
-  //    {
-  //        return $this->createQueryBuilder('m')
-  //            ->andWhere('m.exampleField = :val')
-  //            ->setParameter('val', $value)
-  //            ->orderBy('m.id', 'ASC')
-  //            ->setMaxResults(10)
-  //            ->getQuery()
-  //            ->getResult()
-  //        ;
-  //    }
-
-  //    public function findOneBySomeField($value): ?Message
-  //    {
-  //        return $this->createQueryBuilder('m')
-  //            ->andWhere('m.exampleField = :val')
-  //            ->setParameter('val', $value)
-  //            ->getQuery()
-  //            ->getOneOrNullResult()
-  //        ;
-  //    }
-
-  // @TODO => voir si cette fonction sert toujours à quelque chose
-  /*public function findByTrick($trick): array
-  {
-    return $this->createQueryBuilder('m')
-      ->select('m', 'u')
-      ->leftJoin('m.user', 'u')
-      ->where('m.trick = :trick')
-      ->setParameter('trick', $trick)
-      ->orderBy('m.created_at', 'DESC')
-      ->getQuery()
-      ->getResult()
-    ;
-  }*/
 }

@@ -26,10 +26,10 @@ class ImageService implements ImageServiceInterface
   // FIND ALL
   public function findAll()
   {
-    dd($this->entityManager->getRepository(Image::class)->findAll()[0]->setTrick());
     return $this->entityManager->getRepository(Image::class)->findAll();
   }
 
+  // CREATE
   public function create(Trick $trick, $arrayOfImages)
   {
     $date = new DateTimeImmutable();

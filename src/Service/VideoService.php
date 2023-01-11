@@ -26,7 +26,6 @@ class VideoService implements VideoServiceInterface
         ->setTrick($trick)
         ->setCreatedAt($date)
       ;
-      dump($vdo);
       $this->entityManager->persist($vdo);
     }
     $this->entityManager->flush();

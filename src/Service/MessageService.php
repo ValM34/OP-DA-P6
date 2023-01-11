@@ -17,14 +17,7 @@ class MessageService implements MessageServiceInterface
   public function __construct(EntityManagerInterface $entityManager)
   {
     $this->entityManager = $entityManager;
-    $this->request = new Request(
-      $_GET,
-      $_POST,
-      [],
-      $_COOKIE,
-      $_FILES,
-      $_SERVER
-    );
+    $this->request = new Request();
   }
 
   // FIND BY TRICK
