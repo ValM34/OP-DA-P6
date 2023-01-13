@@ -25,43 +25,14 @@ class RegistrationController extends AbstractController
 
   // REGISTRATION
   #[Route('/inscription', name: 'register')]
-  public function register(
-    Request $request,
-    UserPasswordHasherInterface $userPasswordHasher,
-    SendMailServiceInterface $mail
-  ): Response 
+  public function register(Request $request): Response 
   {
     $user = new User();
     $form = $this->createForm(RegistrationFormType::class, $user);
     $form->handleRequest($request);
 
-    if ($form->isSubmitted() && $form->isValid()) {
-      // encode the plain password
-      $user->setPassword(
-        $userPasswordHasher->hashPassword(
-          $user,
-          $form->get('plainPassword')->getData()
-        )
-      );
-
-      $token = hash('sha512', $user->getEmail() . uniqId() . 'dsf51dsf15dsSDFSf521d65s');
-      $user->setRegistrationToken($token);
-
-      $avatar = $form->get('avatar')->getData();
-      if ($avatar !== null) {
-        $avatarPath = $this->userService->upload($avatar);
-        $this->userService->create($user, $avatarPath);
-      } else {
-        $this->userService->create($user);
-      }
-
-      // Send validation mail
-      $mail->emailValidation(
-        'snow@tricks.fr',
-        $user->getEmail(),
-        'Activation de votre compte sur le site Snowtricks',
-        $token
-      );
+    if ($form->isSubmitted() && $form->isValid()) { 
+      $this->userService->create($user, $form);
 
       return $this->redirectToRoute('registration_succes');
     }
@@ -91,10 +62,11 @@ class RegistrationController extends AbstractController
   #[Route('/verif/{token}', name: 'verify_user')]
   public function verifyUser(string $token, UserAuthenticatorInterface $userAuthenticator, UsersAuthenticator $authenticator, Request $request): Response
   {
+    $succes = false;
     $user = $this->userService->findByToken($token);
 
     // if token is true
-    if($user){
+    if($user !== null){
       $this->userService->validateUser($user);
       $userAuthenticator->authenticateUser(
         $user,
@@ -102,12 +74,7 @@ class RegistrationController extends AbstractController
         $request
       );
       $succes = true;
-      
-      return $this->redirectToRoute('user_validate', ['succes' => $succes]);
     }
-
-    // if token is false
-    $succes = 0;
 
     return $this->redirectToRoute('user_validate', ['succes' => $succes]);
   }

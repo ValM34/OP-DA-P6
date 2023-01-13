@@ -8,6 +8,8 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use App\Service\SendMailServiceInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Form\FormInterface;
 
 class UserService implements UserServiceInterface
 {
@@ -15,13 +17,20 @@ class UserService implements UserServiceInterface
   private $sendMailService;
   private $targetDirectory;
   private $slugger;
+  private $userPasswordHasher;
 
-  public function __construct(EntityManagerInterface $entityManager, string $targetDirectory, SluggerInterface $slugger, SendMailServiceInterface $sendMailService)
-  {
+  public function __construct(
+    EntityManagerInterface $entityManager,
+    string $targetDirectory,
+    SluggerInterface $slugger,
+    SendMailServiceInterface $sendMailService,
+    UserPasswordHasherInterface $userPasswordHasher
+  ) {
     $this->entityManager = $entityManager;
     $this->targetDirectory = $targetDirectory;
     $this->slugger = $slugger;
     $this->sendMailService = $sendMailService;
+    $this->userPasswordHasher = $userPasswordHasher;
   }
 
   // FIND ONE
@@ -36,9 +45,33 @@ class UserService implements UserServiceInterface
   }
 
   // CREATE
-  public function create(User $user, string $avatarPath = 'default.jpg'): void
+  public function create(User $user, FormInterface $form): void
   {
-    $user->setAvatar($avatarPath);
+    // encode the plain password
+    $passwordEncrypt = $this->userPasswordHasher->hashPassword(
+      $user,
+      $form->get('plainPassword')->getData()
+    );
+
+    $token = hash('sha512', $user->getEmail() . uniqId() . 'dsf51dsf15dsSDFSf521d65s');
+    
+    $avatar = $form->get('avatar')->getData();
+    $avatarPath = $avatar !== null ? $this->upload($avatar) : 'default.jpg';
+
+    $user
+      ->setAvatar($avatarPath)
+      ->setRegistrationToken($token)
+      ->setPassword($passwordEncrypt)
+    ;
+
+    // Send validation mail
+    $this->sendMailService->emailValidation(
+      'snow@tricks.fr',
+      $user->getEmail(),
+      'Activation de votre compte sur le site Snowtricks',
+      $token
+    );
+
     $this->entityManager->persist($user);
     $this->entityManager->flush();
   }
@@ -74,7 +107,7 @@ class UserService implements UserServiceInterface
   }
 
   // FIND BY TOKEN
-  public function findByToken(string $token): User
+  public function findByToken(string $token): ?User
   {
     return $this->entityManager->getRepository(User::class)->findOneBy(['registration_token' => $token]);
   }
@@ -91,6 +124,7 @@ class UserService implements UserServiceInterface
   // SEND PASSWORD VALIDATION TOKEN
   public function sendPasswordRecoveryToken(User $user): void
   {
+    $user = $this->findByEmail($user->getEmail());
     // Je vais envoyer le token en BDD et envoyer un mail à l'utilisateur en question.
     $token = hash('sha512', $user->getEmail() . uniqId() . 'dsf51dsf15dsSDFSqsdf521d65s');
     $user->setPasswordRecoveryToken($token);
