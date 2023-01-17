@@ -49,8 +49,8 @@ class TrickController extends AbstractController
   {
     $tricks = $this->trickService->findAll();
     $tricksData = [];
-
-    for ($i = 0; $i < count($tricks); $i++) {
+    
+    for ($i = 0, $count = count($tricks); $i < $count; $i++) {
       $tricksData[$i]['id'] = $tricks[$i]->getId();
       $tricksData[$i]['name'] = $tricks[$i]->getName();
       if ($tricks[$i]->getImages()[0] !== null) {
