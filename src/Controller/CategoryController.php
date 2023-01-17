@@ -33,7 +33,7 @@ class CategoryController extends AbstractController
   }
 
   // DISPLAY ALL
-  #[Route('/category/displayall', name: 'category_display_all')]
+  #[Route('/category/displayall', name: 'category_display_all', methods: ['GET'])]
   public function displayAll(): Response
   {
     $categories = $this->categoryService->findAll();
@@ -44,7 +44,7 @@ class CategoryController extends AbstractController
   }
 
   // DISPLAY ONE
-  #[Route('/category/displayone/{id}', name: 'category_display_one')]
+  #[Route('/category/displayone/{id}', name: 'category_display_one', methods: ['GET'])]
   public function displayOne(int $id): Response
   {
     $category = $this->categoryService->findOne($id);
@@ -55,7 +55,7 @@ class CategoryController extends AbstractController
   }
 
   // CREATE
-  #[Route('/category/create', name: 'category_create')]
+  #[Route('/category/create', name: 'category_create', methods: ['GET', 'POST'])]
   public function createCategory(Request $request): Response
   {
     $form = $this->createForm(CreationCategory::class, $this->category);
@@ -76,7 +76,7 @@ class CategoryController extends AbstractController
   }
 
   // UPDATE
-  #[Route('/category/update/{id}', name: 'category_update')]
+  #[Route('/category/update/{id}', name: 'category_update', methods: ['GET', 'POST'])]
   public function update(int $id, Request $request, UserInterface $user): Response
   {
     $category = $this->categoryService->findOne($id);
@@ -90,7 +90,7 @@ class CategoryController extends AbstractController
       ;
       $this->categoryService->update($id);
       $this->addFlash('succes', 'La catégorie a été modifiée.');
-      
+
       return $this->redirectToRoute('category_display_one', [
         'id' => $category->getId()
       ]);
@@ -105,7 +105,7 @@ class CategoryController extends AbstractController
   }
 
   // DELETE
-  #[Route('/category/delete/{id}', name: 'category_delete')]
+  #[Route('/category/delete/{id}', name: 'category_delete', methods: ['GET'])]
   public function deleteCategory(int $id): Response
   {
     $this->categoryService->delete($id);

@@ -16,7 +16,7 @@ class ImageController extends AbstractController
     $this->imageService = $imageService;
   }
   
-  #[Route('/image/delete/{id}', name: 'image_delete')]
+  #[Route('/image/delete/{id}', name: 'image_delete', methods: ['GET'])]
   public function delete(int $id): Response
   {
     if ($this->getUser()) {

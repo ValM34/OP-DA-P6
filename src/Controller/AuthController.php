@@ -23,7 +23,7 @@ class AuthController extends AbstractController
   }
 
   // LOGIN
-  #[Route(path: '/login', name: 'login')]
+  #[Route(path: '/login', name: 'login', methods: ['POST', 'GET'])]
   public function login(AuthenticationUtils $authenticationUtils): Response
   {
     // get the login error if there is one
@@ -35,14 +35,14 @@ class AuthController extends AbstractController
   }
 
   // LOGOUT
-  #[Route(path: '/logout', name: 'logout')]
+  #[Route(path: '/logout', name: 'logout', methods: ['GET'])]
   public function logout(): void
   {
     throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
   }
 
   // SEND PASSWORD RECOVERY
-  #[Route(path: '/password/recovery/send', name: 'send_password_recovery')]
+  #[Route(path: '/password/recovery/send', name: 'send_password_recovery', methods: ['POST', 'GET'])]
   public function sendTokenRecovery(Request $request): Response
   {
     $user = new User();
@@ -62,7 +62,7 @@ class AuthController extends AbstractController
   }
 
   // PASSWORD RECOVERY
-  #[Route(path: '/password/recovery/new/{token}', name: 'password_recovery')]
+  #[Route(path: '/password/recovery/new/{token}', name: 'password_recovery', methods: ['POST', 'GET'])]
   public function passwordRecovery(string $token, Request $request, UserPasswordHasherInterface $userPasswordHasher): Response
   {
     $user = $this->userService->findByRecoveryToken($token);

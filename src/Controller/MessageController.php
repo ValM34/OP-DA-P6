@@ -29,7 +29,7 @@ class MessageController extends AbstractController
   }
 
   // UPDATE
-  #[Route('/message/update/{id}', name: 'message_update')]
+  #[Route('/message/update/{id}', name: 'message_update', methods: ['GET', 'POST'])]
   public function update(int $id, Message $message, Request $request): Response
   {
     $entity = $this->messageService->updatePage($id);
@@ -61,7 +61,7 @@ class MessageController extends AbstractController
   }
 
   // DELETE
-  #[Route('/message/delete/{id}', name: 'message_delete')]
+  #[Route('/message/delete/{id}', name: 'message_delete', methods: ['GET'])]
   public function delete(int $id): Response
   {
     $message = $this->messageService->findById($id);

@@ -24,13 +24,13 @@ class RegistrationController extends AbstractController
   }
 
   // REGISTRATION
-  #[Route('/inscription', name: 'register')]
-  public function register(Request $request): Response 
+  #[Route('/inscription', name: 'register', methods: ['GET', 'POST'])]
+  public function register(Request $request): Response
   {
     $form = $this->createForm(RegistrationFormType::class, $this->user);
     $form->handleRequest($request);
 
-    if ($form->isSubmitted() && $form->isValid()) { 
+    if ($form->isSubmitted() && $form->isValid()) {
       $this->userService->create($this->user, $form);
 
       return $this->redirectToRoute('registration_succes');
@@ -42,14 +42,14 @@ class RegistrationController extends AbstractController
   }
 
   // SUCCES REGISTRATION MESSAGE
-  #[Route('/registration/succes', name: 'registration_succes')]
+  #[Route('/registration/succes', name: 'registration_succes', methods: ['GET'])]
   public function registrationSucces(): Response
   {
     return $this->render('registration/succesRegistration.html.twig');
   }
 
   // SUCCES ACCOUNT VALIDATION MESSAGE
-  #[Route('/user/validate/{succes}', name: 'user_validate')]
+  #[Route('/user/validate/{succes}', name: 'user_validate', methods: ['GET'])]
   public function validate(bool $succes): Response
   {
     return $this->render('registration/validate.html.twig', [
@@ -58,14 +58,18 @@ class RegistrationController extends AbstractController
   }
 
   // TOKEN VERIFICATION
-  #[Route('/verif/{token}', name: 'verify_user')]
-  public function verifyUser(string $token, UserAuthenticatorInterface $userAuthenticator, UsersAuthenticator $authenticator, Request $request): Response
-  {
+  #[Route('/verif/{token}', name: 'verify_user', methods: ['GET'])]
+  public function verifyUser(
+    string $token,
+    UserAuthenticatorInterface $userAuthenticator,
+    UsersAuthenticator $authenticator,
+    Request $request
+  ): Response {
     $succes = false;
     $user = $this->userService->findByToken($token);
 
     // if token is true
-    if($user !== null){
+    if ($user !== null) {
       $this->userService->validateUser($user);
       $userAuthenticator->authenticateUser(
         $user,

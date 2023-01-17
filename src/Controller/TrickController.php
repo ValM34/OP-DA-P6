@@ -13,8 +13,7 @@ use App\Service\CategoryServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Form\CreationTrick;
-use App\Form\UpdateTrickForm;
+use App\Form\TrickForm;
 use App\Form\MessageCreateType;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -45,7 +44,7 @@ class TrickController extends AbstractController
   }
 
   // DISPLAY ALL
-  #[Route('/', name: 'home')]
+  #[Route('/', name: 'home', methods: ['GET'])]
   public function displayAll(): Response
   {
     $tricks = $this->trickService->findAll();
@@ -67,7 +66,7 @@ class TrickController extends AbstractController
   }
 
   // DISPLAY ONE
-  #[Route('/trick/displayone/{id}', name: 'trick_display_one')]
+  #[Route('/trick/displayone/{id}', name: 'trick_display_one', methods: ['GET', 'POST'])]
   public function displayOne(int $id, Request $request): Response
   {
     $form = $this->createForm(MessageCreateType::class, $this->message);
@@ -145,11 +144,11 @@ class TrickController extends AbstractController
   }
 
   // CREATE
-  #[Route('/trick/create', name: 'trick_create')]
+  #[Route('/trick/create', name: 'trick_create', methods: ['GET', 'POST'])]
   public function create(Request $request): Response
   {
     $trick = new Trick();
-    $form = $this->createForm(CreationTrick::class, $trick);
+    $form = $this->createForm(TrickForm::class, $trick);
     $form->handleRequest($request);
 
     if ($form->isSubmitted() && $form->isValid() && $this->getUser()) {
@@ -173,11 +172,11 @@ class TrickController extends AbstractController
   }
 
   // UPDATE
-  #[Route('/trick/update/{id}', name: 'trick_update')]
+  #[Route('/trick/update/{id}', name: 'trick_update', methods: ['GET', 'POST'])]
   public function update(int $id, Request $request): Response
   {
     $trick = $this->trickService->findOne($id);
-    $form = $this->createForm(UpdateTrickForm::class, $trick);
+    $form = $this->createForm(TrickForm::class, $trick);
     $form->handleRequest($request);
 
     if (($form->isSubmitted() && $form->isValid() && $this->getUser())) {
@@ -203,14 +202,12 @@ class TrickController extends AbstractController
   }
 
   // DELETE
-  #[Route('/trick/delete/{id}', name: 'trick_delete')]
+  #[Route('/trick/delete/{id}', name: 'trick_delete', methods: ['GET'])]
   public function delete(int $id): Response
   {
     if ($this->getUser()) {
       $this->trickService->delete($id);
       $this->addFlash('succes', 'Le trick a bien été supprimé.');
-
-      return $this->redirectToRoute('home');
     }
 
     return $this->redirectToRoute('home');

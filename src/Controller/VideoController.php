@@ -16,7 +16,7 @@ class VideoController extends AbstractController
     $this->videoService = $videoService;
   }
 
-  #[Route('/video/delete/{id}', name: 'video_delete')]
+  #[Route('/video/delete/{id}', name: 'video_delete', methods: ['GET'])]
   public function delete(int $id): Response
   {
     if ($this->getUser()) {
