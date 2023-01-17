@@ -27,14 +27,21 @@ class TrickController extends AbstractController
   private $messageService;
   private $userService;
   private $categoryService;
+  private $message;
 
-  public function __construct(TrickServiceInterface $trickService, MessageServiceInterface $messageService, ImageServiceInterface $imageService, UserServiceInterface $userService, CategoryServiceInterface $categoryService)
-  {
+  public function __construct(
+    TrickServiceInterface $trickService,
+    MessageServiceInterface $messageService,
+    ImageServiceInterface $imageService,
+    UserServiceInterface $userService,
+    CategoryServiceInterface $categoryService
+  ) {
     $this->trickService = $trickService;
     $this->imageService = $imageService;
     $this->userService = $userService;
     $this->messageService = $messageService;
     $this->categoryService = $categoryService;
+    $this->message = new Message();
   }
 
   // DISPLAY ALL
@@ -44,10 +51,10 @@ class TrickController extends AbstractController
     $tricks = $this->trickService->findAll();
     $tricksData = [];
 
-    for($i = 0; $i < count($tricks); $i++){
+    for ($i = 0; $i < count($tricks); $i++) {
       $tricksData[$i]['id'] = $tricks[$i]->getId();
       $tricksData[$i]['name'] = $tricks[$i]->getName();
-      if($tricks[$i]->getImages()[0] !== null){
+      if ($tricks[$i]->getImages()[0] !== null) {
         $tricksData[$i]['path'] = 'images/tricks/' . $tricks[$i]->getImages()[0]->getPath();
       } else {
         $tricksData[$i]['path'] = 'images/tricks/default.jpg';
@@ -63,48 +70,33 @@ class TrickController extends AbstractController
   #[Route('/trick/displayone/{id}', name: 'trick_display_one')]
   public function displayOne(int $id, Request $request): Response
   {
-    $message = new Message();
-    $form = $this->createForm(MessageCreateType::class, $message);
+    $form = $this->createForm(MessageCreateType::class, $this->message);
     $form->handleRequest($request);
     $trick = $this->trickService->findOne($id);
     $messages = $this->messageService->findByTrick($id);
-    if($this->getUser()){
+    if ($this->getUser()) {
       $actualUser = $this->userService->findOne($this->getUser())->getId();
     } else {
       $actualUser = null;
     }
     $messagesArray = [];
     $arr = [];
-    for($i = 0; $i < count($messages); $i++){
-      if($this->getUser()){
-        if($messages[$i]->getUser()->getId() === $actualUser){
-          $arr = [
-            'id'=>$messages[$i]->getId(),
-            'content'=>$messages[$i]->getContent(),
-            'firstname'=>$messages[$i]->getUser()->getFirstname(),
-            'lastname'=>$messages[$i]->getUser()->getLastName(),
-            'avatar'=>$messages[$i]->getUser()->getAvatar(),
-            'isOwner'=>true]
-          ;
+    for ($i = 0; $i < count($messages); $i++) {
+      $arr = [
+        'id' => $messages[$i]->getId(),
+        'content' => $messages[$i]->getContent(),
+        'firstname' => $messages[$i]->getUser()->getFirstname(),
+        'lastname' => $messages[$i]->getUser()->getLastName(),
+        'avatar' => $messages[$i]->getUser()->getAvatar()
+      ];
+      if ($this->getUser()) {
+        if ($messages[$i]->getUser()->getId() === $actualUser) {
+          $arr = array_merge($arr, ['isOwner' => true]);
         } else {
-          $arr = [
-            'id'=>$messages[$i]->getId(),
-            'content'=>$messages[$i]->getContent(),
-            'firstname'=>$messages[$i]->getUser()->getFirstname(),
-            'lastname'=>$messages[$i]->getUser()->getLastName(),
-            'avatar'=>$messages[$i]->getUser()->getAvatar(),
-            'isOwner'=>false]
-          ;
+          $arr = array_merge($arr, ['isOwner' => false]);
         }
       } else {
-        $arr = [
-          'id'=>$messages[$i]->getId(),
-          'content'=>$messages[$i]->getContent(),
-          'firstname'=>$messages[$i]->getUser()->getFirstname(),
-          'lastname'=>$messages[$i]->getUser()->getLastName(),
-          'avatar'=>$messages[$i]->getUser()->getAvatar(),
-          'isOwner'=>false]
-        ;
+        $arr = array_merge($arr, ['isOwner' => false]);
       }
       array_push($messagesArray, $arr);
     }
@@ -112,9 +104,9 @@ class TrickController extends AbstractController
     $images = [];
     $imagePath = null;
 
-    if($trick->getImages()[0] !== null){
+    if ($trick->getImages()[0] !== null) {
       $imagePath = $trick->getImages()[0]->getPath();
-      for($i = 0; $i < count($trick->getImages()); $i++){  
+      for ($i = 0; $i < count($trick->getImages()); $i++) {
         $images[$i]['path'] = $trick->getImages()[$i]->getPath();
         $images[$i]['id'] = $trick->getImages()[$i]->getId();
       }
@@ -123,24 +115,24 @@ class TrickController extends AbstractController
     }
 
     $videos = [];
-    if($trick->getVideos()[0] !== null){
-      for($i = 0; $i < count($trick->getVideos()); $i++){  
-          $videos[$i]['path'] = $trick->getVideos()[$i]->getPath();
-          $videos[$i]['id'] = $trick->getVideos()[$i]->getId();
-      }      
+    if ($trick->getVideos()[0] !== null) {
+      for ($i = 0; $i < count($trick->getVideos()); $i++) {
+        $videos[$i]['path'] = $trick->getVideos()[$i]->getPath();
+        $videos[$i]['id'] = $trick->getVideos()[$i]->getId();
+      }
     }
 
     if ($form->isSubmitted() && $form->isValid()) {
-      $this->messageService->create($this->getUser(), $trick, $message);
+      $this->messageService->create($this->getUser(), $trick, $this->message);
       $this->addFlash('succes', 'Votre commentaire a bien été ajouté!');
-      
+
       return $this->redirectToRoute('trick_display_one', [
         'id' => $trick->getId()
       ]);
     }
 
     $category['name'] = $trick->getCategory()->getName();
-    
+
     return $this->render('trick/displayone.html.twig', [
       'trick' => $trick,
       'messages' => $messagesArray,
@@ -163,7 +155,7 @@ class TrickController extends AbstractController
     if ($form->isSubmitted() && $form->isValid() && $this->getUser()) {
       $imageFile = $form->get('image')->getData();
       $videos = $form->get('videos')->getData();
-      if($videos === null){
+      if ($videos === null) {
         $videos = '';
       }
       $this->trickService->create($this->getUser(), $trick, $imageFile, $videos);
@@ -187,11 +179,11 @@ class TrickController extends AbstractController
     $trick = $this->trickService->findOne($id);
     $form = $this->createForm(UpdateTrickForm::class, $trick);
     $form->handleRequest($request);
-    
-    if(($form->isSubmitted() && $form->isValid() && $this->getUser())){
+
+    if (($form->isSubmitted() && $form->isValid() && $this->getUser())) {
       $imageFiles = $form->get('image')->getData();
       $videos = $form->get('videos')->getData();
-      if($videos === null){
+      if ($videos === null) {
         $videos = '';
       }
       $trick = $this->trickService->update($trick, $imageFiles, $videos);
@@ -214,13 +206,13 @@ class TrickController extends AbstractController
   #[Route('/trick/delete/{id}', name: 'trick_delete')]
   public function delete(int $id): Response
   {
-    if($this->getUser()){
+    if ($this->getUser()) {
       $this->trickService->delete($id);
       $this->addFlash('succes', 'Le trick a bien été supprimé.');
-      
+
       return $this->redirectToRoute('home');
     }
-    
+
     return $this->redirectToRoute('home');
   }
 }

@@ -8,31 +8,30 @@ use App\Security\UsersAuthenticator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 use App\Service\UserServiceInterface;
-use App\Service\SendMailServiceInterface;
 
 class RegistrationController extends AbstractController
 {
   private $userService;
+  private $user;
 
   public function __construct(UserServiceInterface $userService)
   {
     $this->userService = $userService;
+    $this->user = new User();
   }
 
   // REGISTRATION
   #[Route('/inscription', name: 'register')]
   public function register(Request $request): Response 
   {
-    $user = new User();
-    $form = $this->createForm(RegistrationFormType::class, $user);
+    $form = $this->createForm(RegistrationFormType::class, $this->user);
     $form->handleRequest($request);
 
     if ($form->isSubmitted() && $form->isValid()) { 
-      $this->userService->create($user, $form);
+      $this->userService->create($this->user, $form);
 
       return $this->redirectToRoute('registration_succes');
     }

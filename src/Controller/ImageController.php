@@ -21,7 +21,7 @@ class ImageController extends AbstractController
   {
     if ($this->getUser()) {
       $idTrick = $this->imageService->delete($id);
-      $this->addFlash('succes', "L'image a bien été supprimé.");
+      $this->addFlash('succes', "L'image a bien été supprimée.");
 
       return $this->redirectToRoute('trick_display_one', [
         'id' => $idTrick

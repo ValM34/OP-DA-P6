@@ -12,7 +12,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Form\CreationCategory;
 use App\Form\UpdateCategoryForm;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -22,11 +21,15 @@ class CategoryController extends AbstractController
 
   private $categoryService;
   private $userService;
+  private $category;
+  private $dateTimeImmutable;
 
   public function __construct(CategoryServiceInterface $categoryService, UserServiceInterface $userService)
   {
     $this->categoryService = $categoryService;
     $this->userService = $userService;
+    $this->category = new Category();
+    $this->dateTimeImmutable = new DateTimeImmutable();
   }
 
   // DISPLAY ALL
@@ -55,16 +58,15 @@ class CategoryController extends AbstractController
   #[Route('/category/create', name: 'category_create')]
   public function createCategory(Request $request): Response
   {
-    $category = new Category();
-    $form = $this->createForm(CreationCategory::class, $category);
+    $form = $this->createForm(CreationCategory::class, $this->category);
     $form->handleRequest($request);
 
     if ($form->isSubmitted() && $form->isValid() && $this->getUser()) {
-      $this->categoryService->create($this->getUser(), $category);
+      $this->categoryService->create($this->getUser(), $this->category);
       $this->addFlash('succes', 'Votre catégorie a bien été ajoutée!');
       
       return $this->redirectToRoute('category_display_one', [
-        'id' => $category->getId()
+        'id' => $this->category->getId()
       ]);
     }
 
@@ -82,14 +84,13 @@ class CategoryController extends AbstractController
     $form->handleRequest($request);
 
     if ($form->isSubmitted() && $form->isValid()) {
-      $updated_at = new DateTimeImmutable();
       $category
         ->setUser($user)
-        ->setUpdatedAt($updated_at)
+        ->setUpdatedAt($this->dateTimeImmutable)
       ;
       $this->categoryService->update($id);
-
       $this->addFlash('succes', 'La catégorie a été modifiée.');
+      
       return $this->redirectToRoute('category_display_one', [
         'id' => $category->getId()
       ]);

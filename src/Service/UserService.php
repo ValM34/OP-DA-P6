@@ -135,7 +135,7 @@ class UserService implements UserServiceInterface
   }
 
   // FIND BY EMAIL
-  public function findByEmail(string $email): User
+  public function findByEmail(string $email): ?User
   {
     return $this->entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
   }
