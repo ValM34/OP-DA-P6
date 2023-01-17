@@ -80,7 +80,7 @@ class TrickController extends AbstractController
     }
     $messagesArray = [];
     $arr = [];
-    for ($i = 0; $i < count($messages); $i++) {
+    for ($i = 0, $count = count($messages); $i < $count; $i++) {
       $arr = [
         'id' => $messages[$i]->getId(),
         'content' => $messages[$i]->getContent(),
@@ -105,7 +105,7 @@ class TrickController extends AbstractController
 
     if ($trick->getImages()[0] !== null) {
       $imagePath = $trick->getImages()[0]->getPath();
-      for ($i = 0; $i < count($trick->getImages()); $i++) {
+      for ($i = 0, $count = count($trick->getImages()); $i < $count; $i++) {
         $images[$i]['path'] = $trick->getImages()[$i]->getPath();
         $images[$i]['id'] = $trick->getImages()[$i]->getId();
       }
@@ -115,7 +115,7 @@ class TrickController extends AbstractController
 
     $videos = [];
     if ($trick->getVideos()[0] !== null) {
-      for ($i = 0; $i < count($trick->getVideos()); $i++) {
+      for ($i = 0, $count = count($trick->getVideos()); $i < $count; $i++) {
         $videos[$i]['path'] = $trick->getVideos()[$i]->getPath();
         $videos[$i]['id'] = $trick->getVideos()[$i]->getId();
       }

@@ -34,7 +34,7 @@ class ImageService implements ImageServiceInterface
   {
     $date = new DateTimeImmutable();
     
-    for($i = 0; $i < count($arrayOfImages); $i++){
+    for($i = 0, $count = count($arrayOfImages); $i < $count; $i++){
       $image = new Image();
       $image
         ->setPath($arrayOfImages[$i])
