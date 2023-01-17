@@ -17,16 +17,11 @@ class MessageController extends AbstractController
 {
   use CreatedAtTrait;
 
-  private $messageService;
-  private $trickService;
-  private $userService;
-
-  public function __construct(UserServiceInterface $userService, MessageServiceInterface $messageService, TrickServiceInterface $trickService)
-  {
-    $this->userService = $userService;
-    $this->messageService = $messageService;
-    $this->trickService = $trickService;
-  }
+  public function __construct(
+    private UserServiceInterface $userService,
+    private MessageServiceInterface $messageService,
+    private TrickServiceInterface $trickService
+  ) {}
 
   // UPDATE
   #[Route('/message/update/{id}', name: 'message_update', methods: ['GET', 'POST'])]

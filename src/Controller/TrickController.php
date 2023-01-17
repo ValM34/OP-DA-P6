@@ -21,25 +21,15 @@ class TrickController extends AbstractController
 {
   use CreatedAtTrait;
 
-  private $trickService;
-  private $imageService;
-  private $messageService;
-  private $userService;
-  private $categoryService;
   private $message;
 
   public function __construct(
-    TrickServiceInterface $trickService,
-    MessageServiceInterface $messageService,
-    ImageServiceInterface $imageService,
-    UserServiceInterface $userService,
-    CategoryServiceInterface $categoryService
+    private TrickServiceInterface $trickService,
+    private MessageServiceInterface $messageService,
+    private ImageServiceInterface $imageService,
+    private UserServiceInterface $userService,
+    private CategoryServiceInterface $categoryService
   ) {
-    $this->trickService = $trickService;
-    $this->imageService = $imageService;
-    $this->userService = $userService;
-    $this->messageService = $messageService;
-    $this->categoryService = $categoryService;
     $this->message = new Message();
   }
 

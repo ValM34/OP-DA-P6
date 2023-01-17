@@ -9,12 +9,8 @@ use App\Service\VideoServiceInterface;
 
 class VideoController extends AbstractController
 {
-  private $videoService;
-
-  public function __construct(VideoServiceInterface $videoService)
-  {
-    $this->videoService = $videoService;
-  }
+  public function __construct(private VideoServiceInterface $videoService)
+  {}
 
   #[Route('/video/delete/{id}', name: 'video_delete', methods: ['GET'])]
   public function delete(int $id): Response

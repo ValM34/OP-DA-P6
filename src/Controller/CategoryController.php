@@ -19,15 +19,11 @@ class CategoryController extends AbstractController
 {
   use CreatedAtTrait;
 
-  private $categoryService;
-  private $userService;
   private $category;
   private $dateTimeImmutable;
 
-  public function __construct(CategoryServiceInterface $categoryService, UserServiceInterface $userService)
+  public function __construct(private CategoryServiceInterface $categoryService, private UserServiceInterface $userService)
   {
-    $this->categoryService = $categoryService;
-    $this->userService = $userService;
     $this->category = new Category();
     $this->dateTimeImmutable = new DateTimeImmutable();
   }

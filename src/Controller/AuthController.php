@@ -15,12 +15,8 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AuthController extends AbstractController
 {
-  private $userService;
-
-  public function __construct(UserServiceInterface $userService)
-  {
-    $this->userService = $userService;
-  }
+  public function __construct(private UserServiceInterface $userService)
+  {}
 
   // LOGIN
   #[Route(path: '/login', name: 'login', methods: ['POST', 'GET'])]

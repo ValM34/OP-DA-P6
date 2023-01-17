@@ -14,12 +14,10 @@ use App\Service\UserServiceInterface;
 
 class RegistrationController extends AbstractController
 {
-  private $userService;
   private $user;
 
-  public function __construct(UserServiceInterface $userService)
+  public function __construct(private UserServiceInterface $userService)
   {
-    $this->userService = $userService;
     $this->user = new User();
   }
 

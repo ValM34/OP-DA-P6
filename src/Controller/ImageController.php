@@ -9,12 +9,8 @@ use App\Service\ImageServiceInterface;
 
 class ImageController extends AbstractController
 {
-  private $imageService;
-
-  public function __construct(ImageServiceInterface $imageService)
-  {
-    $this->imageService = $imageService;
-  }
+  public function __construct(private ImageServiceInterface $imageService)
+  {}
   
   #[Route('/image/delete/{id}', name: 'image_delete', methods: ['GET'])]
   public function delete(int $id): Response
