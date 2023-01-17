@@ -56,7 +56,7 @@ class UserService implements UserServiceInterface
     $token = hash('sha512', $user->getEmail() . uniqId() . 'dsf51dsf15dsSDFSf521d65s');
     
     $avatar = $form->get('avatar')->getData();
-    $avatarPath = $avatar !== null ? $this->upload($avatar) : 'default.jpg';
+    $avatarPath = $avatar !== null ? $this->upload($avatar) : '../avatarDefault.jpg';
 
     $user
       ->setAvatar($avatarPath)

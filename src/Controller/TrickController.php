@@ -56,7 +56,7 @@ class TrickController extends AbstractController
       if ($tricks[$i]->getImages()[0] !== null) {
         $tricksData[$i]['path'] = 'images/tricks/' . $tricks[$i]->getImages()[0]->getPath();
       } else {
-        $tricksData[$i]['path'] = 'images/tricks/default.jpg';
+        $tricksData[$i]['path'] = 'images/TrickDefault.jpg';
       }
     }
 
@@ -110,7 +110,7 @@ class TrickController extends AbstractController
         $images[$i]['id'] = $trick->getImages()[$i]->getId();
       }
     } else {
-      $imagePath = 'default.jpg';
+      $imagePath = '../trickDefault.jpg';
     }
 
     $videos = [];
