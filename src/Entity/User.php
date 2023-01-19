@@ -64,6 +64,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
   #[ORM\Column(length: 255, nullable: true)]
   private ?string $password_recovery_token = null;
 
+  #[ORM\Column(length: 255, nullable: true)]
+  private ?string $accountDeletionToken = null;
+
   public function __construct()
   {
     $this->tricks = new ArrayCollection();
@@ -312,6 +315,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
   public function setPasswordRecoveryToken(string $password_recovery_token): self
   {
       $this->password_recovery_token = $password_recovery_token;
+
+      return $this;
+  }
+
+  public function getAccountDeletionToken(): ?string
+  {
+      return $this->accountDeletionToken;
+  }
+
+  public function setAccountDeletionToken(?string $accountDeletionToken): self
+  {
+      $this->accountDeletionToken = $accountDeletionToken;
 
       return $this;
   }
