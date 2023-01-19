@@ -53,26 +53,37 @@ class UserController extends AbstractController
     }
   }
 
+  /////////////////////////////////////////////////// CHANGER LA REDIRECTION 
+  // DELETE SEND MAIL TOKEN REQUEST
   #[Route('/user/delete/request', name: 'user_delete_request')]
   public function deleteRequest()
   {
     if($this->getUser()){
-      $this->sendMailService->accountDeletion($this->getUser());
+      $this->userService->sendAccountDeletionToken($this->getUser());
 
-      return $this->redirectToRoute('user_update');
-    }
-
-    return $this->redirectToRoute('home');
-  }
-
-  #[Route('/user/delete/validate/{id}', name: 'user_delete_validate')]
-  public function delete(int $id)
-  {
-    if($this->getUser()){
-      
+      $this->addFlash('succes', 'Un email pour supprimer votre compte vous a été envoyé.');
       return $this->redirectToRoute('home');
     }
 
+    $this->addFlash('error', 'Une erreur est survenue.');
+    return $this->redirectToRoute('home');
+  }
+
+  #[Route('/user/delete/validate/{token}', name: 'user_delete_validate')]
+  public function delete(string $token)
+  {    
+    $accountDeleted = false;
+    $user = $this->userService->findByAccountDeletionToken($token);
+    if($user !== null){
+      $this->userService->delete($user);
+      $accountDeleted = true;
+    }
+    if($accountDeleted){
+      $this->addFlash('succes', 'Votre compte a bien été supprimé. Toutes vos données personnelles seront effacées dans un délai de 48h.');
+    } else {
+      $this->addFlash('error', 'Lien invalide.');
+    }
+    
     return $this->redirectToRoute('home');
   }
 }

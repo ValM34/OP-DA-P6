@@ -42,14 +42,14 @@ class SendMailService implements SendMailServiceInterface
   }
 
   // ACCOUNT DELETION
-  public function accountDeletion(User $user): void
+  public function accountDeletion(User $user, string $token): void
   {
     $email = (new Email())
       ->from('snow@tricks.fr')
       ->to($user->getEmail())
       ->replyTo('snow@tricks.fr')
       ->subject('Suppression du compte Snowtricks')
-      ->html('Vous avez demandé de supprimer votre compte Snowtricks. Si vous souhaitez réellement supprimer votre compte, <a href=http://127.0.0.1:8000/user/delete/' . $user->getId() . '>Cliquez ici.</a>')
+      ->html('Vous avez demandé de supprimer votre compte Snowtricks. Si vous souhaitez réellement supprimer votre compte, <a href=http://127.0.0.1:8000/user/delete/validate/' . $token . '>Cliquez ici.</a>')
     ;
     $this->mailer->send($email);
   }

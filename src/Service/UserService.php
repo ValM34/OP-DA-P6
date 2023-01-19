@@ -134,6 +134,15 @@ class UserService implements UserServiceInterface
     $this->sendMailService->passwordRecovery($user, $token);
   }
 
+  public function sendAccountDeletionToken(User $user): void
+  {
+    $token = hash('sha512', $user->getEmail() . uniqId() . 'dsf51dsf15dsSDFSqsdf521d65s');
+    $user->setAccountDeletionToken($token);
+    $this->entityManager->persist($user);
+    $this->entityManager->flush();
+    $this->sendMailService->accountDeletion($user, $token);
+  }
+
   // FIND BY EMAIL
   public function findByEmail(string $email): ?User
   {
@@ -147,9 +156,9 @@ class UserService implements UserServiceInterface
   }
 
   // FIND BY ID
-  public function findById(int $id): ?User
+  public function findByAccountDeletionToken(string $token): ?User
   {
-    return $this->entityManager->getRepository(User::class)->findOneBy(['id' => $id]);
+    return $this->entityManager->getRepository(User::class)->findOneBy(['account_deletion_token' => $token]);
   }
 
   // DELETE
