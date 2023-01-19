@@ -65,7 +65,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
   private ?string $password_recovery_token = null;
 
   #[ORM\Column(length: 255, nullable: true)]
-  private ?string $accountDeletionToken = null;
+  private ?string $account_deletion_token = null;
 
   public function __construct()
   {
@@ -321,12 +321,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
   public function getAccountDeletionToken(): ?string
   {
-      return $this->accountDeletionToken;
+      return $this->account_deletion_token;
   }
 
-  public function setAccountDeletionToken(?string $accountDeletionToken): self
+  public function setAccountDeletionToken(?string $account_deletion_token): self
   {
-      $this->accountDeletionToken = $accountDeletionToken;
+      $this->account_deletion_token = $account_deletion_token;
 
       return $this;
   }
