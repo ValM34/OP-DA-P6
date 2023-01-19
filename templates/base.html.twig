@@ -49,6 +49,7 @@
           {% if app.user %}
             <a class="secondary" href="{{ path('trick_create') }}">Ajouter un trick</a>
             <a class="secondary" href="{{ path('category_display_all') }}">Catégories</a>
+            <a class="secondary" href="{{ path('user_update') }}">Profil</a>
             <a class="secondary" href="{{ path('logout') }}">Déconnexion</a>
           {% else %}
             <a class="secondary" href="{{ path('login') }}">Connexion</a>
