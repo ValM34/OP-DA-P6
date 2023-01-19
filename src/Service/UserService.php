@@ -141,8 +141,21 @@ class UserService implements UserServiceInterface
   }
 
   // FIND BY RECOVERY TOKEN
-  public function findByRecoveryToken(string $token): User
+  public function findByRecoveryToken(string $token): ?User
   {
     return $this->entityManager->getRepository(User::class)->findOneBy(['password_recovery_token' => $token]);
+  }
+
+  // FIND BY ID
+  public function findById(int $id): ?User
+  {
+    return $this->entityManager->getRepository(User::class)->findOneBy(['id' => $id]);
+  }
+
+  // DELETE
+  public function delete(User $user): void
+  {
+    $this->entityManager->remove($user);
+    $this->entityManager->flush();
   }
 }

@@ -17,5 +17,7 @@ interface UserServiceInterface
   public function getTargetDirectory(): string;
   public function sendPasswordRecoveryToken(User $user): void;
   public function findByEmail(string $email): ?User;
-  public function findByRecoveryToken(string $token): User;
+  public function findByRecoveryToken(string $token): ?User;
+  public function findById(int $id): ?User;
+  public function delete(User $user): void;
 }
