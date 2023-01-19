@@ -22,7 +22,8 @@ class UserController extends AbstractController
     $this->user = new User();
   }
 
-  #[Route('/user/update', name: 'user_update')]
+  // UPDATE
+  #[Route('/user/update', name: 'user_update', methods: ['GET', 'POST'])]
   public function update(Request $request): Response
   {
     if ($this->getUser() === null) {
@@ -53,10 +54,9 @@ class UserController extends AbstractController
     }
   }
 
-  /////////////////////////////////////////////////// CHANGER LA REDIRECTION 
   // DELETE SEND MAIL TOKEN REQUEST
-  #[Route('/user/delete/request', name: 'user_delete_request')]
-  public function deleteRequest()
+  #[Route('/user/delete/request', name: 'user_delete_request', methods: 'GET')]
+  public function deleteRequest(): Response
   {
     if($this->getUser()){
       $this->userService->sendAccountDeletionToken($this->getUser());
@@ -69,9 +69,9 @@ class UserController extends AbstractController
     return $this->redirectToRoute('home');
   }
 
-  #[Route('/user/delete/validate/{token}', name: 'user_delete_validate')]
-  public function delete(string $token)
-  {    
+  #[Route('/user/delete/validate/{token}', name: 'user_delete_validate', methods: 'GET')]
+  public function delete(string $token): Response
+  {
     $accountDeleted = false;
     $user = $this->userService->findByAccountDeletionToken($token);
     if($user !== null){
