@@ -35,8 +35,21 @@ class SendMailService implements SendMailServiceInterface
       ->from('snow@tricks.fr')
       ->to($user->getEmail())
       ->replyTo('snow@tricks.fr')
-      ->subject('Récupération du mot de passe')
-      ->html('Vous avez demandé un lien de récupération de mot de passe. Pour en créer un nouveau, <a href=http://127.0.0.1:8000/password/recovery/new/' . $token . '>Cliquez ici.</a>')
+      ->subject('Modification du mot de passe')
+      ->html('Vous avez demandé un lien de modification de mot de passe. Si vous souhaitez changer votre mot de passe, <a href=http://127.0.0.1:8000/password/recovery/new/' . $token . '>Cliquez ici.</a>')
+    ;
+    $this->mailer->send($email);
+  }
+
+  // ACCOUNT DELETION
+  public function accountDeletion(User $user, string $token): void
+  {
+    $email = (new Email())
+      ->from('snow@tricks.fr')
+      ->to($user->getEmail())
+      ->replyTo('snow@tricks.fr')
+      ->subject('Suppression du compte Snowtricks')
+      ->html('Vous avez demandé de supprimer votre compte Snowtricks. Si vous souhaitez réellement supprimer votre compte, <a href=http://127.0.0.1:8000/user/delete/validate/' . $token . '>Cliquez ici.</a>')
     ;
     $this->mailer->send($email);
   }

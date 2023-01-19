@@ -31,7 +31,7 @@ class UserFixtures extends Fixture
         ->setIsVerified(1)
         ->setFirstName('user ' . $i)
         ->setPassword($password)
-        ->setAvatar('default.jpg')
+        ->setAvatar('../avatarDefault.jpg')
       ;
 
       $manager->persist($user);

@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier profil{% endblock %}
+
+{% block bodyClass %}update-user{% endblock %}
+
+{% block javascripts %}
+  <script type="module">
+    import checkVideoForm from "{{ asset('js/trickForms/checkVideoForm.js') }}";
+    checkVideoForm('#update_trick_form_videos', 'label[for="update_trick_form_videos"]');
+  </script>
+{% endblock %}
+
+{% block body %}
+
+	{% if app.user %}
+		<div class="base-container">
+      <div class="info-message">Le changement d'adresse email est impossible. Pour changer de mot de passe, merci de <a class="primary" href="{{ path('send_password_recovery') }}">cliquer ici</a>.</div>
+      <div class="form-container">
+        <div class="form-subcontainer">
+          {{ form_start(form) }}
+          {{ form_widget(form) }}
+            <button type="submit">Valider</button>
+          {{ form_end(form) }}
+        </div>
+      </div>
+    </div>
+	{% else %}
+		<div class="base-container">
+      Veuillez vous connecter pour pouvoir modifier le trick : <a class="primary" href="{{ path('login') }}">Connexion</a>
+    </div>
+	{% endif %}
+
+{% endblock %}
