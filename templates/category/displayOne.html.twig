@@ -6,11 +6,13 @@
 
 {% block body %}
 
-  {% if succesMessage %}
-    <div class="base-container">
-      <div class="succes-message">{{succesMessage}}</div>
-    </div>
-  {% endif %}
+  {% for label, messages in app.flashes %}
+    {% for message in messages %}
+      <div class="{{ label }}-message">
+        <div>{{ message }}</div>
+      </div>
+    {% endfor %}
+  {% endfor %}
 
 	<h1 class="title-1 text-center">{{category.name}}</h1>
 	<div class="base-container">

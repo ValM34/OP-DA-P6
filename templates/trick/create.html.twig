@@ -6,6 +6,13 @@
 
 {% block bodyClass %}create-trick{% endblock %}
 
+{% block javascripts %}
+  <script type="module">
+    import checkVideoForm from "{{ asset('js/trickForms/checkVideoForm.js') }}";
+    checkVideoForm('#creation_trick_videos', 'label[for="creation_trick_videos"]');
+  </script>
+{% endblock %}
+
 {% block body %}
   <div class="title-1 text-center">Ajouter un trick</div>
   {% if app.user %}

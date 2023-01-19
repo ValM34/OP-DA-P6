@@ -1,0 +1,25 @@
+{
+  "lang": "fr-FR",
+
+  "name": "Snowtricks",
+
+  "short_name": "ST",
+
+  "description": "Snowtricks est un site de fans de figures de snowboard.",
+
+  "start_url": "https://snowtricks",
+
+  "scope": "/app/",
+
+  "orientation": "snowboard tricks",
+
+  "display": "fullscreen",
+
+  "background_color": "white",
+
+  "theme_color": "#075789",
+
+  "icons": [
+      { "src": "favicon.png", "sizes": "32x32", "type": "image/png" }
+  ]
+}

@@ -1,6 +1,14 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Ajouter un trick
+{% block title %}Ajouter un trick{% endblock %}
+
+{% block bodyClass %}update-trick{% endblock %}
+
+{% block javascripts %}
+  <script type="module">
+    import checkVideoForm from "{{ asset('js/trickForms/checkVideoForm.js') }}";
+    checkVideoForm('#update_trick_form_videos', 'label[for="update_trick_form_videos"]');
+  </script>
 {% endblock %}
 
 {% block body %}

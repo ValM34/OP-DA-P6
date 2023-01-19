@@ -7,10 +7,8 @@ use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Trick;
 use App\Entity\Image;
-use App\Entity\Video;
+use App\Entity\User;
 use App\Entity\Category;
-use App\Entity\Message;
-use Symfony\Component\HttpFoundation\Request; 
 use App\Service\ImageServiceInterface;
 use App\Service\VideoServiceInterface;
 
@@ -25,23 +23,16 @@ class TrickService implements TrickServiceInterface
     $this->entityManager = $entityManager;
     $this->imageService = $imageService;
     $this->videoService = $videoService;
-    $this->request = new Request(
-      $_GET,
-      $_POST,
-      [],
-      $_COOKIE,
-      $_FILES,
-      $_SERVER
-    );
   }
 
-  // DISPLAY ALL
-  public function findAll()
+  // FIND ALL
+  public function findAll(): array
   {
     return $this->entityManager->getRepository(Trick::class)->findAll();
   }
 
-  public function findOne(int $id)
+  // FIND ONE
+  public function findOne(int $id): Trick
   {
     $trick = $this->entityManager->getRepository(Trick::class)->find($id);
     if (!$trick) {
@@ -52,7 +43,7 @@ class TrickService implements TrickServiceInterface
   }
 
   // CREATE
-  public function create($user, Trick $trick, array $imageFiles, string $videos)
+  public function create(User $user, Trick $trick, array $imageFiles, string $videos): void
   {
     $date = new DateTimeImmutable();
     $trick
@@ -80,25 +71,12 @@ class TrickService implements TrickServiceInterface
       $this->entityManager->flush();
     }
 
-    $videos = str_replace(' ', '', $videos);
-    $separators = ", ;";
-    $videosArray = preg_split("/[" . $separators . "]/", $videos);
-    foreach($videosArray as $video){
-      if (strpos($video, 'https://www.youtube.com') !== false || strpos($video, 'https://vimeo.com') !== false) {
-        dump("La chaîne contient l'URL de YouTube ou l'URL de Vimeo");
-      } else {
-        dump("La chaîne ne contient pas l'URL de YouTube ni l'URL de Vimeo");
-        $videosArray = array_diff($videosArray, [$video]);
-      }
-    }
-    $videosArray = array_values($videosArray);
-    $videosArray = str_replace('https://www.youtube.com/watch?v=', 'https://www.youtube.com/embed/', $videosArray);
-    $videosArray = str_replace('https://vimeo.com/', 'https://player.vimeo.com/video/', $videosArray);
+    $videosArray = $this->filterVideos($videos);
     $this->videoService->create($trick, $videosArray);
   }
 
   // UPDATE PAGE
-  public function updatePage(int $id)
+  public function updatePage(int $id): Trick
   {
     $trick = $this->entityManager->getRepository(Trick::class)->find($id);
 
@@ -110,7 +88,7 @@ class TrickService implements TrickServiceInterface
   }
 
   // UPDATE
-  public function update(Trick $trick, array $imageFiles, string $videos)
+  public function update(Trick $trick, array $imageFiles, string $videos): void
   {
     $date = new DateTimeImmutable();
     $trick
@@ -131,25 +109,12 @@ class TrickService implements TrickServiceInterface
       $this->entityManager->flush();
     }
 
-    $videos = str_replace(' ', '', $videos);
-    $separators = ", ;";
-    $videosArray = preg_split("/[" . $separators . "]/", $videos);
-    foreach($videosArray as $video){
-      if (strpos($video, 'https://www.youtube.com') !== false || strpos($video, 'https://vimeo.com') !== false) {
-        dump("La chaîne contient l'URL de YouTube ou l'URL de Vimeo");
-      } else {
-        dump("La chaîne ne contient pas l'URL de YouTube ni l'URL de Vimeo");
-        $videosArray = array_diff($videosArray, [$video]);
-      }
-    }
-    $videosArray = array_values($videosArray);
-    $videosArray = str_replace('https://www.youtube.com/watch?v=', 'https://www.youtube.com/embed/', $videosArray);
-    $videosArray = str_replace('https://vimeo.com/', 'https://player.vimeo.com/video/', $videosArray);
+    $videosArray = $this->filterVideos($videos);
     $this->videoService->create($trick, $videosArray);
   }
 
   // DELETE
-  public function delete(int $id)
+  public function delete(int $id): void
   {
     $trick = $this->entityManager->getRepository(Trick::class)->find($id);
     $images = $this->entityManager->getRepository(Image::class)->findByTrick($trick);
@@ -158,9 +123,24 @@ class TrickService implements TrickServiceInterface
     $this->entityManager->flush();
   }
 
-  // FIND ALL CATEGORIES
-  public function findAllCategories()
+  // FILTER VIDEOS
+  public function filterVideos(string $videos): array
   {
-    return $this->entityManager->getRepository(Category::class)->findAll();
+    $videos = str_replace(' ', '', $videos);
+    $separators = ", ;";
+    $videosArray = preg_split("/[" . $separators . "]/", $videos);
+    foreach($videosArray as $video){
+      if (str_starts_with($video, 'https://www.youtube.com') !== false || str_starts_with($video, 'https://vimeo.com') !== false) {
+        // La chaîne contient l'URL de YouTube ou l'URL de Vimeo
+      } else {
+        // La chaîne ne contient pas l'URL de YouTube ni l'URL de Vimeo
+        $videosArray = array_diff($videosArray, [$video]);
+      }
+    }
+    $videosArray = array_values($videosArray);
+    $videosArray = str_replace('https://www.youtube.com/watch?v=', 'https://www.youtube.com/embed/', $videosArray);
+    $videosArray = str_replace('https://vimeo.com/', 'https://player.vimeo.com/video/', $videosArray);
+    
+    return $videosArray;
   }
 }

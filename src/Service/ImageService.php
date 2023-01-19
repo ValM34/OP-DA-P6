@@ -5,10 +5,7 @@ namespace App\Service;
 use \DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Image;
-use App\Entity\Category;
-use App\Entity\Message;
 use App\Entity\Trick;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\String\Slugger\SluggerInterface;
@@ -19,37 +16,28 @@ class ImageService implements ImageServiceInterface
   private $targetDirectory;
   private $slugger;
   
-  public function __construct(EntityManagerInterface $entityManager, $targetDirectory, SluggerInterface $slugger)
+  public function __construct(EntityManagerInterface $entityManager, string $targetDirectory, SluggerInterface $slugger)
   {
     $this->entityManager = $entityManager;
     $this->targetDirectory = $targetDirectory;
     $this->slugger = $slugger;
-    $this->request = new Request(
-      $_GET,
-      $_POST,
-      [],
-      $_COOKIE,
-      $_FILES,
-      $_SERVER
-    );
   }
 
-  // @TODO commentaires des méthodes
-  public function findAll()
+  // FIND ALL
+  public function findAll(): array
   {
-    dd($this->entityManager->getRepository(Image::class)->findAll()[0]->setTrick());
     return $this->entityManager->getRepository(Image::class)->findAll();
   }
 
-  public function create(Trick $trick, $arrayOfImages)
+  // CREATE
+  public function create(Trick $trick, array $arrayOfImages): void
   {
     $date = new DateTimeImmutable();
     
-    for($i = 0; $i < count($arrayOfImages); $i++){
+    for($i = 0, $count = count($arrayOfImages); $i < $count; $i++){
       $image = new Image();
       $image
         ->setPath($arrayOfImages[$i])
-        ->setUpdatedAt($date)
         ->setCreatedAt($date)
         ->setTrick($trick)
       ;
@@ -59,7 +47,8 @@ class ImageService implements ImageServiceInterface
     $this->entityManager->flush();
   }
 
-  public function upload(UploadedFile $file)
+  // UPLOAD
+  public function upload(UploadedFile $file): string
   {
     $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
     // this is needed to safely include the file name as part of the URL
@@ -76,12 +65,14 @@ class ImageService implements ImageServiceInterface
     return $newFilename;
   }
 
-  public function getTargetDirectory()
+  // GET TARGET DIRECTORY
+  public function getTargetDirectory(): string
   {
     return $this->targetDirectory;
   }
 
-  public function delete(int $id)
+  // DELETE
+  public function delete(int $id): int
   {
     $image = $this->entityManager->getRepository(Image::class)->find($id);
     $idTrick = $image->getTrick()->getId();
@@ -96,7 +87,8 @@ class ImageService implements ImageServiceInterface
     return $idTrick;
   }
 
-  public function deleteByTrick(array $images)
+  // DELETE BY TRICK
+  public function deleteByTrick(array $images): void
   {
     foreach($images as $image){
       $imageWholePath = $this->getTargetDirectory() . '/' . $image->getPath();

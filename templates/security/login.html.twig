@@ -13,7 +13,7 @@
       <form method="post">
         <div>
           {% if error %}
-              <div class="bg-red-300 px-1">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+              <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
           {% endif %}
 
           {% if app.user %}
@@ -23,20 +23,20 @@
           {% endif %}
           <div>
             <label for="inputEmail">Email</label>
-            <input class="bg-neutral-300 p-1" type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
+            <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
           </div>
           <div>
-            <label for="inputPassword">Password</label>
-            <input class="bg-neutral-300 p-1" type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
+            <label for="inputPassword">Mot de passe</label>
+            <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
           </div>
           <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
         </div>
-        <button class="bg-blue-500 hover:bg-blue-400 px-2 py-1 rounded text-white font-semibold" type="submit">
+        <button type="submit">
             Valider
         </button>
       </form>
-      <a class="primary" href="{{ path('register') }}">Register</a>
-      <a class="primary" href="{{ path('send_password_recovery') }}">Forgot password ?</a>
+      <a class="primary" href="{{ path('register') }}">S'inscrire</a>
+      <a class="primary" href="{{ path('send_password_recovery') }}">Mot de passe oublié ?</a>
     </div>
   </div>
 {% endblock %}

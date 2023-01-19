@@ -7,8 +7,8 @@
         Welcome!
 			{% endblock %}
 		</title>
-		<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <script src="https://kit.fontawesome.com/e869897231.js" crossorigin="anonymous"></script>
 
 		{% block stylesheets %}
@@ -44,15 +44,15 @@
         </div>
         <div class="overlay"></div>
         <nav>
-          <a class="secondary" href="{{ path('home') }}">Home</a>
-          <a class="secondary" href="{{ path('home') }}#tricks-container">Tricks</a>
+          <a class="secondary" href="{{ path('home') }}">Accueil</a>
+          <a id="trick_anchor" class="secondary" href="{{ path('home') }}#tricks-container">Tricks</a>
           {% if app.user %}
             <a class="secondary" href="{{ path('trick_create') }}">Ajouter un trick</a>
             <a class="secondary" href="{{ path('category_display_all') }}">Catégories</a>
-            <a class="secondary" href="{{ path('logout') }}">Logout</a>
+            <a class="secondary" href="{{ path('logout') }}">Déconnexion</a>
           {% else %}
-            <a class="secondary" href="{{ path('login') }}">Sign in</a>
-            <a class="secondary" href="{{ path('register') }}">Sign up</a>
+            <a class="secondary" href="{{ path('login') }}">Connexion</a>
+            <a class="secondary" href="{{ path('register') }}">Inscription</a>
           {% endif %}
         </nav>
       </div>

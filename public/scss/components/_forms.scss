@@ -23,6 +23,10 @@
         padding: 30px;
       }
 
+      label {
+        margin-bottom: 5px;
+      }
+
       input[type="text"], input[type="password"], input[type="email"] {
         padding: 20px 30px;
         border-radius: 50px;
@@ -45,6 +49,7 @@
           flex-direction: column;
           align-items: center;
           margin: 20px 0;
+          text-align: center;
         }
       }
 
@@ -56,6 +61,13 @@
           color: $red;
           font-size: 14px;
         }
+      }
+
+      div.js-form-error-message {
+        font-style: italic;
+        color: $red;
+        font-size: 14px;
+        margin: 0;
       }
     }
 

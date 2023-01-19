@@ -8,9 +8,10 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 interface ImageServiceInterface
 {
-  public function findAll();
-  public function create(Trick $trick, $arrayOfImages);
-  public function upload(UploadedFile $file);
-  public function delete(int $id);
-  public function deleteByTrick(array $images);
+  public function findAll(): array;
+  public function create(Trick $trick, array $arrayOfImages): void;
+  public function upload(UploadedFile $file): string;
+  public function delete(int $id): int;
+  public function deleteByTrick(array $images): void;
+  public function getTargetDirectory(): string;
 }

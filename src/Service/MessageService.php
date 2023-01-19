@@ -3,44 +3,37 @@
 namespace App\Service;
 
 use \DateTimeImmutable;
-use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Entity\Trick;
-use App\Entity\Image;
-use App\Entity\Category;
 use App\Entity\Message;
+use App\Entity\Trick;
+use App\Entity\User;
 use Symfony\Component\HttpFoundation\Request; 
 
 class MessageService implements MessageServiceInterface
 {
   private $entityManager;
+  private $request;
+
   public function __construct(EntityManagerInterface $entityManager)
   {
     $this->entityManager = $entityManager;
-    $this->request = new Request(
-      $_GET,
-      $_POST,
-      [],
-      $_COOKIE,
-      $_FILES,
-      $_SERVER
-    );
+    $this->request = new Request();
   }
 
   // FIND BY TRICK
-  public function findByTrick($trick)
+  public function findByTrick(int $trick): array
   {
-    return $this->entityManager->getRepository(Message::class)->findByTrick($trick);
+    return $this->entityManager->getRepository(Message::class)->findByTrick($trick, ['created_at' => 'DESC']);
   }
 
   // FIND BY ID
-  public function findById(int $id)
+  public function findById(int $id): Message
   {
     return $this->entityManager->getRepository(Message::class)->findOneBy(['id' => $id]);
   }
 
   // CREATE
-  public function create($user, $trick, $message)
+  public function create(User $user, Trick $trick, Message $message): void
   {
     $dateNow = new DateTimeImmutable();
 
@@ -56,7 +49,7 @@ class MessageService implements MessageServiceInterface
   }
 
   // UPDATE PAGE
-  public function updatePage(int $id)
+  public function updatePage(int $id): array
   {
     $entity['message'] = $this->entityManager->getRepository(Message::class)->find($id);
     $entity['trick'] = $entity['message']->getTrick();
@@ -65,7 +58,7 @@ class MessageService implements MessageServiceInterface
   }
 
   // UPDATE
-  public function update(int $id)
+  public function update(int $id): Message
   {
     $entity = $this->entityManager->getRepository(Message::class)->find($id);
     $entity->setUpdatedAt(new \DateTimeImmutable());
@@ -79,18 +72,10 @@ class MessageService implements MessageServiceInterface
   }
 
   // DELETE
-  public function delete(int $id)
+  public function delete(int $id): void
   {
     $entity = $this->entityManager->getRepository(Message::class)->find($id);
-    $entity
-      ->setUpdatedAt(new \DateTimeImmutable())
-      ->setCreatedAt(new \DateTimeImmutable());
-    if ($this->request->request->get('content')) {
-      $entity->setContent($this->request->request->get('content'));
-    };
     $this->entityManager->remove($entity);
     $this->entityManager->flush();
-
-    return $entity;
   }
 }

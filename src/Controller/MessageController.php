@@ -17,19 +17,14 @@ class MessageController extends AbstractController
 {
   use CreatedAtTrait;
 
-  private $messageService;
-  private $trickService;
-  private $userService;
-
-  public function __construct(UserServiceInterface $userService, MessageServiceInterface $messageService, TrickServiceInterface $trickService)
-  {
-    $this->userService = $userService;
-    $this->messageService = $messageService;
-    $this->trickService = $trickService;
-  }
+  public function __construct(
+    private UserServiceInterface $userService,
+    private MessageServiceInterface $messageService,
+    private TrickServiceInterface $trickService
+  ) {}
 
   // UPDATE
-  #[Route('/message/update/{id}', name: 'message_update')]
+  #[Route('/message/update/{id}', name: 'message_update', methods: ['GET', 'POST'])]
   public function update(int $id, Message $message, Request $request): Response
   {
     $entity = $this->messageService->updatePage($id);
@@ -41,9 +36,9 @@ class MessageController extends AbstractController
 
     if($form->isSubmitted() && $form->isValid() && $this->getUser() && $owner === $actualUser){
       $message = $this->messageService->update($id);
+      $this->addFlash('succes', 'Votre message a bien été modifié.');
       
       return $this->redirectToRoute('trick_display_one', [
-        'succesMessage' => 'Votre message a bien été modifié.',
         'id' => $message->getTrick()->getId()
       ]);
     }
@@ -61,7 +56,7 @@ class MessageController extends AbstractController
   }
 
   // DELETE
-  #[Route('/message/delete/{id}', name: 'message_delete')]
+  #[Route('/message/delete/{id}', name: 'message_delete', methods: ['GET'])]
   public function delete(int $id): Response
   {
     $message = $this->messageService->findById($id);

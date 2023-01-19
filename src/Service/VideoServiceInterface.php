@@ -6,6 +6,6 @@ use App\Entity\Trick;
 
 interface VideoServiceInterface
 {
-  public function create(Trick $trick, $arrayOfVideos);
-  public function delete(int $id);
+  public function create(Trick $trick, array $arrayOfVideos): void;
+  public function delete(int $id): ?int;
 }

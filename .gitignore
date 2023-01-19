@@ -5,8 +5,11 @@
 /.env.*.local
 /config/secrets/prod/prod.decrypt.private.php
 /public/bundles/
+/public/images/tricks/
+/public/images/avatars/
 /var/
 /vendor/
+/sessions/
 ###< symfony/framework-bundle ###
 
 ###> phpunit/phpunit ###

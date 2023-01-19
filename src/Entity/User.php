@@ -58,7 +58,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
   #[ORM\Column(options: ['default' => false])]
   private ?bool $is_verified = false;
 
-  #[ORM\Column(length: 255)]
+  #[ORM\Column(length: 255, nullable: true)]
   private ?string $registration_token = null;
 
   #[ORM\Column(length: 255, nullable: true)]
@@ -137,10 +137,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
   /**
    * @see UserInterface
    */
-  public function eraseCredentials()
+  public function eraseCredentials(): void
   {
     // If you store any temporary, sensitive data on the user, clear it here
-    // $this->plainPassword = null;
   }
 
   public function getLastname(): ?string
