@@ -28,19 +28,17 @@ class VideoService implements VideoServiceInterface
       ;
       $this->entityManager->persist($vdo);
     }
-    $this->entityManager->flush();
   }
 
-  public function delete(int $id): ?int
+  public function delete(Video $video): ?string
   {
-    $video = $this->entityManager->getRepository(Video::class)->find($id);
     if($video === null){
-      return $idTrick = null;
+      return $slugTrick = null;
     }
-    $idTrick = $video->getTrick()->getId();
+    $slugTrick = $video->getTrick()->getSlug();
     $this->entityManager->remove($video);
     $this->entityManager->flush();
 
-    return $idTrick;
+    return $slugTrick;
   }
 }

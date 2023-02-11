@@ -9,6 +9,9 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
+//////
+use Symfony\Component\Serializer\Annotation\Groups;
+
 #[ORM\Entity(repositoryClass: TrickRepository::class)]
 #[UniqueEntity(
   fields: ['name'],
@@ -41,6 +44,7 @@ class Trick
   private ?Category $category = null;
 
   #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Message::class)]
+  #[Groups(['get_messages'])]
   private Collection $messages;
 
   #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Image::class)]
@@ -48,6 +52,10 @@ class Trick
 
   #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Video::class)]
   private Collection $videos;
+
+  #[ORM\Column(type: 'string', unique: true)]
+  #[Groups(['get_messages'])]
+  private string $slug;
 
   public function __construct()
   {
@@ -210,5 +218,15 @@ class Trick
     }
 
     return $this;
+  }
+
+  public function getSlug()
+  {
+    return $this->slug;
+  }
+
+  public function setSlug($slug)
+  {
+    $this->slug = $slug;
   }
 }

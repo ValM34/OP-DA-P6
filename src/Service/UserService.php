@@ -10,6 +10,7 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 use App\Service\SendMailServiceInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\Form;
 
 class UserService implements UserServiceInterface
 {
@@ -76,9 +77,32 @@ class UserService implements UserServiceInterface
     $this->entityManager->flush();
   }
 
-  // UPDATE
-  public function update(User $user): void
+  // UPDATE EXCEPT PASSWORD
+  public function updateExceptPassword(User $user, User $newsDatasUser): void
   {
+    if($newsDatasUser->getFirstName() !== null){
+      $user->setFirstName($newsDatasUser->getFirstName());
+    }
+    if($newsDatasUser->getLastName() !== null){
+      $user->setLastName($newsDatasUser->getLastName());
+    }
+    if($newsDatasUser->getAvatar() !== null){
+      $user->setAvatar($newsDatasUser->getAvatar());
+    }
+    $this->entityManager->persist($user);
+    $this->entityManager->flush();
+  }
+
+  // UPDATE PASSWORD
+  public function updatePassword(User $user, Form $form): void
+  {
+    $user->setPassword(
+      $this->userPasswordHasher->hashPassword(
+        $user,
+        $form->get('plainPassword')->getData()
+      )
+    );
+    $user->setPasswordRecoveryToken('used');
     $this->entityManager->persist($user);
     $this->entityManager->flush();
   }
@@ -125,7 +149,6 @@ class UserService implements UserServiceInterface
   public function sendPasswordRecoveryToken(User $user): void
   {
     $user = $this->findByEmail($user->getEmail());
-    // Je vais envoyer le token en BDD et envoyer un mail à l'utilisateur en question.
     $token = hash('sha512', $user->getEmail() . uniqId() . 'dsf51dsf15dsSDFSqsdf521d65s');
     $user->setPasswordRecoveryToken($token);
     $this->entityManager->persist($user);

@@ -11,15 +11,13 @@ use Doctrine\Persistence\ObjectManager;
 use \DateTimeImmutable;
 use App\DataFixtures\UserFixtures;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class CategoryFixtures extends Fixture implements DependentFixtureInterface
 {
-  private $entityManager;
+  public function __construct(private EntityManagerInterface $entityManager, protected SluggerInterface $slugger)
+  {}
 
-  public function __construct(EntityManagerInterface $entityManager)
-  {
-    $this->entityManager = $entityManager;
-  }
   // CREATE 10 TRICKS
   public function load(ObjectManager $manager): void
   {
@@ -33,6 +31,7 @@ class CategoryFixtures extends Fixture implements DependentFixtureInterface
         ->setDescription($description)
         ->setUpdatedAt($date)
         ->setUser($user[0])
+        ->setSlug(strtolower($this->slugger->slug($category->getName())))
       ;
 
       $manager->persist($category);

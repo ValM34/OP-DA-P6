@@ -23,12 +23,6 @@ class ImageService implements ImageServiceInterface
     $this->slugger = $slugger;
   }
 
-  // FIND ALL
-  public function findAll(): array
-  {
-    return $this->entityManager->getRepository(Image::class)->findAll();
-  }
-
   // CREATE
   public function create(Trick $trick, array $arrayOfImages): void
   {
@@ -44,7 +38,7 @@ class ImageService implements ImageServiceInterface
     $this->entityManager->persist($image);
     }
 
-    $this->entityManager->flush();
+    // $this->entityManager->flush();
   }
 
   // UPLOAD
@@ -72,10 +66,9 @@ class ImageService implements ImageServiceInterface
   }
 
   // DELETE
-  public function delete(int $id): int
+  public function delete(Image $image): string
   {
-    $image = $this->entityManager->getRepository(Image::class)->find($id);
-    $idTrick = $image->getTrick()->getId();
+    $slug = $image->getTrick()->getSlug();
     $imageWholePath = $this->getTargetDirectory() . '/' . $image->getPath();
 
     if(file_exists($imageWholePath)){
@@ -84,7 +77,7 @@ class ImageService implements ImageServiceInterface
     $this->entityManager->remove($image);
     $this->entityManager->flush();
 
-    return $idTrick;
+    return $slug;
   }
 
   // DELETE BY TRICK

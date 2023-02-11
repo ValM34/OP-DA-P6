@@ -21,15 +21,32 @@ class MessageService implements MessageServiceInterface
   }
 
   // FIND BY TRICK
-  public function findByTrick(int $trick): array
+  public function findByTrick(int $trick, ?User $user): array
   {
-    return $this->entityManager->getRepository(Message::class)->findByTrick($trick, ['created_at' => 'DESC']);
-  }
-
-  // FIND BY ID
-  public function findById(int $id): Message
-  {
-    return $this->entityManager->getRepository(Message::class)->findOneBy(['id' => $id]);
+    $messages = $this->entityManager->getRepository(Message::class)->findByTrick($trick, ['created_at' => 'DESC']);
+    $messagesArray = [];
+    $arr = [];
+    for ($i = 0, $count = count($messages); $i < $count; $i++) {
+      $arr = [
+        'id' => $messages[$i]->getId(),
+        'content' => $messages[$i]->getContent(),
+        'firstname' => $messages[$i]->getUser()->getFirstname(),
+        'lastname' => $messages[$i]->getUser()->getLastName(),
+        'avatar' => $messages[$i]->getUser()->getAvatar()
+      ];
+      if ($user) {
+        if ($messages[$i]->getUser() === $user) {
+          $arr = array_merge($arr, ['isOwner' => true]);
+        } else {
+          $arr = array_merge($arr, ['isOwner' => false]);
+        }
+      } else {
+        $arr = array_merge($arr, ['isOwner' => false]);
+      }
+      array_push($messagesArray, $arr);
+    }
+    
+    return $messagesArray;
   }
 
   // CREATE
@@ -49,26 +66,25 @@ class MessageService implements MessageServiceInterface
   }
 
   // UPDATE PAGE
-  public function updatePage(int $id): array
+  public function updatePage(Message $message): array
   {
-    $entity['message'] = $this->entityManager->getRepository(Message::class)->find($id);
+    $entity['message'] = $message;
     $entity['trick'] = $entity['message']->getTrick();
 
     return $entity;
   }
 
   // UPDATE
-  public function update(int $id): Message
+  public function update(Message $message): Message
   {
-    $entity = $this->entityManager->getRepository(Message::class)->find($id);
-    $entity->setUpdatedAt(new \DateTimeImmutable());
+    $message->setUpdatedAt(new \DateTimeImmutable());
     if ($this->request->request->get('content')) {
-      $entity->setContent($this->request->request->get('content'));
+      $message->setContent($this->request->request->get('content'));
     };
-    $this->entityManager->persist($entity);
+    $this->entityManager->persist($message);
     $this->entityManager->flush();
 
-    return $entity;
+    return $message;
   }
 
   // DELETE

@@ -14,8 +14,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Form\TrickForm;
-use App\Form\MessageCreateType;
+use App\Form\MessageForm;
 use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 
 class TrickController extends AbstractController
 {
@@ -38,98 +40,33 @@ class TrickController extends AbstractController
   public function displayAll(): Response
   {
     $tricks = $this->trickService->findAll();
-    $tricksData = [];
-    
-    for ($i = 0, $count = count($tricks); $i < $count; $i++) {
-      $tricksData[$i]['id'] = $tricks[$i]->getId();
-      $tricksData[$i]['name'] = $tricks[$i]->getName();
-      if ($tricks[$i]->getImages()[0] !== null) {
-        $tricksData[$i]['path'] = 'images/tricks/' . $tricks[$i]->getImages()[0]->getPath();
-      } else {
-        $tricksData[$i]['path'] = 'images/TrickDefault.jpg';
-      }
-    }
 
     return $this->render('home/home.html.twig', [
-      'tricks' => $tricksData
+      'tricks' => $tricks
     ]);
   }
-
+  
+  // public function displayOne(Request $request, #[MapEntity(expr: 'repository.findTrick(video)')] Trick $trick): Response
   // DISPLAY ONE
-  #[Route('/trick/displayone/{id}', name: 'trick_display_one', methods: ['GET', 'POST'])]
-  public function displayOne(int $id, Request $request): Response
+  #[Route('/trick/displayone/{slug}', name: 'trick_display_one', methods: ['GET', 'POST'])]
+  #[Entity('trick', expr: 'repository.findTrick(slug)')]
+  public function displayOne(Request $request, Trick $trick): Response
   {
-    $form = $this->createForm(MessageCreateType::class, $this->message);
+    $form = $this->createForm(MessageForm::class, $this->message);
     $form->handleRequest($request);
-    $trick = $this->trickService->findOne($id);
-    $messages = $this->messageService->findByTrick($id);
-    if ($this->getUser()) {
-      $actualUser = $this->userService->findOne($this->getUser())->getId();
-    } else {
-      $actualUser = null;
-    }
-    $messagesArray = [];
-    $arr = [];
-    for ($i = 0, $count = count($messages); $i < $count; $i++) {
-      $arr = [
-        'id' => $messages[$i]->getId(),
-        'content' => $messages[$i]->getContent(),
-        'firstname' => $messages[$i]->getUser()->getFirstname(),
-        'lastname' => $messages[$i]->getUser()->getLastName(),
-        'avatar' => $messages[$i]->getUser()->getAvatar()
-      ];
-      if ($this->getUser()) {
-        if ($messages[$i]->getUser()->getId() === $actualUser) {
-          $arr = array_merge($arr, ['isOwner' => true]);
-        } else {
-          $arr = array_merge($arr, ['isOwner' => false]);
-        }
-      } else {
-        $arr = array_merge($arr, ['isOwner' => false]);
-      }
-      array_push($messagesArray, $arr);
-    }
-
-    $images = [];
-    $imagePath = null;
-
-    if ($trick->getImages()[0] !== null) {
-      $imagePath = $trick->getImages()[0]->getPath();
-      for ($i = 0, $count = count($trick->getImages()); $i < $count; $i++) {
-        $images[$i]['path'] = $trick->getImages()[$i]->getPath();
-        $images[$i]['id'] = $trick->getImages()[$i]->getId();
-      }
-    } else {
-      $imagePath = '../trickDefault.jpg';
-    }
-
-    $videos = [];
-    if ($trick->getVideos()[0] !== null) {
-      for ($i = 0, $count = count($trick->getVideos()); $i < $count; $i++) {
-        $videos[$i]['path'] = $trick->getVideos()[$i]->getPath();
-        $videos[$i]['id'] = $trick->getVideos()[$i]->getId();
-      }
-    }
 
     if ($form->isSubmitted() && $form->isValid()) {
       $this->messageService->create($this->getUser(), $trick, $this->message);
       $this->addFlash('succes', 'Votre commentaire a bien été ajouté!');
 
       return $this->redirectToRoute('trick_display_one', [
-        'id' => $trick->getId()
+        'slug' => $trick->getSlug()
       ]);
     }
 
-    $category['name'] = $trick->getCategory()->getName();
-
     return $this->render('trick/displayone.html.twig', [
       'trick' => $trick,
-      'messages' => $messagesArray,
-      'createMessageForm' => $form->createView(),
-      'images' => $images,
-      'videos' => $videos,
-      'imagePath' => $imagePath,
-      'category' => $category
+      'messageForm' => $form->createView()
     ]);
   }
 
@@ -142,16 +79,11 @@ class TrickController extends AbstractController
     $form->handleRequest($request);
 
     if ($form->isSubmitted() && $form->isValid() && $this->getUser()) {
-      $imageFile = $form->get('image')->getData();
-      $videos = $form->get('videos')->getData();
-      if ($videos === null) {
-        $videos = '';
-      }
-      $this->trickService->create($this->getUser(), $trick, $imageFile, $videos);
+      $trick = $this->trickService->create($this->getUser(), $trick, $form);
       $this->addFlash('succes', 'Votre trick a bien été ajouté!');
 
-      return $this->redirectToRoute('home', [
-        '_fragment' => 'tricks-container'
+      return $this->redirectToRoute('trick_display_one', [
+        'slug' => $trick->getSlug()
       ]);
     }
 
@@ -162,28 +94,20 @@ class TrickController extends AbstractController
   }
 
   // UPDATE
-  #[Route('/trick/update/{id}', name: 'trick_update', methods: ['GET', 'POST'])]
-  public function update(int $id, Request $request): Response
+  #[Route('/trick/update/{slug}', name: 'trick_update', methods: ['GET', 'POST'])]
+  public function update(Request $request, Trick $trick): Response
   {
-    $trick = $this->trickService->findOne($id);
     $form = $this->createForm(TrickForm::class, $trick);
     $form->handleRequest($request);
 
     if (($form->isSubmitted() && $form->isValid() && $this->getUser())) {
-      $imageFiles = $form->get('image')->getData();
-      $videos = $form->get('videos')->getData();
-      if ($videos === null) {
-        $videos = '';
-      }
-      $trick = $this->trickService->update($trick, $imageFiles, $videos);
+      $this->trickService->update($trick, $form);
       $this->addFlash('succes', 'Le trick a bien été modifié.');
 
       return $this->redirectToRoute('trick_display_one', [
-        'id' => $id
+        'slug' => $trick->getSlug()
       ]);
     }
-
-    $trick = $this->trickService->updatePage($id);
 
     return $this->render('trick/update.html.twig', [
       'trick' => $trick,
@@ -192,11 +116,11 @@ class TrickController extends AbstractController
   }
 
   // DELETE
-  #[Route('/trick/delete/{id}', name: 'trick_delete', methods: ['GET'])]
-  public function delete(int $id): Response
+  #[Route('/trick/delete/{slug}', name: 'trick_delete', methods: ['GET'])]
+  public function delete(Trick $trick): Response
   {
     if ($this->getUser()) {
-      $this->trickService->delete($id);
+      $this->trickService->delete($trick);
       $this->addFlash('succes', 'Le trick a bien été supprimé.');
     }
 

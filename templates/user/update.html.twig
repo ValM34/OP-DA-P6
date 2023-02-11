@@ -2,33 +2,39 @@
 
 {% block title %}Modifier profil{% endblock %}
 
-{% block bodyClass %}update-user{% endblock %}
+{% block bodyClass %}user-update{% endblock %}
 
 {% block javascripts %}
   <script type="module">
-    import checkVideoForm from "{{ asset('js/trickForms/checkVideoForm.js') }}";
-    checkVideoForm('#update_trick_form_videos', 'label[for="update_trick_form_videos"]');
+    import deleteUser from "{{ asset('js/user/deleteUser.js') }}";
+    deleteUser();
   </script>
 {% endblock %}
 
 {% block body %}
-
-	{% if app.user %}
-		<div class="base-container">
-      <div class="info-message">Le changement d'adresse email est impossible. Pour changer de mot de passe, merci de <a class="primary" href="{{ path('send_password_recovery') }}">cliquer ici</a>.</div>
-      <div class="form-container">
-        <div class="form-subcontainer">
-          {{ form_start(form) }}
-          {{ form_widget(form) }}
-            <button type="submit">Valider</button>
-          {{ form_end(form) }}
-        </div>
+  <div class="base-container">
+    <div class="info-message">Le changement d'adresse email est impossible. Pour changer de mot de passe, merci de <a class="primary" href="{{ path('send_password_recovery') }}">cliquer ici</a>.</div>
+    <div class="form-container">
+      <div class="form-subcontainer">
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+          <button type="submit">Valider</button>
+        {{ form_end(form) }}
       </div>
     </div>
-	{% else %}
-		<div class="base-container">
-      Veuillez vous connecter pour pouvoir modifier le trick : <a class="primary" href="{{ path('login') }}">Connexion</a>
+    <div class="delete-account-btn-container">
+      <button class="delete-account-btn" id="delete_account_btn" type="button"><i class="fas fa-radiation"></i> Supprimer mon compte <i class="fas fa-radiation"></i></button>
     </div>
-	{% endif %}
-
+  </div>
+  <div id="modal" class="modal hidden">
+    <div data-close-modal="" class="close-modal"><i class="fas fa-times"></i></div>
+    <strong>Voulez-vous vraiment supprimer votre compte ?</strong>
+    <div class="modal-btn-container">
+      <form id="modal_form">
+        <button id="modal_submit_btn">Oui</button>
+        <button data-close-modal="">Non</button>
+      </form>
+    </div>
+  </div>
+  <div id="overlay" class="overlay hidden" data-close-modal=""></div>
 {% endblock %}

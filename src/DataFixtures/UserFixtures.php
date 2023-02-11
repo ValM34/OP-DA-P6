@@ -10,12 +10,9 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserFixtures extends Fixture
 {
-  private $hasher;
   
-  public function __construct(UserPasswordHasherInterface $hasher)
-  {
-    $this->hasher = $hasher;
-  }
+  public function __construct(private UserPasswordHasherInterface $hasher)
+  {}
 
   // CREATE 20 USERS
   public function load(ObjectManager $manager): void

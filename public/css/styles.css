@@ -58,6 +58,14 @@ ul {
     opacity: 1;
   }
 }
+@keyframes spinner {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
 button {
   padding: 7px 30px;
   background-color: rgb(19, 19, 19);
@@ -641,6 +649,14 @@ header .overlay.is-active {
   max-width: 800px;
   padding: 10px;
 }
+.base-container.comments-container .spinner-container {
+  display: flex;
+  justify-content: center;
+}
+.base-container.comments-container .spinner-container .fa-spinner {
+  animation: spinner 1s linear infinite;
+  font-size: 50px;
+}
 @media (min-width: 768px) {
   .base-container.comments-container {
     padding: 30px;
@@ -796,6 +812,22 @@ body.trick .form-subcontainer {
 .categories .category-list li a:nth-child(2) {
   margin-right: 10px;
   margin-left: auto;
+}
+
+body.user-update .info-message .primary {
+  color: white;
+}
+body.user-update .delete-account-btn-container {
+  display: flex;
+  justify-content: center;
+}
+body.user-update .delete-account-btn-container .delete-account-btn {
+  background-color: rgb(204, 10, 10);
+  border-color: rgb(204, 10, 10);
+}
+body.user-update .delete-account-btn-container .delete-account-btn:hover {
+  background-color: white;
+  color: rgb(204, 10, 10);
 }
 
 .hidden {

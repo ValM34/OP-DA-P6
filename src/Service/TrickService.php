@@ -3,120 +3,126 @@
 namespace App\Service;
 
 use \DateTimeImmutable;
-use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Trick;
 use App\Entity\Image;
 use App\Entity\User;
-use App\Entity\Category;
 use App\Service\ImageServiceInterface;
 use App\Service\VideoServiceInterface;
+use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Component\Form\Form;
 
 class TrickService implements TrickServiceInterface
 {
-  private $entityManager;
-  private $imageService;
-  private $videoService;
-
-  public function __construct(EntityManagerInterface $entityManager, ImageServiceInterface $imageService, VideoServiceInterface $videoService)
-  {
-    $this->entityManager = $entityManager;
-    $this->imageService = $imageService;
-    $this->videoService = $videoService;
-  }
+  public function __construct(
+    protected SluggerInterface $slugger,
+    private EntityManagerInterface $entityManager,
+    private ImageServiceInterface $imageService,
+    private VideoServiceInterface $videoService
+  )
+  {}
 
   // FIND ALL
   public function findAll(): array
   {
-    return $this->entityManager->getRepository(Trick::class)->findAll();
+    $tricks = $this->entityManager->getRepository(Trick::class)->findAllTricks();
+    for ($i = 0, $count = count($tricks); $i < $count; $i++) {
+      if ($tricks[$i]['path'] !== null) {
+        $tricks[$i]['path'] = 'images/tricks/' . $tricks[$i]['path'];
+      } else {
+        $tricks[$i]['path'] = 'images/TrickDefault.jpg';
+      }
+    }
+
+    return $tricks;
   }
 
   // FIND ONE
-  public function findOne(int $id): Trick
+  public function findOne(int $id): array
   {
     $trick = $this->entityManager->getRepository(Trick::class)->find($id);
     if (!$trick) {
       $trick = null;
     }
 
-    return $trick;
+    if($trick !== null){
+      $images = [];
+      $imagePath = null;
+      
+      if ($trick->getImages()[0] !== null) {
+        $imagePath = $trick->getImages()[0]->getPath();
+        for ($i = 0, $count = count($trick->getImages()); $i < $count; $i++) {
+          $images[$i]['path'] = $trick->getImages()[$i]->getPath();
+          $images[$i]['id'] = $trick->getImages()[$i]->getId();
+        }
+      } else {
+        $imagePath = '../trickDefault.jpg';
+      }
+
+      $videos = [];
+      if ($trick->getVideos()[0] !== null) {
+        for ($i = 0, $count = count($trick->getVideos()); $i < $count; $i++) {
+          $videos[$i]['path'] = $trick->getVideos()[$i]->getPath();
+          $videos[$i]['id'] = $trick->getVideos()[$i]->getId();
+        }
+      }
+    }
+
+    return [$trick, $imagePath, $images, $videos];
   }
 
   // CREATE
-  public function create(User $user, Trick $trick, array $imageFiles, string $videos): void
+  public function create(User $user, Trick $trick, Form $form): Trick
   {
     $date = new DateTimeImmutable();
+    $imageFiles = $form->get('image')->getData();
+    $videos = $form->get('videos')->getData();
+    if ($videos === null) {
+      $videos = '';
+    }
+
     $trick
       ->setUser($user)
       ->setUpdatedAt($date)
       ->setCreatedAt($date)
+      ->setSlug(strtolower($this->slugger->slug($trick->getName()))) //@TODO strtolower pour les autres slug
     ;
-
+    
     $this->entityManager->persist($trick);
-    $this->entityManager->flush();
-
-    if (isset($imageFiles[0])) {
-      $arrayOfImages = [];
-      foreach($imageFiles as $imageFile){
-        $arrayOfImages[] = $this->imageService->upload($imageFile);
-      }
-
-      $this->entityManager->persist($trick);
-      $this->entityManager->flush();
-
-      $this->imageService->create($trick, $arrayOfImages);
-
-    } else {
-      $this->entityManager->persist($trick);
-      $this->entityManager->flush();
-    }
-
+    $this->imagesProcessing($trick, $imageFiles);
     $videosArray = $this->filterVideos($videos);
     $this->videoService->create($trick, $videosArray);
-  }
 
-  // UPDATE PAGE
-  public function updatePage(int $id): Trick
-  {
-    $trick = $this->entityManager->getRepository(Trick::class)->find($id);
-
-    if (!$trick) {
-      $trick = null;
-    }
+    $this->entityManager->flush();
 
     return $trick;
   }
 
   // UPDATE
-  public function update(Trick $trick, array $imageFiles, string $videos): void
+  public function update(Trick $trick, Form $form): void
   {
     $date = new DateTimeImmutable();
+    $imageFiles = $form->get('image')->getData();
+    $videos = $form->get('videos')->getData();
+    if ($videos === null) {
+      $videos = '';
+    }
     $trick
       ->setUpdatedAt($date)
       ->setCreatedAt($date)
+      ->setSlug($this->slugger->slug($trick->getName()))
     ;
-
-    if (isset($imageFiles[0])) {
-      $arrayOfImages = [];
-      foreach($imageFiles as $imageFile){
-        $arrayOfImages[] = $this->imageService->upload($imageFile);
-      }
-      $this->entityManager->persist($trick);
-      $this->entityManager->flush();
-      $this->imageService->create($trick, $arrayOfImages);
-    } else {
-      $this->entityManager->persist($trick);
-      $this->entityManager->flush();
-    }
-
+    $this->entityManager->persist($trick);
+    $this->imagesProcessing($trick, $imageFiles);
     $videosArray = $this->filterVideos($videos);
     $this->videoService->create($trick, $videosArray);
+
+    $this->entityManager->flush();
   }
 
   // DELETE
-  public function delete(int $id): void
+  public function delete(Trick $trick): void
   {
-    $trick = $this->entityManager->getRepository(Trick::class)->find($id);
     $images = $this->entityManager->getRepository(Image::class)->findByTrick($trick);
     $this->imageService->deleteByTrick($images);
     $this->entityManager->remove($trick);
@@ -142,5 +148,17 @@ class TrickService implements TrickServiceInterface
     $videosArray = str_replace('https://vimeo.com/', 'https://player.vimeo.com/video/', $videosArray);
     
     return $videosArray;
+  }
+
+  // IMAGES PROCESSING
+  public function imagesProcessing(Trick $trick, array $imageFiles): void
+  {
+    if (isset($imageFiles[0])) {
+      $arrayOfImages = [];
+      foreach($imageFiles as $imageFile){
+        $arrayOfImages[] = $this->imageService->upload($imageFile);
+      }
+      $this->imageService->create($trick, $arrayOfImages);
+    }
   }
 }

@@ -1,0 +1,22 @@
+body.user-update {
+  .info-message {
+    .primary {
+      color: $white;
+    }
+  }
+
+  .delete-account-btn-container {
+    display: flex;
+    justify-content: center;
+  
+    .delete-account-btn {
+      background-color: $red;
+      border-color: $red;
+  
+      &:hover {
+        background-color: white;
+        color: $red;
+      }
+    }
+  }
+}

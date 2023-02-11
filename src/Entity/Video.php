@@ -20,7 +20,7 @@ class Video
   #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE', name: 'id_trick')]
   private ?Trick $trick = null;
 
-  #[ORM\Column(length: 2048)]
+  #[ORM\Column(length: 300, unique: true)]
   private ?string $path = null;
 
   public function getId(): ?int

@@ -22,7 +22,7 @@ class UpdateUserForm extends AbstractType
       ->add('lastName', TextType::class, ['label' => 'Nom', 'required' => false])
       ->add('firstName', TextType::class, ['label' => 'Prénom', 'required' => false])
       ->add('avatar', FileType::class, [
-        'label' => 'Ajouter une image (jpg, jpeg, png)',
+        'label' => "Changer l'avatar (jpg, jpeg, png)",
         'mapped' => false,
         'required' => false,
         'constraints' => [
