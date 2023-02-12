@@ -1,15 +1,16 @@
 export default function messages() {
   // Get slug
-  let slug = document.URL;
-  slug = slug.split("/");
-  slug = slug[5];
+  let url = document.URL;
+  url = url.split("/");
+  let protocol = url[0];
+  let slug = url[5];
 
   let showMoreMessagesBtn = document.querySelector("#show_more_comments_btn");
 
   let loadingSpinner = document.querySelector("#messages_spinner_container");
-
+  console.log(`${protocol}//${url[2]}/api/message/${slug}?page=1&limit=10`);
   // Call API (first page)
-  fetch(`http://127.0.0.1:8000/api/message/${slug}?page=1&limit=10`, {
+  fetch(`${protocol}//${url[2]}/api/message/${slug}?page=1&limit=10`, {
     method: "GET",
     headers: { "Content-Type": "Application/json" },
   })

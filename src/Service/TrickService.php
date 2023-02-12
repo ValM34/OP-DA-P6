@@ -30,7 +30,7 @@ class TrickService implements TrickServiceInterface
       if ($tricks[$i]['path'] !== null) {
         $tricks[$i]['path'] = 'images/tricks/' . $tricks[$i]['path'];
       } else {
-        $tricks[$i]['path'] = 'images/TrickDefault.jpg';
+        $tricks[$i]['path'] = 'images/trickDefault.jpg';
       }
     }
 

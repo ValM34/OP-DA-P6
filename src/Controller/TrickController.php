@@ -64,7 +64,7 @@ class TrickController extends AbstractController
       ]);
     }
 
-    return $this->render('trick/displayone.html.twig', [
+    return $this->render('trick/displayOne.html.twig', [
       'trick' => $trick,
       'messageForm' => $form->createView()
     ]);
