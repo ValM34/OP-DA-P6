@@ -9,7 +9,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 use App\Entity\Message;
 
-class MessageCreateType extends AbstractType
+class MessageForm extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {

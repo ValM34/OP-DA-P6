@@ -160,6 +160,16 @@
   max-width: 800px;
   padding: 10px;
 
+  .spinner-container {
+    display: flex;
+    justify-content: center;
+
+    .fa-spinner {
+      animation: spinner 1s linear infinite;
+      font-size: 50px;
+    }
+  }
+
   @include breakpoint(md) {
     padding: 30px;
   }

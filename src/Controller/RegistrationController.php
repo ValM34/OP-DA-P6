@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Form\RegistrationFormType;
+use App\Form\RegistrationForm;
 use App\Security\UsersAuthenticator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,7 +25,7 @@ class RegistrationController extends AbstractController
   #[Route('/inscription', name: 'register', methods: ['GET', 'POST'])]
   public function register(Request $request): Response
   {
-    $form = $this->createForm(RegistrationFormType::class, $this->user);
+    $form = $this->createForm(RegistrationForm::class, $this->user);
     $form->handleRequest($request);
 
     if ($form->isSubmitted() && $form->isValid()) {

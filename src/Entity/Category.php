@@ -18,7 +18,7 @@ class Category
   #[ORM\Column]
   private ?int $id;
 
-  #[ORM\Column(length: 150)]
+  #[ORM\Column(length: 150, unique: true)]
   private ?string $name = null;
 
   #[ORM\Column]
@@ -33,6 +33,9 @@ class Category
 
   #[ORM\Column(length: 1000)]
   private ?string $description = null;
+
+  #[ORM\Column(type: 'string', unique: true)]
+  private string $slug;
 
   public function __construct()
   {
@@ -121,5 +124,15 @@ class Category
       $this->description = $description;
 
       return $this;
+  }
+
+  public function getSlug()
+  {
+    return $this->slug;
+  }
+
+  public function setSlug($slug)
+  {
+    $this->slug = $slug;
   }
 }

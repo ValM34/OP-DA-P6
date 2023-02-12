@@ -7,6 +7,7 @@
 
 // Animations
 @import './animations/display';
+@import './animations/spinner';
 
 // Components
 @import './components/buttons';
@@ -24,6 +25,7 @@
 @import './pages/home';
 @import './pages/trick';
 @import './pages/categories';
+@import './pages/user-update';
 
 .hidden {
   display: none;

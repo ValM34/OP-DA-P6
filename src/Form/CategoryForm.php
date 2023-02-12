@@ -8,7 +8,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use App\Entity\Category;
 
-class UpdateCategoryForm extends AbstractType
+class CategoryForm extends AbstractType
 {
   public function buildForm(FormBuilderInterface $builder, array $options): void
   {

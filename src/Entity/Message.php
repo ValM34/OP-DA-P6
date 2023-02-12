@@ -5,6 +5,8 @@ namespace App\Entity;
 use App\Entity\Trait\CreatedAtTrait;
 use App\Repository\MessageRepository;
 use Doctrine\ORM\Mapping as ORM;
+//////
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: MessageRepository::class)]
 class Message
@@ -14,6 +16,7 @@ class Message
   #[ORM\Id]
   #[ORM\GeneratedValue]
   #[ORM\Column]
+  #[Groups(['get_messages'])]
   private ?int $id = null;
 
   #[ORM\ManyToOne(inversedBy: 'messages')]
@@ -22,9 +25,11 @@ class Message
 
   #[ORM\ManyToOne(inversedBy: 'messages')]
   #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE', name: 'id_user')]
+  #[Groups(['get_messages'])]
   private ?User $user = null;
 
   #[ORM\Column(length: 2500)]
+  #[Groups(['get_messages'])]
   private ?string $content = null;
 
   #[ORM\Column]

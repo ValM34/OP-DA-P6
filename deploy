@@ -1,0 +1,2 @@
+#!/bin/sh
+  rsync -av ./ zf6jl_test@valentin-moreau.com:~/test --include=public/build --include=vendor --include=public/.htacces --include=.env --exclude-from=.gitignore --exclude=".*"

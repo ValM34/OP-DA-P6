@@ -10,6 +10,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+/////
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[UniqueEntity(fields: ['email'], message: 'Il existe déjà un utilisateur avec cet email')]
@@ -20,6 +22,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
   #[ORM\Id]
   #[ORM\GeneratedValue]
   #[ORM\Column]
+  #[Groups(['get_messages'])]
   private ?int $id = null;
 
   #[ORM\Column(length: 180, unique: true)]
@@ -35,9 +38,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
   private ?string $password = null;
 
   #[ORM\Column(length: 100)]
+  #[Groups(['get_messages'])]
   private ?string $lastname = null;
 
   #[ORM\Column(length: 100)]
+  #[Groups(['get_messages'])]
   private ?string $firstname = null;
 
   #[ORM\Column(options: ['default' => 'CURRENT_TIMESTAMP'])]
@@ -53,6 +58,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
   private Collection $categories;
 
   #[ORM\Column(length: 150, nullable: true)]
+  #[Groups(['get_messages'])]
   private ?string $avatar = null;
 
   #[ORM\Column(options: ['default' => false])]

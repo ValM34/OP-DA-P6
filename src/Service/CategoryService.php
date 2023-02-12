@@ -4,33 +4,25 @@ namespace App\Service;
 
 use \DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Entity\Trick;
 use App\Entity\User;
 use App\Entity\Category;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class CategoryService implements CategoryServiceInterface
 {
   private $entityManager;
-  public function __construct(EntityManagerInterface $entityManager)
+  private $dateTimeImmutable;
+
+  public function __construct(EntityManagerInterface $entityManager, protected SluggerInterface $slugger)
   {
     $this->entityManager = $entityManager;
+    $this->dateTimeImmutable = new DateTimeImmutable();
   }
 
   // FIND ALL
   public function findAll(): array
   {
     return $this->entityManager->getRepository(Category::class)->findAll();
-  }
-
-  // FIND ONE
-  public function findOne(int $id): Category
-  {
-    $category = $this->entityManager->getRepository(Category::class)->find($id);
-    if (!$category) {
-      $category = null;
-    }
-
-    return $category;
   }
 
   // CREATE
@@ -41,32 +33,26 @@ class CategoryService implements CategoryServiceInterface
       ->setUser($user)
       ->setUpdatedAt($date)
       ->setCreatedAt($date)
+      ->setSlug($this->slugger->slug($category->getName()))
     ;
     $this->entityManager->persist($category);
     $this->entityManager->flush();
   }
 
-  // UPDATE PAGE
-  public function updatePage(int $id): Category
+  // UPDATE
+  public function update(Category $category): void
   {
-    $category = $this->entityManager->getRepository(Category::class)->find($id);
-    if (!$category) {
-      $category = null;
-    }
-
-    return $category;
-  }
-
-  public function update(int $id): void
-  {
-    $category = $this->entityManager->getRepository(Category::class)->find($id);
+    $category
+      ->setUpdatedAt($this->dateTimeImmutable)
+      ->setSlug($this->slugger->slug($category->getName()))
+    ;
     $this->entityManager->persist($category);
     $this->entityManager->flush();
   }
 
-  public function delete(int $id): void
+  // DELETE
+  public function delete($category): void
   {
-    $category = $this->entityManager->getRepository(Category::class)->find($id);
     $this->entityManager->remove($category);
     $this->entityManager->flush();
   }

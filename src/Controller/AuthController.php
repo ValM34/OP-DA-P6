@@ -11,7 +11,6 @@ use Symfony\Component\HttpFoundation\Request;
 use App\Entity\User;
 use App\Form\PasswordRecoveryForm;
 use App\Form\PasswordUpdateForm;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AuthController extends AbstractController
 {
@@ -47,19 +46,26 @@ class AuthController extends AbstractController
 
     if($form->isSubmitted()){
       $user = $this->userService->findByEmail($user->getEmail());
+      if($user === null){
+        $this->addFlash('error', "L'email n'existe pas.");
+
+        return $this->render('security/passwordRecoveryForm.html.twig', [
+          'passwordRecoveryForm' => $form->createView()
+        ]);
+      }
       $this->userService->sendPasswordRecoveryToken($user);
 
       return $this->render('security/passwordRecoveryRequested.html.twig');
     }
 
     return $this->render('security/passwordRecoveryForm.html.twig', [
-      'recoveryForm' => $form->createView()
+      'passwordRecoveryForm' => $form->createView()
     ]);
   }
 
   // PASSWORD RECOVERY
   #[Route(path: '/password/recovery/new/{token}', name: 'password_recovery', methods: ['POST', 'GET'])]
-  public function passwordRecovery(string $token, Request $request, UserPasswordHasherInterface $userPasswordHasher): Response
+  public function passwordRecovery(string $token, Request $request): Response
   {
     $user = $this->userService->findByRecoveryToken($token);
     if($user){
@@ -67,21 +73,13 @@ class AuthController extends AbstractController
       $form->handleRequest($request);
 
       if($form->isSubmitted()){
-        // encode the plain password
-        $user->setPassword(
-          $userPasswordHasher->hashPassword(
-            $user,
-            $form->get('plainPassword')->getData()
-          )
-        );
-        $user->setPasswordRecoveryToken('used');
-        $this->userService->update($user);
+        $this->userService->updatePassword($user, $form);
 
         return $this->redirectToRoute('login');
       }
 
       return $this->render('security/passwordUpdateForm.html.twig', [
-        'updateForm' => $form->createView()
+        'passwordUpdateForm' => $form->createView()
       ]);
     }
 

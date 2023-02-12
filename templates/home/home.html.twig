@@ -33,19 +33,19 @@
       <ul class="tricks-container">
         {% for trick in tricks %}
           <li class="trick-item">
-            <a href="trick/displayone/{{trick.id}}" class="primary">
+            <a href="/trick/displayone/{{trick.slug}}">
               <div style="background-image: url('{{trick.path}}')" class="trick-img-container"></div>
             </a>
             <div class="trick-infos">
               <div>
-                <a href="trick/displayone/{{trick.id}}" class="primary">{{trick.name}}</a>
+                <a href="trick/displayone/{{trick.slug}}" class="secondary">{{trick.name}}</a>
               </div>
               {% if app.user %}
                 <div class="manage-trick">
-                  <a href="trick/update/{{trick.id}}" class="icon-container">
+                  <a href="trick/update/{{trick.slug}}" class="icon-container">
                     <i class="fas fa-edit"></i>
                   </a>
-                  <a href="#" class="icon-container delete-btn" data-trick-id="{{trick.id}}" data-trick-action="trick/delete/{{trick.id}}">
+                  <a href="#" class="icon-container delete-btn" data-trick-id="{{trick.slug}}" data-trick-action="trick/delete/{{trick.slug}}">
                     <i class="fas fa-trash"></i>
                   </a>
                 </div>
