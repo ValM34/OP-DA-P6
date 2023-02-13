@@ -1,0 +1,44 @@
+name: Deploy to production
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Setup SSH key
+      uses: webfactory/ssh-agent@v0.4.0
+      with:
+        ssh-private-key: ${{ env.SSH_PRIVATE_KEY }}
+
+    - name: Install dependencies
+      run: |
+        composer install --no-dev --optimize-autoloader
+
+    - name: Build assets
+      run: |
+        yarn install
+        yarn build
+
+    - name: Sync code to production
+      uses: appleboy/rsync-action@v2
+      with:
+        host: valentin-moreau.com
+        source: ./
+        target: /var/www/symfony-app/
+        flags: '-avz'
+        ssh-key: ${{ env.SSH_PRIVATE_KEY }}
+
+    - name: Clear cache
+      run: |
+        ssh valentin-moreau.com "php /var/www/symfony-app/bin/console cache:clear"
