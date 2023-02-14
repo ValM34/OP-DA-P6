@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      SSHPASS: ${{ secrets.APP_PASS }}
+      SSHPASS: ${{ secrets.SSH_PRIVATE_KEY }}
 
     steps:
       - uses: actions/checkout@v2
@@ -19,7 +19,7 @@ jobs:
       
       - name: test pwd
         run:
-          sshpass -e ssh -o stricthostkeychecking=no ${{ secrets.SSH_PRIVATE_KEY }}@${{ secrets.APP_HOST }}
+          sshpass -e ssh -o stricthostkeychecking=no ${{ secrets.APP_USER }}@${{ secrets.APP_HOST }}
           "cd test/ &&
           git pull &&
           composer install &&
