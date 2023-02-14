@@ -19,8 +19,9 @@ jobs:
       
       - name: test pwd
         run:
-          sshpass -e ssh -o stricthostkeychecking=no zf6jl_test@valentin-moreau.com
-          "cd test/ &&
+          sshpass -e ssh -o stricthostkeychecking=no ${{ secrets.APP_USER }}@${{ secrets.APP_HOST }}
+          "ls &&
+          cd test/ &&
           git pull &&
           composer install &&
           php bin/console d:m:m -n"
