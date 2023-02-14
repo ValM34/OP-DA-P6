@@ -19,7 +19,7 @@ jobs:
       
       - name: test pwd
         run:
-          ssh -A -o stricthostkeychecking=no ${{ secrets.APP_USER }}@${{ secrets.APP_HOST }}
+          sshpass -e ssh -A -o stricthostkeychecking=no ${{ secrets.APP_USER }}@${{ secrets.APP_HOST }}
           "ls &&
           cd test/ &&
           git pull &&
