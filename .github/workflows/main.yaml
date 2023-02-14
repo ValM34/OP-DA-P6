@@ -15,7 +15,7 @@ jobs:
 
       - name: APT UPDATE and INSTALL SSHPASS
         run:
-          sudo apt update && sudo apy install sshpass
+          sudo apt update && sudo apt install sshpass
       
       - name: test pwd
         run:
