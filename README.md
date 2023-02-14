@@ -1,5 +1,5 @@
 ## Requirements :
-Symfony 6.1 - PHP 8.1.0 - MySQL 5.7.36 - Symfony CLI 5.4.13
+Symfony 6.2 - PHP 8.2.0 - MySQL 5.7.36 - Symfony CLI 5.4.13
 
 ## Instructions : 
 Clone the repo
