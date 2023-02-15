@@ -32,9 +32,9 @@ class SendMailService implements SendMailServiceInterface
   public function passwordRecovery(User $user, string $token): void 
   {
     $email = (new Email())
-      ->from('snow@tricks.fr')
+      ->from('contact@valentin-moreau.com')
       ->to($user->getEmail())
-      ->replyTo('snow@tricks.fr')
+      ->replyTo('contact@valentin-moreau.com')
       ->subject('Modification du mot de passe')
       ->html('Vous avez demandé un lien de modification de mot de passe. Si vous souhaitez changer votre mot de passe, <a href=https://valentin-moreau.com/password/recovery/new/' . $token . '>Cliquez ici.</a>')
     ;
@@ -45,9 +45,9 @@ class SendMailService implements SendMailServiceInterface
   public function accountDeletion(User $user, string $token): void
   {
     $email = (new Email())
-      ->from('snow@tricks.fr')
+      ->from('contact@valentin-moreau.com')
       ->to($user->getEmail())
-      ->replyTo('snow@tricks.fr')
+      ->replyTo('contact@valentin-moreau.com')
       ->subject('Suppression du compte Snowtricks')
       ->html('Vous avez demandé de supprimer votre compte Snowtricks. Si vous souhaitez réellement supprimer votre compte, <a href=https://valentin-moreau.com/user/delete/validate/' . $token . '>Cliquez ici.</a>')
     ;
