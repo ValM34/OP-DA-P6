@@ -28,6 +28,9 @@ class SendMailService implements SendMailServiceInterface
     $this->mailer->send($email);
   }
 
+  // SEND EMAIL VALIDATION PROD TEST @TODO
+  
+
   // SEND PASSWORD RECOVERY EMAIL
   public function passwordRecovery(User $user, string $token): void 
   {

@@ -67,7 +67,7 @@ class UserService implements UserServiceInterface
 
     // Send validation mail
     $this->sendMailService->emailValidation(
-      'snow@tricks.fr',
+      'contact@valentin-moreau.com',
       $user->getEmail(),
       'Activation de votre compte sur le site Snowtricks',
       $token
