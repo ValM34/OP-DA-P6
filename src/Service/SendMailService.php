@@ -23,7 +23,7 @@ class SendMailService implements SendMailServiceInterface
       ->to($to)
       ->replyTo($from)
       ->subject($subject)
-      ->html('Merci de vous être inscrit sur le site Snowtricks :) <a href=http://127.0.0.1:8000/verif/' . $token . '>Cliquez ici pour activer votre compte.</a>')
+      ->html('Merci de vous être inscrit sur le site Snowtricks :) <a href=https://valentin-moreau.com/verif/' . $token . '>Cliquez ici pour activer votre compte.</a>')
     ;
     $this->mailer->send($email);
   }
@@ -36,7 +36,7 @@ class SendMailService implements SendMailServiceInterface
       ->to($user->getEmail())
       ->replyTo('snow@tricks.fr')
       ->subject('Modification du mot de passe')
-      ->html('Vous avez demandé un lien de modification de mot de passe. Si vous souhaitez changer votre mot de passe, <a href=http://127.0.0.1:8000/password/recovery/new/' . $token . '>Cliquez ici.</a>')
+      ->html('Vous avez demandé un lien de modification de mot de passe. Si vous souhaitez changer votre mot de passe, <a href=https://valentin-moreau.com/password/recovery/new/' . $token . '>Cliquez ici.</a>')
     ;
     $this->mailer->send($email);
   }
@@ -49,7 +49,7 @@ class SendMailService implements SendMailServiceInterface
       ->to($user->getEmail())
       ->replyTo('snow@tricks.fr')
       ->subject('Suppression du compte Snowtricks')
-      ->html('Vous avez demandé de supprimer votre compte Snowtricks. Si vous souhaitez réellement supprimer votre compte, <a href=http://127.0.0.1:8000/user/delete/validate/' . $token . '>Cliquez ici.</a>')
+      ->html('Vous avez demandé de supprimer votre compte Snowtricks. Si vous souhaitez réellement supprimer votre compte, <a href=https://valentin-moreau.com/user/delete/validate/' . $token . '>Cliquez ici.</a>')
     ;
     $this->mailer->send($email);
   }
