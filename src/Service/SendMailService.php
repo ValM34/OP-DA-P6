@@ -23,13 +23,10 @@ class SendMailService implements SendMailServiceInterface
       ->to($to)
       ->replyTo($from)
       ->subject($subject)
-      ->html('Merci de vous être inscrit sur le site Snowtricks :) <a href=http://127.0.0.1:8000/verif/' . $token . '>Cliquez ici pour activer votre compte.</a>')
+      ->html('Merci de vous être inscrit sur le site Snowtricks :) <a href=https://valentin-moreau.com/verif/' . $token . '>Cliquez ici pour activer votre compte.</a>')
     ;
     $this->mailer->send($email);
   }
-
-  // SEND EMAIL VALIDATION PROD TEST @TODO
-  
 
   // SEND PASSWORD RECOVERY EMAIL
   public function passwordRecovery(User $user, string $token): void 
