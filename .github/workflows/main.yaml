@@ -19,7 +19,7 @@ jobs:
       
       - name: test pwd
         run:
-          ssh ${{ secrets.APP_USER }}@${{ secrets.APP_HOST }}
+          ssh -i ~/.ssh/id_ed25519 ${{ secrets.APP_USER }}@${{ secrets.APP_HOST }}
           "ls &&
           cd test/ &&
           git pull &&
