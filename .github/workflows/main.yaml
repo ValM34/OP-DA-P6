@@ -20,14 +20,6 @@ jobs:
       - name: test pwd
         run:
           sshpass -e ssh -A -o stricthostkeychecking=no ${{ secrets.APP_USER }}@${{ secrets.APP_HOST }}
-      
-      - name: APT UPDATE and INSTALL SSHPASS 2
-        run:
-          sudo apt update && sudo apt install sshpass
-
-      - name: test pwd 2
-        run:
-          sshpass -e ssh -A -o stricthostkeychecking=no ${{ secrets.APP_USER }}@${{ secrets.APP_HOST }}
           "ls &&
           cd test/ &&
           git pull &&
