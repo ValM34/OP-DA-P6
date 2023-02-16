@@ -78,17 +78,18 @@ class UserService implements UserServiceInterface
   }
 
   // UPDATE EXCEPT PASSWORD
-  public function updateExceptPassword(User $user, User $newsDatasUser): void
+  public function updateExceptPassword(User $user, User $newsDatasUser, FormInterface $form): void
   {
+    $avatar = $form->get('avatar')->getData();
+    $avatarPath = $avatar !== null ? $this->upload($avatar) : '../avatarDefault.jpg';
     if($newsDatasUser->getFirstName() !== null){
       $user->setFirstName($newsDatasUser->getFirstName());
     }
     if($newsDatasUser->getLastName() !== null){
       $user->setLastName($newsDatasUser->getLastName());
     }
-    if($newsDatasUser->getAvatar() !== null){
-      $user->setAvatar($newsDatasUser->getAvatar());
-    }
+    $user->setAvatar($avatarPath);
+
     $this->entityManager->persist($user);
     $this->entityManager->flush();
   }
