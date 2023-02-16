@@ -1,0 +1,13 @@
+{% extends 'email/baseEmail.html.twig' %}
+
+{% block title %}Modifier la catégorie
+{% endblock %}
+
+{% block body %}
+
+	<div>
+		Merci de vous être inscrit sur le site Snowtricks :)
+		<a href={{ absolute_url(path('verify_user', { 'token': token } )) }}>Cliquez ici pour activer votre compte.</a>
+	</div>
+
+{% endblock %}
