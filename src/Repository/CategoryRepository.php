@@ -38,4 +38,13 @@ class CategoryRepository extends ServiceEntityRepository
       $this->getEntityManager()->flush();
     }
   }
+
+  public function findAllByName()
+  {
+    return $this->createQueryBuilder('c')
+      ->orderBy('c.name')
+      ->getQuery()
+      ->getResult()
+    ;
+  }
 }

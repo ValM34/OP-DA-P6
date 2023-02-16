@@ -56,6 +56,7 @@ class TrickRepository extends ServiceEntityRepository
       ->select('t.name', 't.slug', 'i.path')
       ->leftJoin('t.images', 'i')
       ->orderBy('t.updated_at', 'DESC')
+      ->groupBy('t.id')
       ->getQuery()
       ->getResult()
     ;

@@ -22,12 +22,12 @@
 		<ul class="category-list">
 			{% for category in categories %}
 				<li>
-					<a class="secondary" href="/category/displayone/{{category.id}}">{{category.name}}</a>
+					<a class="secondary" href="/category/displayone/{{category.slug}}">{{category.name}}</a>
           <div>
-            <a href="/category/update/{{category.id}}" class="icon-container">
+            <a href="/category/update/{{category.slug}}" class="icon-container">
             <i class="fas fa-edit"></i>
             </a>
-            <a href="/category/delete/{{category.id}}" class="icon-container">
+            <a href="/category/delete/{{category.slug}}" class="icon-container">
               <i class="fas fa-trash"></i>
             </a>
           </div>

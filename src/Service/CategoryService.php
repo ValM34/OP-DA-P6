@@ -22,7 +22,7 @@ class CategoryService implements CategoryServiceInterface
   // FIND ALL
   public function findAll(): array
   {
-    return $this->entityManager->getRepository(Category::class)->findAll();
+    return $this->entityManager->getRepository(Category::class)->findAllByName();
   }
 
   // CREATE

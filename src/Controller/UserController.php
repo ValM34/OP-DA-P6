@@ -35,7 +35,7 @@ class UserController extends AbstractController
       $form->handleRequest($request);
       if ($form->isSubmitted() && $form->isValid()) {
         $user = $this->userService->findOne($this->getUser());
-        $this->userService->updateExceptPassword($user, $this->user);
+        $this->userService->updateExceptPassword($user, $this->user, $form);
         
         return $this->redirectToRoute('home');
       }

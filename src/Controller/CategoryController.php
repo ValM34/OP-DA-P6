@@ -38,7 +38,7 @@ class CategoryController extends AbstractController
   }
 
   // DISPLAY ONE
-  #[Route('/category/displayone/{id}', name: 'category_display_one', methods: ['GET'])]
+  #[Route('/category/displayone/{slug}', name: 'category_display_one', methods: ['GET'])]
   public function displayOne(Category $category): Response
   {
     return $this->render('category/displayOne.html.twig', [
@@ -58,7 +58,7 @@ class CategoryController extends AbstractController
       $this->addFlash('succes', 'Votre catégorie a bien été ajoutée!');
       
       return $this->redirectToRoute('category_display_one', [
-        'id' => $this->category->getId()
+        'slug' => $this->category->getSlug()
       ]);
     }
 
@@ -68,7 +68,7 @@ class CategoryController extends AbstractController
   }
 
   // UPDATE
-  #[Route('/category/update/{id}', name: 'category_update', methods: ['GET', 'POST'])]
+  #[Route('/category/update/{slug}', name: 'category_update', methods: ['GET', 'POST'])]
   public function update(Category $category, Request $request): Response
   {
     $form = $this->createForm(CategoryForm::class, $category);
@@ -79,7 +79,7 @@ class CategoryController extends AbstractController
       $this->addFlash('succes', 'La catégorie a été modifiée.');
 
       return $this->redirectToRoute('category_display_one', [
-        'id' => $category->getId()
+        'slug' => $category->getSlug()
       ]);
     }
 
@@ -90,7 +90,7 @@ class CategoryController extends AbstractController
   }
 
   // DELETE
-  #[Route('/category/delete/{id}', name: 'category_delete', methods: ['GET'])]
+  #[Route('/category/delete/{slug}', name: 'category_delete', methods: ['GET'])]
   public function deleteCategory(Category $category): Response
   {
     $this->categoryService->delete($category);

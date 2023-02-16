@@ -12,7 +12,7 @@ interface UserServiceInterface
 {
   public function findOne(User $user): User;
   public function create(User $user, FormInterface $form): void;
-  public function updateExceptPassword(User $user, User $newsDatasUser): void;
+  public function updateExceptPassword(User $user, User $newsDatasUser, FormInterface $form): void;
   public function updatePassword(User $user, Form $form): void;
   public function upload(UploadedFile $file): string;
   public function findByToken(string $token): ?User;
