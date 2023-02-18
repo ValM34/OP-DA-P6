@@ -7,6 +7,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use App\Entity\Category;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class CategoryForm extends AbstractType
 {
@@ -14,7 +15,7 @@ class CategoryForm extends AbstractType
   {
     $builder
       ->add('name', TextType::class, ['label' => 'Nom'])
-      ->add('description', TextType::class)
+      ->add('description', TextareaType::class)
     ;
   }
 
