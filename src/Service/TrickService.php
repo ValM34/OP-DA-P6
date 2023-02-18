@@ -85,7 +85,7 @@ class TrickService implements TrickServiceInterface
       ->setUser($user)
       ->setUpdatedAt($date)
       ->setCreatedAt($date)
-      ->setSlug(strtolower($this->slugger->slug($trick->getName()))) //@TODO strtolower pour les autres slug
+      ->setSlug(strtolower($this->slugger->slug($trick->getName())))
     ;
     
     $this->entityManager->persist($trick);

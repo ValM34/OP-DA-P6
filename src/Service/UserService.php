@@ -109,13 +109,8 @@ class UserService implements UserServiceInterface
     // this is needed to safely include the file name as part of the URL
     $safeFilename = $this->slugger->slug($originalFilename);
     $newFilename = $safeFilename.'-'.uniqid().'.'.$file->guessExtension();
-
     // Move the file to the directory where images are stored
-    try {
-      $file->move($this->getTargetDirectory(), $newFilename);
-    } catch (FileException $e) {
-      // ... handle exception if something happens during file upload @TODO Faire quelque chose pour pas que le site renvoie une erreur
-    }
+    $file->move($this->getTargetDirectory(), $newFilename);
 
     return $newFilename;
   }
