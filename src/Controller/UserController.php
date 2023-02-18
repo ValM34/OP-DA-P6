@@ -27,15 +27,17 @@ class UserController extends AbstractController
   #[Route('/user/update', name: 'user_update', methods: ['GET', 'POST'])]
   public function update(Request $request): Response
   {
-    if ($this->getUser() === null) {
+    $user = $this->getUser();
+    if ($user === null) {
 
       return $this->redirectToRoute('login');
     } else {
-      $form = $this->createForm(UpdateUserForm::class, $this->user);
+      $form = $this->createForm(UpdateUserForm::class, $user);
       $form->handleRequest($request);
       if ($form->isSubmitted() && $form->isValid()) {
-        $user = $this->userService->findOne($this->getUser());
-        $this->userService->updateExceptPassword($user, $this->user, $form);
+        // $user = $this->userService->findOne($this->getUser());
+        //$this->userService->updateExceptPassword($user, $this->user, $form);
+        $this->userService->updateExceptPassword($user, $form);
         
         return $this->redirectToRoute('home');
       }
