@@ -111,10 +111,5 @@
     "symfony/stopwatch": "6.1.*",
     "symfony/var-dumper": "6.1.*",
     "symfony/web-profiler-bundle": "6.1.*"
-  },
-  "rules": {
-    "doctrine.database_query_contains_string_and_variable_concatenation": {
-      "enabled": true
-    }
   }
 }
