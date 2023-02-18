@@ -12,16 +12,12 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 
 class ImageService implements ImageServiceInterface
 {
-  private $entityManager;
-  private $targetDirectory;
-  private $slugger;
-  
-  public function __construct(EntityManagerInterface $entityManager, string $targetDirectory, SluggerInterface $slugger)
-  {
-    $this->entityManager = $entityManager;
-    $this->targetDirectory = $targetDirectory;
-    $this->slugger = $slugger;
-  }
+  public function __construct(
+    private EntityManagerInterface $entityManager,
+    private string $targetDirectory,
+    private SluggerInterface $slugger
+  )
+  {}
 
   // CREATE
   public function create(Trick $trick, array $arrayOfImages): void
@@ -48,13 +44,8 @@ class ImageService implements ImageServiceInterface
     // this is needed to safely include the file name as part of the URL
     $safeFilename = $this->slugger->slug($originalFilename);
     $newFilename = $safeFilename.'-'.uniqid().'.'.$file->guessExtension();
-
     // Move the file to the directory where images are stored
-    try {
-      $file->move($this->getTargetDirectory(), $newFilename);
-    } catch (FileException $e) {
-      // ... handle exception if something happens during file upload @TODO Faire quelque chose pour pas que le site renvoie une erreur
-    }
+    $file->move($this->getTargetDirectory(), $newFilename);
 
     return $newFilename;
   }

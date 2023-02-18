@@ -72,7 +72,7 @@ class TrickRepository extends ServiceEntityRepository
       ->orderBy('m.created_at', 'DESC')
       ->leftJoin('m.user', 'u')
       ->andWhere('t.slug = :slug')
-      ->setParameter('slug', strtolower($slug)) // @TODO modifier aussi pour les autres slug
+      ->setParameter('slug', strtolower($slug))
       ->getQuery()
       ->getOneOrNullResult()
     ;

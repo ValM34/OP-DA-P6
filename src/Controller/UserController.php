@@ -22,7 +22,6 @@ class UserController extends AbstractController
     $this->user = new User();
   }
 
-  // @TODO demander à Laurent pourquoi il préremplit pas les champs comme sur updateMessage et updateCategory
   // UPDATE
   #[Route('/user/update', name: 'user_update', methods: ['GET', 'POST'])]
   public function update(Request $request): Response

@@ -36,7 +36,7 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
         ->setUpdatedAt($date)
         ->setUser($user[0])
         ->setCategory($category[0])
-        ->setSlug($this->slugger->slug($trick->getName()))
+        ->setSlug(strtolower($this->slugger->slug($trick->getName())))
       ;
 
       $manager->persist($trick);
