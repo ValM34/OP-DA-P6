@@ -33,7 +33,7 @@ class CategoryService implements CategoryServiceInterface
       ->setUser($user)
       ->setUpdatedAt($date)
       ->setCreatedAt($date)
-      ->setSlug($this->slugger->slug($category->getName()))
+      ->setSlug(strtolower($this->slugger->slug($category->getName())))
     ;
     $this->entityManager->persist($category);
     $this->entityManager->flush();
@@ -44,7 +44,7 @@ class CategoryService implements CategoryServiceInterface
   {
     $category
       ->setUpdatedAt($this->dateTimeImmutable)
-      ->setSlug($this->slugger->slug($category->getName()))
+      ->setSlug(strtolower($this->slugger->slug($category->getName())))
     ;
     $this->entityManager->persist($category);
     $this->entityManager->flush();

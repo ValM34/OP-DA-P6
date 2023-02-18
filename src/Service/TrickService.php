@@ -110,7 +110,7 @@ class TrickService implements TrickServiceInterface
     $trick
       ->setUpdatedAt($date)
       ->setCreatedAt($date)
-      ->setSlug($this->slugger->slug($trick->getName()))
+      ->setSlug(strtolower($this->slugger->slug($trick->getName())))
     ;
     $this->entityManager->persist($trick);
     $this->imagesProcessing($trick, $imageFiles);
