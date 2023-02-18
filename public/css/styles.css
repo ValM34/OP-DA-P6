@@ -172,7 +172,7 @@ a.icon-container {
 }
 .form-container .form-subcontainer form input[type=text], .form-container .form-subcontainer form input[type=password], .form-container .form-subcontainer form input[type=email] {
   padding: 20px 30px;
-  border-radius: 50px;
+  border-radius: 15px;
   border: 2px solid rgb(19, 19, 19);
   width: 100%;
   max-width: 100%;
@@ -181,6 +181,21 @@ a.icon-container {
 }
 @media (min-width: 768px) {
   .form-container .form-subcontainer form input[type=text], .form-container .form-subcontainer form input[type=password], .form-container .form-subcontainer form input[type=email] {
+    width: 500px;
+  }
+}
+.form-container .form-subcontainer form textarea {
+  padding: 20px 30px;
+  border-radius: 15px;
+  border: 2px solid rgb(19, 19, 19);
+  width: 100%;
+  height: 10rem;
+  max-width: 100%;
+  box-shadow: 3px 2px 3px rgba(0, 0, 0, 0.3098039216);
+  resize: none;
+}
+@media (min-width: 768px) {
+  .form-container .form-subcontainer form textarea {
     width: 500px;
   }
 }
@@ -215,10 +230,11 @@ a.icon-container {
 }
 .form-container select {
   padding: 20px 30px;
-  border-radius: 50px;
+  border-radius: 15px;
   border: 2px solid rgb(19, 19, 19);
   width: 100%;
   max-width: 100%;
+  box-shadow: 3px 2px 3px rgba(0, 0, 0, 0.3098039216);
 }
 @media (min-width: 768px) {
   .form-container select {

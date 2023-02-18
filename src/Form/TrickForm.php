@@ -11,6 +11,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\All;
 
@@ -20,7 +21,7 @@ class TrickForm extends AbstractType
   {
     $builder
       ->add('name', TextType::class, ['label' => 'Nom'])
-      ->add('description', TextType::class)
+      ->add('description', TextareaType::class)
       ->add('category', EntityType::class, [
         'class' => Category::class,
         'choice_label' => 'name',
