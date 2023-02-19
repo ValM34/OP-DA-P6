@@ -62,7 +62,7 @@ class TrickRepository extends ServiceEntityRepository
     ;
   }
 
-  public function findTrick(string $slug): ?array
+  public function findTrick(string $slug): ?Trick
   {
     return $this->createQueryBuilder('t')
       ->select('t', 'i', 'm', 'v', 'u')

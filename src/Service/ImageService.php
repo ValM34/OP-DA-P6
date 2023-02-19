@@ -33,8 +33,6 @@ class ImageService implements ImageServiceInterface
       ;
     $this->entityManager->persist($image);
     }
-
-    // $this->entityManager->flush();
   }
 
   // UPLOAD
