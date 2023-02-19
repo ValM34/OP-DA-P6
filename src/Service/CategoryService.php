@@ -51,7 +51,7 @@ class CategoryService implements CategoryServiceInterface
   }
 
   // DELETE
-  public function delete($category): void
+  public function delete(Category $category): void
   {
     $this->entityManager->remove($category);
     $this->entityManager->flush();
