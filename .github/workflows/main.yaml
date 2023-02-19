@@ -20,8 +20,7 @@ jobs:
       - name: test pwd
         run:
           sshpass -e ssh -A -o stricthostkeychecking=no ${{ secrets.APP_USER }}@${{ secrets.APP_HOST }}
-          "ls &&
-          cd test/ &&
+          "cd sites/snowtricks.valentin-moreau.com &&
           git pull &&
           composer install &&
           php bin/console d:m:m -n"
