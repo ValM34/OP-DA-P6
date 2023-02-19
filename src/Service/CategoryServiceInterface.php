@@ -10,5 +10,5 @@ interface CategoryServiceInterface
   public function findAll(): array;
   public function create(User $user, Category $category): void;
   public function update(Category $category): void;
-  public function delete($category): void;
+  public function delete(Category $category): void;
 }

@@ -39,7 +39,7 @@ class CategoryRepository extends ServiceEntityRepository
     }
   }
 
-  public function findAllByName()
+  public function findAllByName(): ?array
   {
     return $this->createQueryBuilder('c')
       ->orderBy('c.name')

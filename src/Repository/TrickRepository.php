@@ -39,7 +39,7 @@ class TrickRepository extends ServiceEntityRepository
     }
   }
 
-  public function findAll()
+  public function findAll(): ?array
   {
     return $this->createQueryBuilder('t')
       ->select('t', 'i')
@@ -50,7 +50,7 @@ class TrickRepository extends ServiceEntityRepository
     ;
   }
 
-  public function findAllTricks()
+  public function findAllTricks(): ?array
   {
     return $this->createQueryBuilder('t')
       ->select('t.name', 't.slug', 'i.path')
@@ -62,7 +62,7 @@ class TrickRepository extends ServiceEntityRepository
     ;
   }
 
-  public function findTrick(string $slug)
+  public function findTrick(string $slug): ?Trick
   {
     return $this->createQueryBuilder('t')
       ->select('t', 'i', 'm', 'v', 'u')
@@ -78,7 +78,7 @@ class TrickRepository extends ServiceEntityRepository
     ;
   }
 
-  public function getMessages(string $slug, int $page, int $limit)
+  public function getMessages(string $slug, int $page, int $limit): ?array
   {
     return $this->createQueryBuilder('t')
       ->select('t', 'm', 'u')
