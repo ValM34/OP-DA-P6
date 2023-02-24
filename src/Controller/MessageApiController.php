@@ -21,8 +21,8 @@ class MessageApiController extends AbstractController
   {}
 
   // GET MESSAGES BY TRICK
-  #[Route('api/message/{slug}', requirements: ['slug' => '[a-zA-Z0-9\-]+'], name: 'app_display_messages', methods: ['GET'])]
-  public function getCustomers(string $slug, TrickRepository $messageRepository, Request $request): JsonResponse
+  #[Route('/api/message/{slug}', requirements: ['slug' => '[a-zA-Z0-9\-]+'], name: 'app_display_messages', methods: ['GET'])]
+  public function getCustomers(string $slug, TrickRepository $trickRepository, Request $request): JsonResponse
   {
     $page = $request->get('page', 1);
     $limit = $request->get('limit', 5);
@@ -30,7 +30,7 @@ class MessageApiController extends AbstractController
       ->withGroups('get_messages')
       ->toArray()
     ;
-    $customerList = $messageRepository->getMessages($slug, $page, $limit);
+    $customerList = $trickRepository->getMessages($slug, $page, $limit);
     $jsonCustomerList = $this->serializer->serialize($customerList, 'json', $context);
     
     if($this->getUser() !== null){
