@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Message;
-use App\Entity\Trait\CreatedAtTrait;
 use App\Service\MessageServiceInterface;
 use App\Service\TrickServiceInterface;
 use App\Service\UserServiceInterface;
@@ -15,8 +14,6 @@ use Symfony\Component\HttpFoundation\Request;
 
 class MessageController extends AbstractController
 {
-  use CreatedAtTrait;
-
   public function __construct(
     private UserServiceInterface $userService,
     private MessageServiceInterface $messageService,
