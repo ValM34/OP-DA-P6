@@ -78,7 +78,7 @@ class TrickRepository extends ServiceEntityRepository
     ;
   }
 
-  public function getMessages(string $slug, int $page, int $limit): ?array
+  public function getMessages(string $slug, int $page, int $limit): ?Trick
   {
     return $this->createQueryBuilder('t')
       ->select('t', 'm', 'u')
